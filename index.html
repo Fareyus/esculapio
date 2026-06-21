@@ -200,7 +200,7 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
 </header>
 
 <div class="ticker-wrap" id="ticker-wrap">
-  <div class="ticker-label">🗞 Toscana</div>
+  <div class="ticker-label">🗞 FI · PO</div>
   <div class="ticker-viewport">
     <div class="ticker-inner" id="ticker-inner">
       <span class="ticker-item" style="color:var(--muted)">Caricamento notizie…</span>
@@ -431,8 +431,8 @@ tick(); setInterval(tick, 1000);
 /* ---- news ticker ---- */
 async function loadTicker() {
   const FEEDS = [
-    "https://www.ansa.it/toscana/news/toscana_rss.xml",
-    "https://www.gonews.it/feed/",
+    "https://www.firenzetoday.it/rss/index.xml",
+    "https://www.pratotoday.it/rss/index.xml",
   ];
   const inner = document.getElementById("ticker-inner");
   const wrap  = document.getElementById("ticker-wrap");
@@ -450,24 +450,27 @@ async function loadTicker() {
     const xml   = await res.text();
     const doc   = new DOMParser().parseFromString(xml, "text/xml");
     if (doc.querySelector("parsererror")) throw new Error("xml parse error");
-    const nodes = [...doc.querySelectorAll("item")].slice(0, 12);
+    const nodes = [...doc.querySelectorAll("item")].slice(0, 8);
     if (!nodes.length) throw new Error("no items");
     return nodes.map(n => ({
-      title: n.querySelector("title")?.textContent?.trim() ?? "",
-      link:  (n.querySelector("link")?.nextSibling?.nodeValue?.trim()
-           || n.querySelector("link")?.textContent?.trim()
-           || n.querySelector("guid")?.textContent?.trim()
-           || "#"),
+      title:   n.querySelector("title")?.textContent?.trim() ?? "",
+      link:    (n.querySelector("link")?.nextSibling?.nodeValue?.trim()
+             || n.querySelector("link")?.textContent?.trim()
+             || n.querySelector("guid")?.textContent?.trim()
+             || "#"),
+      pubDate: new Date(n.querySelector("pubDate")?.textContent ?? 0),
     })).filter(i => i.title);
   }
 
-  let items = null;
-  for (const feed of FEEDS) {
-    try { items = await tryFeed(feed); break; } catch(e) {}
-  }
+  const results = await Promise.allSettled(FEEDS.map(f => tryFeed(f)));
+  const items = results
+    .filter(r => r.status === "fulfilled")
+    .flatMap(r => r.value)
+    .sort((a, b) => b.pubDate - a.pubDate)
+    .slice(0, 16);
 
-  if (!items?.length) {
-    inner.innerHTML = `<span class="ticker-item" style="color:var(--muted)">Notizie Toscana non disponibili</span>`;
+  if (!items.length) {
+    inner.innerHTML = `<span class="ticker-item" style="color:var(--muted)">Notizie Firenze/Prato non disponibili</span>`;
     return;
   }
 
