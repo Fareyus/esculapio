@@ -164,11 +164,10 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .age-result.err{color:var(--amber)}
 
 /* ---- SHIFT TIMERS ---- */
-.shift-timers{display:flex;gap:18px;flex-shrink:0}
-.shift-timer{display:flex;flex-direction:column;align-items:center;gap:2px}
-.shift-lbl{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.shift-timers{display:flex;gap:16px;flex-shrink:0;margin-left:auto}
+.shift-timer{display:flex;flex-direction:row;align-items:center;gap:7px}
+.shift-lbl{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .shift-cd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-strong)}
-.age-vdiv{width:1px;height:34px;background:var(--border);flex-shrink:0;align-self:center}
 
 /* ---- ARCHIVIO ---- */
 #archivio{
@@ -275,21 +274,20 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
 
 <!-- ETÀ PAZIENTE -->
 <div class="age-bar">
-  <div class="shift-timers">
-    <div class="shift-timer">
-      <span class="shift-lbl">ORD</span>
-      <span class="shift-cd" id="cd-ord">--:--:--</span>
-    </div>
-    <div class="shift-timer">
-      <span class="shift-lbl">EME</span>
-      <span class="shift-cd" id="cd-eme">--:--:--</span>
-    </div>
-  </div>
-  <div class="age-vdiv"></div>
   <span class="age-bar-label">🩺 Età paziente</span>
   <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
   <button class="age-btn" id="age-calc-btn">Calcola</button>
   <span class="age-result" id="age-result"></span>
+  <div class="shift-timers">
+    <div class="shift-timer">
+      <span class="shift-lbl">Ordinario</span>
+      <span class="shift-cd" id="cd-ord">--:--:--</span>
+    </div>
+    <div class="shift-timer">
+      <span class="shift-lbl">Emergenza</span>
+      <span class="shift-cd" id="cd-eme">--:--:--</span>
+    </div>
+  </div>
 </div>
 
 <!-- ARCHIVIO -->
