@@ -178,13 +178,6 @@
     }
 
     /* ARCHIVIO (details/summary) */
-    #archivio {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
     #archivio summary {
       padding: 11px 16px;
       font-size: 12px;
@@ -202,6 +195,20 @@
     #archivio[open] summary::before { content: "▴  "; }
 
     #archivio .link-list li a { font-size: 13px; }
+
+    /* LAN BADGE */
+    .badge-lan {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 700;
+      background: #e8f0fe;
+      color: #1a56b0;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      vertical-align: middle;
+    }
 
     /* MOBILE */
     @media (max-width: 700px) {
@@ -225,31 +232,31 @@
 <div class="page">
 
   <div class="search-wrap">
-    <input type="text" id="search" placeholder="🔍  Cerca tra i link..." autocomplete="off" spellcheck="false">
+    <input type="text" id="search" placeholder="🔍  Cerca tra i link..." autocomplete="off" spellcheck="false" aria-label="Cerca tra i link">
   </div>
 
   <div id="no-results" class="hidden">Nessun link trovato.</div>
 
   <!-- COMUNE -->
   <div class="card" id="section-comune">
-    <div class="card-title comune">Comune</div>
+    <h2 class="card-title comune">Comune</h2>
     <div class="pills" id="links-comune"></div>
   </div>
 
   <!-- URGENTI + EMERGENZA -->
   <div class="sections-grid" id="sections-grid">
     <div class="card" id="section-urgenti">
-      <div class="card-title urgenti">🚐 Trasporti Urgenti</div>
+      <h2 class="card-title urgenti">🚐 Trasporti Urgenti</h2>
       <ul class="link-list" id="links-urgenti"></ul>
     </div>
     <div class="card" id="section-emergenza">
-      <div class="card-title emergenza">🚑 Emergenza Sanitaria</div>
+      <h2 class="card-title emergenza">🚑 Emergenza Sanitaria</h2>
       <ul class="link-list" id="links-emergenza"></ul>
     </div>
   </div>
 
   <!-- ARCHIVIO -->
-  <details id="archivio">
+  <details id="archivio" class="card">
     <summary>Archivio link (poco usati)</summary>
     <ul class="link-list" id="links-archivio"></ul>
   </details>
@@ -269,7 +276,7 @@ const SITE_DATA = {
     { label: "Mappa Sinottica EU FI-PO",   url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
     { label: "POT",                        url: "http://auth.sin.asf.it/login.php" },
     { label: "Cartellino",                 url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
-    { label: "Sigle e Turni Ambulanze 118",url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by" },
+    { label: "Sigle e Turni Ambulanze 118",url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by", intranet: true },
   ],
   urgenti: [
     { label: "NRE - Controllo Certificati",   url: "https://ricettatrasporti.sanita.toscana.it/" },
@@ -280,17 +287,17 @@ const SITE_DATA = {
     { label: "Turnazione PRATO",              url: "https://drive.google.com/file/d/12gCfvRuQjvZ8JhAe3iktxNednAUaXaJP/view" },
     { label: "Mappa Funebre",                 url: "https://www.google.com/maps/d/u/0/viewer?mid=1gxSBjjf9NSwnSZP6SIP4UVVA5cv1m2lY&ll=43.8157963799819%2C11.372541918299275&z=10" },
     { label: "Tango",                         url: "https://drive.google.com/drive/folders/1wT5EIO0WB1u5y_Mlb3jAACSW_7yZPZcN" },
-    { label: "Mezzi 118",                     url: "http://192.168.2.123:8080/dump118/" },
+    { label: "Mezzi 118",                     url: "http://192.168.2.123:8080/dump118/", intranet: true },
     { label: "Protocolli CO Firenze",         url: "https://drive.google.com/drive/u/0/folders/1A0L7jA6QkxEHzLL-hyQD50qI-2mwyIq0" },
     { label: "Regolamento Trasporti NRE",     url: "https://drive.google.com/drive/folders/1va72AvaAiL5XAIIMbeYGk5C1e2Su6hQw" },
   ],
   emergenza: [
-    { label: "Homepage 118",                   url: "http://intranet.118.asf.locale/" },
+    { label: "Homepage 118",                   url: "http://intranet.118.asf.locale/", intranet: true },
     { label: "Medical Note Explorer",          url: "https://app118-firenze.uslcentro.toscana.it" },
     { label: "LifeDesk",                       url: "https://checklist118.uslcentro.toscana.it/Consegne.aspx" },
-    { label: "DUMP - Guasti",                  url: "http://172.19.19.239/118/guasti.php" },
-    { label: "DUMP - Ingressi Ospedali",       url: "http://172.19.19.239/118/dea_all.php" },
-    { label: "Gestione Guasti",                url: "http://intranet.118.asf.locale/index.php/acc-rapido/3-riga/gestione-guasti-e-richieste-di-assistenza-tecnica" },
+    { label: "DUMP - Guasti",                  url: "http://172.19.19.239/118/guasti.php", intranet: true },
+    { label: "DUMP - Ingressi Ospedali",       url: "http://172.19.19.239/118/dea_all.php", intranet: true },
+    { label: "Gestione Guasti",                url: "http://intranet.118.asf.locale/index.php/acc-rapido/3-riga/gestione-guasti-e-richieste-di-assistenza-tecnica", intranet: true },
     { label: "S.A.R.A.",                       url: "https://sara.gruppo-informatico.com/Login.aspx" },
     { label: "Dati Post Chiusura Associazioni",url: "https://datipost118.uslcentro.toscana.it/wdodpc2/" },
     { label: "Codifica Regionale Targhe",      url: "https://docs.google.com/spreadsheets/d/1xYhNJWXpJO4gr1n8AutHg8GxYrp-lQhiw0b0Crm_xz4/edit" },
@@ -315,13 +322,19 @@ const SITE_DATA = {
 
 function renderLinks() {
   const comuneEl = document.getElementById('links-comune');
-  SITE_DATA.comune.forEach(({ label, url }) => {
+  SITE_DATA.comune.forEach(({ label, url, intranet }) => {
     const a = document.createElement('a');
     a.href = url;
     a.className = 'pill';
     a.textContent = label;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
+    if (intranet) {
+      const badge = document.createElement('span');
+      badge.className = 'badge-lan';
+      badge.textContent = 'LAN';
+      a.appendChild(badge);
+    }
     comuneEl.appendChild(a);
   });
   renderList('links-urgenti',  SITE_DATA.urgenti);
@@ -331,13 +344,19 @@ function renderLinks() {
 
 function renderList(id, links) {
   const ul = document.getElementById(id);
-  links.forEach(({ label, url }) => {
+  links.forEach(({ label, url, intranet }) => {
     const li = document.createElement('li');
     const a  = document.createElement('a');
     a.href = url;
     a.textContent = label;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
+    if (intranet) {
+      const badge = document.createElement('span');
+      badge.className = 'badge-lan';
+      badge.textContent = 'LAN';
+      a.appendChild(badge);
+    }
     li.appendChild(a);
     ul.appendChild(li);
   });
