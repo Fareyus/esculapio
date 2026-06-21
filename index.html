@@ -437,34 +437,62 @@ async function loadTicker() {
   const inner = document.getElementById("ticker-inner");
   const wrap  = document.getElementById("ticker-wrap");
 
-  function abort(ms) {
+  function tFetch(url, ms) {
     const ctrl = new AbortController();
-    setTimeout(() => ctrl.abort(), ms);
-    return ctrl.signal;
+    const tid  = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
   }
 
-  async function tryFeed(feedUrl) {
-    const proxy = "https://corsproxy.io/?" + encodeURIComponent(feedUrl);
-    const res   = await fetch(proxy, { signal: abort(8000) });
-    if (!res.ok) throw new Error("http " + res.status);
-    const xml   = await res.text();
+  function parseXml(xml) {
     const doc   = new DOMParser().parseFromString(xml, "text/xml");
-    if (doc.querySelector("parsererror")) throw new Error("xml parse error");
+    if (doc.querySelector("parsererror")) throw new Error("xml");
     const nodes = [...doc.querySelectorAll("item")].slice(0, 8);
-    if (!nodes.length) throw new Error("no items");
+    if (!nodes.length) throw new Error("empty");
     return nodes.map(n => ({
-      title:   n.querySelector("title")?.textContent?.trim() ?? "",
-      link:    (n.querySelector("link")?.nextSibling?.nodeValue?.trim()
-             || n.querySelector("link")?.textContent?.trim()
-             || n.querySelector("guid")?.textContent?.trim()
-             || "#"),
-      pubDate: new Date(n.querySelector("pubDate")?.textContent ?? 0),
+      title:   (n.querySelector("title")?.textContent || "").trim(),
+      link:    n.querySelector("link")?.nextSibling?.nodeValue?.trim()
+            || n.querySelector("link")?.textContent?.trim()
+            || n.querySelector("guid")?.textContent?.trim()
+            || "#",
+      pubDate: new Date(n.querySelector("pubDate")?.textContent || 0),
     })).filter(i => i.title);
   }
 
-  const results = await Promise.allSettled(FEEDS.map(f => tryFeed(f)));
+  async function fetchFeed(feedUrl) {
+    const enc = encodeURIComponent(feedUrl);
+
+    // 1) rss2json — restituisce JSON strutturato, nessun parse XML
+    try {
+      const res  = await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=8`, 7000);
+      const data = await res.json();
+      if (data.status === "ok" && data.items?.length) {
+        return data.items.map(i => ({
+          title:   (i.title || "").trim(),
+          link:    i.link || i.guid || "#",
+          pubDate: new Date(i.pubDate || 0),
+        })).filter(i => i.title);
+      }
+    } catch(e) {}
+
+    // 2) allorigins — restituisce {contents: rawXml}
+    try {
+      const res  = await tFetch(`https://api.allorigins.win/get?url=${enc}`, 7000);
+      const data = await res.json();
+      if (data?.contents) return parseXml(data.contents);
+    } catch(e) {}
+
+    // 3) corsproxy — restituisce il testo grezzo
+    try {
+      const res = await tFetch(`https://corsproxy.io/?${enc}`, 7000);
+      return parseXml(await res.text());
+    } catch(e) {}
+
+    return [];
+  }
+
+  const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
   const items = results
-    .filter(r => r.status === "fulfilled")
+    .filter(r => r.status === "fulfilled" && r.value.length)
     .flatMap(r => r.value)
     .sort((a, b) => b.pubDate - a.pubDate)
     .slice(0, 16);
@@ -488,7 +516,7 @@ async function loadTicker() {
   }
   inner.textContent = "";
   inner.appendChild(frag);
-  const dur = Math.max(30, items.reduce((s, i) => s + i.title.length, 0) * 0.18);
+  const dur = Math.max(40, items.reduce((s, i) => s + i.title.length, 0) * 0.18);
   wrap.style.setProperty("--ticker-dur", dur + "s");
 }
 loadTicker();
