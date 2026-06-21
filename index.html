@@ -481,7 +481,9 @@ async function loadTicker() {
       if (data?.contents) {
         let xml = data.contents;
         if (xml.startsWith("data:") && xml.includes("base64,")) {
-          xml = atob(xml.split("base64,")[1]);
+          const b64   = xml.split("base64,")[1];
+          const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+          xml = new TextDecoder("utf-8").decode(bytes);
         }
         return parseXml(xml);
       }
