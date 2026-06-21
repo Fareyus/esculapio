@@ -192,8 +192,8 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
 
 <div class="search-wrap">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-  <input id="search" type="search" placeholder="Cerca un link…  (premi /)" autocomplete="off" aria-label="Cerca tra i link">
-  <kbd>/</kbd>
+  <input id="search" type="search" placeholder="Cerca un link…  (premi \)" autocomplete="off" aria-label="Cerca tra i link">
+  <kbd>\</kbd>
 </div>
 
 <p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
@@ -396,7 +396,7 @@ function filterLinks(q) {
 const searchEl = document.getElementById("search");
 searchEl.addEventListener("input", e => filterLinks(e.target.value.trim().toLowerCase()));
 document.addEventListener("keydown", e => {
-  if (e.key === "/" && document.activeElement !== searchEl) {
+  if (e.key === "\\" && document.activeElement !== searchEl) {
     e.preventDefault(); searchEl.focus();
   } else if (e.key === "Escape" && document.activeElement === searchEl) {
     searchEl.value = ""; filterLinks(""); searchEl.blur();
@@ -421,25 +421,63 @@ tick(); setInterval(tick, 1000);
 
 /* ---- news ticker ---- */
 async function loadTicker() {
-  const FEED = "https://www.ansa.it/toscana/news/toscana_rss.xml";
-  const API  = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEED)}&count=12`;
+  const FEEDS = [
+    "https://www.ansa.it/toscana/news/toscana_rss.xml",
+    "https://www.gonews.it/feed/",
+  ];
   const inner = document.getElementById("ticker-inner");
-  try {
-    const res  = await fetch(API, { signal: AbortSignal.timeout(8000) });
-    const data = await res.json();
-    if (data.status !== "ok" || !data.items?.length) throw new Error();
-    const items = data.items;
-    const html = items.map(i =>
-      `<span class="ticker-item"><a href="${i.link}" target="_blank" rel="noopener noreferrer">${i.title}</a></span>` +
-      `<span class="ticker-sep">◆</span>`
-    ).join("");
-    inner.innerHTML = html + html;
-    const charCount = items.map(i => i.title.length).reduce((a, b) => a + b, 0);
-    inner.style.setProperty("--ticker-dur", Math.max(30, charCount * 0.18) + "s");
-    inner.parentElement.parentElement.style.setProperty("--ticker-dur", Math.max(30, charCount * 0.18) + "s");
-  } catch(e) {
-    inner.innerHTML = `<span class="ticker-item" style="color:var(--muted)">Notizie Toscana non disponibili</span>`;
+  const wrap  = document.getElementById("ticker-wrap");
+
+  function abort(ms) {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), ms);
+    return ctrl.signal;
   }
+
+  async function tryFeed(feedUrl) {
+    const proxy = "https://corsproxy.io/?" + encodeURIComponent(feedUrl);
+    const res   = await fetch(proxy, { signal: abort(8000) });
+    if (!res.ok) throw new Error("http " + res.status);
+    const xml   = await res.text();
+    const doc   = new DOMParser().parseFromString(xml, "text/xml");
+    if (doc.querySelector("parsererror")) throw new Error("xml parse error");
+    const nodes = [...doc.querySelectorAll("item")].slice(0, 12);
+    if (!nodes.length) throw new Error("no items");
+    return nodes.map(n => ({
+      title: n.querySelector("title")?.textContent?.trim() ?? "",
+      link:  (n.querySelector("link")?.nextSibling?.nodeValue?.trim()
+           || n.querySelector("link")?.textContent?.trim()
+           || n.querySelector("guid")?.textContent?.trim()
+           || "#"),
+    })).filter(i => i.title);
+  }
+
+  let items = null;
+  for (const feed of FEEDS) {
+    try { items = await tryFeed(feed); break; } catch(e) {}
+  }
+
+  if (!items?.length) {
+    inner.innerHTML = `<span class="ticker-item" style="color:var(--muted)">Notizie Toscana non disponibili</span>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  for (let pass = 0; pass < 2; pass++) {
+    for (const { title, link } of items) {
+      const s = document.createElement("span"); s.className = "ticker-item";
+      const a = document.createElement("a");
+      a.href = link; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = title;
+      s.appendChild(a); frag.appendChild(s);
+      const sep = document.createElement("span"); sep.className = "ticker-sep";
+      sep.textContent = "◆"; frag.appendChild(sep);
+    }
+  }
+  inner.textContent = "";
+  inner.appendChild(frag);
+  const dur = Math.max(30, items.reduce((s, i) => s + i.title.length, 0) * 0.18);
+  wrap.style.setProperty("--ticker-dur", dur + "s");
 }
 loadTicker();
 </script>
