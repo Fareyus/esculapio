@@ -363,6 +363,69 @@ function renderList(id, links) {
 }
 
 renderLinks();
+
+function filterLinks(q) {
+  const noResults = document.getElementById('no-results');
+
+  if (!q) {
+    showAll();
+    document.getElementById('archivio').removeAttribute('open');
+    noResults.classList.add('hidden');
+    return;
+  }
+
+  let total = 0;
+
+  // Comune: filtra le pills
+  const comuneSection = document.getElementById('section-comune');
+  let n = 0;
+  comuneSection.querySelectorAll('.pill').forEach(el => {
+    const show = el.textContent.toLowerCase().includes(q);
+    el.style.display = show ? '' : 'none';
+    if (show) n++;
+  });
+  comuneSection.style.display = n ? '' : 'none';
+  total += n;
+
+  // Urgenti e Emergenza
+  const urgenti  = filterList('links-urgenti', q);
+  const emergenza = filterList('links-emergenza', q);
+  document.getElementById('section-urgenti').style.display  = urgenti  ? '' : 'none';
+  document.getElementById('section-emergenza').style.display = emergenza ? '' : 'none';
+  document.getElementById('sections-grid').style.display = (urgenti || emergenza) ? '' : 'none';
+  total += urgenti + emergenza;
+
+  // Archivio: si apre automaticamente se ha risultati
+  const arch    = filterList('links-archivio', q);
+  const archivio = document.getElementById('archivio');
+  archivio.style.display = arch ? '' : 'none';
+  if (arch) { archivio.setAttribute('open', ''); total += arch; }
+
+  noResults.classList.toggle('hidden', total > 0);
+}
+
+function filterList(listId, q) {
+  let n = 0;
+  document.getElementById(listId).querySelectorAll('li').forEach(li => {
+    const show = li.querySelector('a').textContent.toLowerCase().includes(q);
+    li.style.display = show ? '' : 'none';
+    if (show) n++;
+  });
+  return n;
+}
+
+function showAll() {
+  ['section-comune','section-urgenti','section-emergenza','archivio','sections-grid'].forEach(id => {
+    document.getElementById(id).style.display = '';
+  });
+  document.querySelectorAll('.pill, #links-urgenti li, #links-emergenza li, #links-archivio li').forEach(el => {
+    el.style.display = '';
+  });
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  filterLinks(e.target.value.trim().toLowerCase());
+});
 </script>
 </body>
 </html>
