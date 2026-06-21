@@ -133,6 +133,36 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   align-self:flex-start;
 }
 
+/* ---- ETÀ PAZIENTE ---- */
+.age-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px 16px;margin-bottom:10px;
+}
+.age-bar-label{
+  font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;flex-shrink:0;
+}
+.age-input{
+  width:130px;padding:5px 10px;border-radius:8px;
+  border:1px solid var(--border);background:var(--panel-2);
+  color:var(--text);font-size:.88rem;outline:none;
+  transition:border-color .12s;
+  /* rimuove le freccette spinner */
+  -moz-appearance:textfield;
+}
+.age-input::-webkit-outer-spin-button,
+.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.age-input:focus{border-color:var(--accent)}
+.age-btn{
+  padding:5px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--navy);color:#fff;font-size:.82rem;font-weight:700;
+  cursor:pointer;transition:opacity .12s;white-space:nowrap;flex-shrink:0;
+}
+.age-btn:hover{opacity:.8}
+.age-result{font-size:.88rem;font-weight:600;color:var(--accent-strong);flex:1;min-width:120px}
+.age-result.err{color:var(--amber)}
+
 /* ---- ARCHIVIO ---- */
 #archivio{
   background:var(--panel);border:1px solid var(--border);
@@ -234,6 +264,14 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
     </div>
     <div class="card-grid" id="links-emergenza"></div>
   </section>
+</div>
+
+<!-- ETÀ PAZIENTE -->
+<div class="age-bar">
+  <span class="age-bar-label">🩺 Età paziente</span>
+  <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
+  <button class="age-btn" id="age-calc-btn">Calcola</button>
+  <span class="age-result" id="age-result"></span>
 </div>
 
 <!-- ARCHIVIO -->
@@ -411,6 +449,33 @@ document.addEventListener("keydown", e => {
     searchEl.value = ""; filterLinks(""); searchEl.blur();
   }
 });
+
+/* ---- età paziente ---- */
+(function() {
+  const input  = document.getElementById("birthYear");
+  const result = document.getElementById("age-result");
+
+  function calcola() {
+    const anno = parseInt(input.value, 10);
+    const oggi = new Date().getFullYear();
+    result.className = "age-result";
+    if (!input.value.trim()) {
+      result.textContent = "Inserisci un anno.";
+      result.classList.add("err");
+    } else if (isNaN(anno) || anno > oggi) {
+      result.textContent = "Anno non valido.";
+      result.classList.add("err");
+    } else if (anno < 1900) {
+      result.textContent = "… è morto.";
+      result.classList.add("err");
+    } else {
+      result.textContent = "Ha " + (oggi - anno) + " anni (o li compirà quest'anno).";
+    }
+  }
+
+  document.getElementById("age-calc-btn").addEventListener("click", calcola);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") calcola(); });
+})();
 
 /* ---- theme ---- */
 const root = document.documentElement;
