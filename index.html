@@ -431,8 +431,8 @@ tick(); setInterval(tick, 1000);
 /* ---- news ticker ---- */
 async function loadTicker() {
   const FEEDS = [
-    "https://www.firenzetoday.it/rss/index.xml",
-    "https://www.pratotoday.it/rss/index.xml",
+    "https://www.lanazione.it/firenze/rss",
+    "https://www.lanazione.it/prato/rss",
   ];
   const inner = document.getElementById("ticker-inner");
   const wrap  = document.getElementById("ticker-wrap");
@@ -474,11 +474,17 @@ async function loadTicker() {
       }
     } catch(e) {}
 
-    // 2) allorigins — restituisce {contents: rawXml}
+    // 2) allorigins — restituisce {contents: rawXml o data:...;base64,...}
     try {
       const res  = await tFetch(`https://api.allorigins.win/get?url=${enc}`, 7000);
       const data = await res.json();
-      if (data?.contents) return parseXml(data.contents);
+      if (data?.contents) {
+        let xml = data.contents;
+        if (xml.startsWith("data:") && xml.includes("base64,")) {
+          xml = atob(xml.split("base64,")[1]);
+        }
+        return parseXml(xml);
+      }
     } catch(e) {}
 
     // 3) corsproxy — restituisce il testo grezzo
