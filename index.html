@@ -1,431 +1,421 @@
-<!DOCTYPE html>
-<html lang="it">
+<!doctype html>
+<html lang="it" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EsculapioNET — Link Rapidi</title>
-  <style>
-    :root {
-      --navy: #0d0d7a;
-      --teal: #1a5f7a;
-      --steel: #8090a0;
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --text: #1a1a2e;
-      --border: #e0e0ea;
-      --hover-bg: #f0f0fa;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EsculapioNET · Link rapidi</title>
+<style>
+/* ---- DESIGN TOKENS ---- */
+:root {
+  --bg:#090a1e; --panel:#11132e; --panel-2:#181b3c; --border:#262a55;
+  --text:#e9ebf7; --muted:#9298c0; --wordmark:#eef0fb;
+  --navy:#000066; --accent:#aab2c6; --accent-strong:#c7ccda; --accent-soft:#1a1d44;
+  --grad:linear-gradient(135deg,#3b3f88 0%,#aab2c6 100%);
+  --grad-mark:linear-gradient(135deg,#ffffff 0%,#9aa2b4 100%);
+  --amber:#e0a93b; --amber-soft:#312607;
+  --shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px rgba(0,0,0,.4);
+  --radius:14px;
+  --c-urgenti:#7b9ce8; --c-emergenza:#4ab5c8;
+}
+[data-theme="light"] {
+  --bg:#eceef4; --panel:#ffffff; --panel-2:#f5f6fb; --border:#dcdfeb;
+  --text:#0a0c2a; --muted:#5d6379; --wordmark:#000066;
+  --navy:#000066; --accent:#000066; --accent-strong:#1b1b7a; --accent-soft:#e3e4f2;
+  --grad:linear-gradient(135deg,#000066 0%,#9aa2b4 100%);
+  --grad-mark:linear-gradient(135deg,#000066 0%,#4a5a9a 100%);
+  --amber:#9a6a06; --amber-soft:#fbeecb;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 6px 20px rgba(16,24,40,.09);
+  --c-urgenti:#1a3a8a; --c-emergenza:#1a5f7a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.45;
+  padding:18px clamp(12px,3vw,28px) 48px;
+}
+.wrap{max-width:1180px;margin:0 auto}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ---- HEADER ---- */
+header.top{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:14px 18px;background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;
+}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.mark{
+  width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;
+  background:var(--navy);border:1px solid rgba(255,255,255,.12);
+}
+.mark span{
+  font-weight:800;font-size:1.1rem;letter-spacing:-1px;
+  background:var(--grad-mark);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.brand-text h1{font-size:1.2rem;margin:0;letter-spacing:.2px;font-weight:700}
+.brand-text h1 .eo{color:var(--wordmark)}
+.brand-text h1 b{font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-text p{margin:2px 0 0;font-size:.73rem;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.clock{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;line-height:1.1}
+.clock .t{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
+.clock .d{font-size:.72rem;color:var(--muted);text-transform:capitalize}
+.iconbtn{
+  width:40px;height:40px;border-radius:10px;border:1px solid var(--border);
+  background:var(--panel-2);color:var(--text);cursor:pointer;font-size:1.1rem;
+  display:grid;place-items:center;transition:transform .12s,border-color .12s;
+}
+.iconbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 15px;
-      line-height: 1.5;
-    }
+/* ---- SEARCH ---- */
+.search-wrap{position:relative;margin-bottom:20px}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none}
+#search{
+  width:100%;padding:13px 44px 13px 42px;border-radius:12px;
+  background:var(--panel);border:1px solid var(--border);color:var(--text);
+  font-size:1rem;outline:none;transition:border-color .12s,box-shadow .12s;
+}
+#search:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);
+}
+.search-wrap kbd{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--border);border-radius:6px;padding:2px 7px;background:var(--panel-2);
+}
 
-    /* HEADER */
-    header {
-      background: var(--navy);
-      color: #fff;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
+/* ---- SECTION HEADERS ---- */
+.group{margin-bottom:24px}
+.ghead{display:flex;align-items:baseline;gap:10px;margin:0 2px 12px}
+.ghead h2{font-size:.96rem;margin:0;letter-spacing:.3px}
+.ghead .cnt{font-size:.74rem;color:var(--muted);font-family:ui-monospace,monospace}
+.ghead .line{flex:1;height:1px;background:var(--border)}
+.urgenti-title{color:var(--c-urgenti)}
+.emergenza-title{color:var(--c-emergenza)}
 
-    .header-inner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+/* ---- TWO-COL LAYOUT ---- */
+.sections-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
 
-    .logo {
-      font-size: 20px;
-      font-weight: 800;
-      background: #fff;
-      color: var(--navy);
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      flex-shrink: 0;
-      letter-spacing: -1px;
-    }
+/* ---- CARD GRID ---- */
+.card-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+.sections-grid .card-grid{grid-template-columns:repeat(auto-fill,minmax(175px,1fr))}
 
-    .header-title { font-size: 17px; font-weight: 700; }
-    .header-sub   { font-size: 13px; opacity: 0.65; margin-left: 6px; }
+/* ---- LINK CARDS ---- */
+a.link-card{
+  display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 13px;position:relative;overflow:hidden;
+  transition:transform .12s,border-color .12s,box-shadow .12s;
+}
+a.link-card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:transparent;opacity:0;transition:opacity .12s,background .12s;
+}
+a.link-card:hover{
+  transform:translateY(-2px);
+  border-color:color-mix(in srgb,var(--accent) 55%,var(--border));
+  box-shadow:var(--shadow);
+}
+a.link-card:hover::before{background:var(--grad);opacity:1}
+a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-    /* LAYOUT */
-    .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 20px 48px;
-    }
+.glyph{
+  width:38px;height:38px;border-radius:9px;flex:none;display:grid;place-items:center;
+  font-weight:800;font-size:.88rem;letter-spacing:-.5px;
+  background:var(--accent-soft);border:1px solid var(--border);color:var(--accent-strong);
+}
+[data-theme="light"] .glyph{color:var(--navy)}
+.meta{min-width:0}
+.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block}
+.meta .host{
+  font-size:.72rem;color:var(--muted);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;display:block;margin-top:2px;
+}
+.badge-lan{
+  position:absolute;top:7px;right:7px;font-size:.58rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;padding:2px 5px;border-radius:5px;
+  background:var(--amber-soft);color:var(--amber);
+  border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);
+}
 
-    /* SEARCH */
-    .search-wrap { margin-bottom: 18px; }
+/* ---- ARCHIVIO ---- */
+#archivio{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:24px;
+}
+#archivio summary{
+  padding:13px 16px;font-size:.82rem;font-weight:700;letter-spacing:.04em;
+  color:var(--muted);cursor:pointer;user-select:none;list-style:none;text-transform:uppercase;
+}
+#archivio summary::-webkit-details-marker{display:none}
+#archivio summary::before{content:"▾  "}
+#archivio[open] summary::before{content:"▴  "}
+#archivio .card-grid{padding:4px 14px 14px}
 
-    #search {
-      width: 100%;
-      padding: 11px 16px;
-      font-size: 16px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      outline: none;
-      transition: border-color 0.18s;
-    }
+/* ---- EMPTY / FOOTER ---- */
+.empty{text-align:center;color:var(--muted);padding:50px 0;font-size:.95rem}
+.hidden{display:none!important}
+footer{margin-top:8px;text-align:center;color:var(--muted);font-size:.74rem}
+footer code{font-family:ui-monospace,monospace;color:var(--text)}
 
-    #search:focus { border-color: var(--navy); }
-
-    /* NO RESULTS */
-    #no-results {
-      text-align: center;
-      padding: 48px 0;
-      color: var(--steel);
-      font-size: 15px;
-    }
-
-    .hidden { display: none !important; }
-
-    /* CARD BASE */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      padding: 9px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #fff;
-    }
-
-    .card-title.comune   { background: var(--steel); }
-    .card-title.urgenti  { background: var(--navy); }
-    .card-title.emergenza{ background: var(--teal); }
-
-    /* PILLS (comune) */
-    .pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 14px 16px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 14px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 14px;
-      color: var(--text);
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      white-space: nowrap;
-    }
-
-    .pill:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-
-    /* TWO-COLUMN GRID */
-    .sections-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-
-    /* LINK LIST */
-    .link-list { list-style: none; }
-
-    .link-list li a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 16px;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 14px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.13s, color 0.13s;
-    }
-
-    .link-list li:last-child a { border-bottom: none; }
-
-    .link-list li a:hover { background: var(--hover-bg); color: var(--navy); }
-
-    .link-list li a::after {
-      content: "↗";
-      color: var(--steel);
-      font-size: 11px;
-      flex-shrink: 0;
-      margin-left: 10px;
-    }
-
-    /* ARCHIVIO (details/summary) */
-    #archivio summary {
-      padding: 11px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--steel);
-      cursor: pointer;
-      user-select: none;
-      list-style: none;
-    }
-
-    #archivio summary::-webkit-details-marker { display: none; }
-    #archivio summary::before { content: "▾  "; }
-    #archivio[open] summary::before { content: "▴  "; }
-
-    #archivio .link-list li a { font-size: 13px; }
-
-    /* LAN BADGE */
-    .badge-lan {
-      display: inline-block;
-      margin-left: 6px;
-      padding: 1px 5px;
-      font-size: 10px;
-      font-weight: 700;
-      background: #e8f0fe;
-      color: #1a56b0;
-      border-radius: 4px;
-      letter-spacing: 0.04em;
-      vertical-align: middle;
-    }
-
-    /* MOBILE */
-    @media (max-width: 700px) {
-      .sections-grid { grid-template-columns: 1fr; }
-      .header-sub { display: none; }
-    }
-  </style>
+/* ---- MOBILE ---- */
+@media(max-width:600px){
+  .sections-grid{grid-template-columns:1fr}
+  .clock{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
+<div class="wrap">
 
-<header>
-  <div class="header-inner">
-    <div class="logo">EN</div>
-    <div>
-      <span class="header-title">EsculapioNET</span>
-      <span class="header-sub">Link Rapidi</span>
+<header class="top">
+  <div class="brand">
+    <div class="mark" aria-hidden="true"><span>eN</span></div>
+    <div class="brand-text">
+      <h1><span class="eo">esculapio</span><b>NET</b></h1>
+      <p>Link rapidi · Centrale 118 Firenze-Prato</p>
     </div>
   </div>
+  <div class="clock" aria-live="off">
+    <div class="t" id="clk">--:--:--</div>
+    <div class="d" id="dat">—</div>
+  </div>
+  <button class="iconbtn" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
 </header>
 
-<div class="page">
-
-  <div class="search-wrap">
-    <input type="text" id="search" placeholder="🔍  Cerca tra i link..." autocomplete="off" spellcheck="false" aria-label="Cerca tra i link">
-  </div>
-
-  <div id="no-results" class="hidden">Nessun link trovato.</div>
-
-  <!-- COMUNE -->
-  <div class="card" id="section-comune">
-    <h2 class="card-title comune">Comune</h2>
-    <div class="pills" id="links-comune"></div>
-  </div>
-
-  <!-- URGENTI + EMERGENZA -->
-  <div class="sections-grid" id="sections-grid">
-    <div class="card" id="section-urgenti">
-      <h2 class="card-title urgenti">🚐 Trasporti Urgenti</h2>
-      <ul class="link-list" id="links-urgenti"></ul>
-    </div>
-    <div class="card" id="section-emergenza">
-      <h2 class="card-title emergenza">🚑 Emergenza Sanitaria</h2>
-      <ul class="link-list" id="links-emergenza"></ul>
-    </div>
-  </div>
-
-  <!-- ARCHIVIO -->
-  <details id="archivio" class="card">
-    <summary>Archivio link (poco usati)</summary>
-    <ul class="link-list" id="links-archivio"></ul>
-  </details>
-
+<div class="search-wrap">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+  <input id="search" type="search" placeholder="Cerca un link…  (premi /)" autocomplete="off" aria-label="Cerca tra i link">
+  <kbd>/</kbd>
 </div>
 
+<p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
+
+<!-- COMUNE -->
+<section class="group" id="section-comune">
+  <div class="ghead">
+    <h2>Comune</h2><span class="cnt" id="count-comune"></span><div class="line"></div>
+  </div>
+  <div class="card-grid" id="links-comune"></div>
+</section>
+
+<!-- URGENTI + EMERGENZA -->
+<div class="sections-grid" id="sections-grid">
+  <section class="group" id="section-urgenti">
+    <div class="ghead">
+      <h2 class="urgenti-title">🚐 Trasporti Urgenti</h2>
+      <span class="cnt" id="count-urgenti"></span><div class="line"></div>
+    </div>
+    <div class="card-grid" id="links-urgenti"></div>
+  </section>
+  <section class="group" id="section-emergenza">
+    <div class="ghead">
+      <h2 class="emergenza-title">🚑 Emergenza Sanitaria</h2>
+      <span class="cnt" id="count-emergenza"></span><div class="line"></div>
+    </div>
+    <div class="card-grid" id="links-emergenza"></div>
+  </section>
+</div>
+
+<!-- ARCHIVIO -->
+<details id="archivio">
+  <summary>Archivio link (poco usati)</summary>
+  <div class="card-grid" id="links-archivio"></div>
+</details>
+
+<footer>
+  I link <code>intranet</code> funzionano solo dalla rete interna 118 ·
+  Per modificare i link, apri il file e cambia l'oggetto <code>SITE_DATA</code>.
+</footer>
+
+</div><!-- .wrap -->
 <script>
+/* =========================================================
+   DATI — per aggiungere/modificare un link, cambia qui.
+   intranet: true  → mostra il badge "intranet" sulla card
+========================================================= */
 const SITE_DATA = {
   comune: [
-    { label: "Mail USL Centro",            url: "https://webmail.sanita.toscana.it/" },
-    { label: "Mail EsculapioNET",          url: "https://outlook.office.com/mail/" },
-    { label: "Rubrica Referenti",          url: "https://docs.google.com/spreadsheets/d/1H8Wfi8ccAZC7Pxi_HMVoefFpVOwKfx-bfPtoZnAVQ0Q/edit" },
-    { label: "Rubrica Generale 118",       url: "https://docs.google.com/spreadsheets/d/1cDakO5InL3gx95SdUShPwQzJb4EJ5_yH/edit" },
-    { label: "Mail Associazioni",          url: "https://docs.google.com/spreadsheets/d/1vvzBGbQW4WD_JToWUck5UkftfQABUR4donJxbMMWwFg/edit" },
-    { label: "Turnazione Centrale 2026",   url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit" },
-    { label: "Timbrature",                 url: "https://zgcloud.zeitgroup.com/" },
-    { label: "Mappa Sinottica EU FI-PO",   url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
-    { label: "POT",                        url: "http://auth.sin.asf.it/login.php" },
-    { label: "Cartellino",                 url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
-    { label: "Sigle e Turni Ambulanze 118",url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by", intranet: true },
+    { label: "Mail USL Centro",             url: "https://webmail.sanita.toscana.it/" },
+    { label: "Mail EsculapioNET",           url: "https://outlook.office.com/mail/" },
+    { label: "Rubrica Referenti",           url: "https://docs.google.com/spreadsheets/d/1H8Wfi8ccAZC7Pxi_HMVoefFpVOwKfx-bfPtoZnAVQ0Q/edit" },
+    { label: "Rubrica Generale 118",        url: "https://docs.google.com/spreadsheets/d/1cDakO5InL3gx95SdUShPwQzJb4EJ5_yH/edit" },
+    { label: "Mail Associazioni",           url: "https://docs.google.com/spreadsheets/d/1vvzBGbQW4WD_JToWUck5UkftfQABUR4donJxbMMWwFg/edit" },
+    { label: "Turnazione Centrale 2026",    url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit" },
+    { label: "Timbrature",                  url: "https://zgcloud.zeitgroup.com/" },
+    { label: "Mappa Sinottica EU FI-PO",    url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
+    { label: "POT",                         url: "http://auth.sin.asf.it/login.php" },
+    { label: "Cartellino",                  url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
+    { label: "Sigle e Turni Ambulanze 118", url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by", intranet: true },
   ],
   urgenti: [
-    { label: "NRE - Controllo Certificati",   url: "https://ricettatrasporti.sanita.toscana.it/" },
-    { label: "Lista Trasporti Entro-RT",      url: "https://docs.google.com/spreadsheets/d/127_ym_5atztWavdqCmabw4qVHaYdo2mbbFNKNcvWoqI/edit" },
-    { label: "Lista Trasporti EXTRA-RT",      url: "https://docs.google.com/spreadsheets/d/1JOjGTEOhtfBt7vlznT-giyOKSul2Fo2LSOVdDgfK4Sg/edit" },
-    { label: "Rubrica Trasporti Salma",       url: "https://docs.google.com/spreadsheets/d/1mMYw8xa1EZ15YK4cwn6Gw5hADZJ26Xvg3KHUKHpMdyo/edit" },
-    { label: "Programmazione 1° Servizio",    url: "https://drive.google.com/drive/u/0/folders/11RbVBLZv6SRwvim9nR2FJZ0ZLYdsBnJ6" },
-    { label: "Turnazione PRATO",              url: "https://drive.google.com/file/d/12gCfvRuQjvZ8JhAe3iktxNednAUaXaJP/view" },
-    { label: "Mappa Funebre",                 url: "https://www.google.com/maps/d/u/0/viewer?mid=1gxSBjjf9NSwnSZP6SIP4UVVA5cv1m2lY&ll=43.8157963799819%2C11.372541918299275&z=10" },
-    { label: "Tango",                         url: "https://drive.google.com/drive/folders/1wT5EIO0WB1u5y_Mlb3jAACSW_7yZPZcN" },
-    { label: "Mezzi 118",                     url: "http://192.168.2.123:8080/dump118/", intranet: true },
-    { label: "Protocolli CO Firenze",         url: "https://drive.google.com/drive/u/0/folders/1A0L7jA6QkxEHzLL-hyQD50qI-2mwyIq0" },
-    { label: "Regolamento Trasporti NRE",     url: "https://drive.google.com/drive/folders/1va72AvaAiL5XAIIMbeYGk5C1e2Su6hQw" },
+    { label: "NRE - Controllo Certificati",    url: "https://ricettatrasporti.sanita.toscana.it/" },
+    { label: "Lista Trasporti Entro-RT",       url: "https://docs.google.com/spreadsheets/d/127_ym_5atztWavdqCmabw4qVHaYdo2mbbFNKNcvWoqI/edit" },
+    { label: "Lista Trasporti EXTRA-RT",       url: "https://docs.google.com/spreadsheets/d/1JOjGTEOhtfBt7vlznT-giyOKSul2Fo2LSOVdDgfK4Sg/edit" },
+    { label: "Rubrica Trasporti Salma",        url: "https://docs.google.com/spreadsheets/d/1mMYw8xa1EZ15YK4cwn6Gw5hADZJ26Xvg3KHUKHpMdyo/edit" },
+    { label: "Programmazione 1° Servizio",     url: "https://drive.google.com/drive/u/0/folders/11RbVBLZv6SRwvim9nR2FJZ0ZLYdsBnJ6" },
+    { label: "Turnazione PRATO",               url: "https://drive.google.com/file/d/12gCfvRuQjvZ8JhAe3iktxNednAUaXaJP/view" },
+    { label: "Mappa Funebre",                  url: "https://www.google.com/maps/d/u/0/viewer?mid=1gxSBjjf9NSwnSZP6SIP4UVVA5cv1m2lY&ll=43.8157963799819%2C11.372541918299275&z=10" },
+    { label: "Tango",                          url: "https://drive.google.com/drive/folders/1wT5EIO0WB1u5y_Mlb3jAACSW_7yZPZcN" },
+    { label: "Mezzi 118",                      url: "http://192.168.2.123:8080/dump118/", intranet: true },
+    { label: "Protocolli CO Firenze",          url: "https://drive.google.com/drive/u/0/folders/1A0L7jA6QkxEHzLL-hyQD50qI-2mwyIq0" },
+    { label: "Regolamento Trasporti NRE",      url: "https://drive.google.com/drive/folders/1va72AvaAiL5XAIIMbeYGk5C1e2Su6hQw" },
   ],
   emergenza: [
-    { label: "Homepage 118",                   url: "http://intranet.118.asf.locale/", intranet: true },
-    { label: "Medical Note Explorer",          url: "https://app118-firenze.uslcentro.toscana.it" },
-    { label: "LifeDesk",                       url: "https://checklist118.uslcentro.toscana.it/Consegne.aspx" },
-    { label: "DUMP - Guasti",                  url: "http://172.19.19.239/118/guasti.php", intranet: true },
-    { label: "DUMP - Ingressi Ospedali",       url: "http://172.19.19.239/118/dea_all.php", intranet: true },
-    { label: "Gestione Guasti",                url: "http://intranet.118.asf.locale/index.php/acc-rapido/3-riga/gestione-guasti-e-richieste-di-assistenza-tecnica", intranet: true },
-    { label: "S.A.R.A.",                       url: "https://sara.gruppo-informatico.com/Login.aspx" },
-    { label: "Dati Post Chiusura Associazioni",url: "https://datipost118.uslcentro.toscana.it/wdodpc2/" },
-    { label: "Codifica Regionale Targhe",      url: "https://docs.google.com/spreadsheets/d/1xYhNJWXpJO4gr1n8AutHg8GxYrp-lQhiw0b0Crm_xz4/edit" },
-    { label: "Guida Inserimento Targhe",       url: "https://docs.google.com/presentation/d/1pWAmGdhAOI3tjbaHD-kUvryNpeF4iYnyekaWO2TkfkA/edit" },
-    { label: "Tablet Rotti",                   url: "https://docs.google.com/spreadsheets/d/18GeLANtC43_U58puU05W99x3e3Rb6os3jeT6PrBjK7Q/edit" },
-    { label: "TuConTi",                        url: "https://tuconti20.amm.telecomitalia.it/" },
-    { label: "Cambio Password Dominio",        url: "https://cambiopassword118.uslcentro.toscana.it/" },
+    { label: "Homepage 118",                    url: "http://intranet.118.asf.locale/", intranet: true },
+    { label: "Medical Note Explorer",           url: "https://app118-firenze.uslcentro.toscana.it" },
+    { label: "LifeDesk",                        url: "https://checklist118.uslcentro.toscana.it/Consegne.aspx" },
+    { label: "DUMP - Guasti",                   url: "http://172.19.19.239/118/guasti.php", intranet: true },
+    { label: "DUMP - Ingressi Ospedali",        url: "http://172.19.19.239/118/dea_all.php", intranet: true },
+    { label: "Gestione Guasti",                 url: "http://intranet.118.asf.locale/index.php/acc-rapido/3-riga/gestione-guasti-e-richieste-di-assistenza-tecnica", intranet: true },
+    { label: "S.A.R.A.",                        url: "https://sara.gruppo-informatico.com/Login.aspx" },
+    { label: "Dati Post Chiusura Associazioni", url: "https://datipost118.uslcentro.toscana.it/wdodpc2/" },
+    { label: "Codifica Regionale Targhe",       url: "https://docs.google.com/spreadsheets/d/1xYhNJWXpJO4gr1n8AutHg8GxYrp-lQhiw0b0Crm_xz4/edit" },
+    { label: "Guida Inserimento Targhe",        url: "https://docs.google.com/presentation/d/1pWAmGdhAOI3tjbaHD-kUvryNpeF4iYnyekaWO2TkfkA/edit" },
+    { label: "Tablet Rotti",                    url: "https://docs.google.com/spreadsheets/d/18GeLANtC43_U58puU05W99x3e3Rb6os3jeT6PrBjK7Q/edit" },
+    { label: "TuConTi",                         url: "https://tuconti20.amm.telecomitalia.it/" },
+    { label: "Cambio Password Dominio",         url: "https://cambiopassword118.uslcentro.toscana.it/" },
   ],
   archivio: [
-    { label: "WebReparti",                  url: "https://trasportiurgenti.uslcentro.toscana.it/WebReparti/" },
-    { label: "WebSer",                      url: "https://trasportiurgenti.uslcentro.toscana.it/WebSer/login.aspx" },
-    { label: "Stradario Firenze",           url: "https://opendata.comune.fi.it/?q=metarepo/datasetinfo&id=11430710-56eb-4444-bd6f-c5433155afc5" },
-    { label: "Calcolo Preventivo Trasporto",url: "https://docs.google.com/spreadsheets/d/1azZt3nlI9xe-CAygKVDIOY0RmcSSccRod72FGmw-e_Q/edit" },
-    { label: "Calendario Notti",            url: "https://drive.google.com/drive/folders/1xp-ToYXze8TUoqQqogHv7v8WChZNQPmn" },
-    { label: "Nottante",                    url: "https://webmail.aruba.it/" },
-    { label: "Dispatcher Tablet Prova",     url: "https://demo.medicalnote.it" },
-    { label: "Decodifica Codice Fiscale",   url: "https://sites.google.com/view/esculapio/link-rapidi/decodifica-codice-fiscale" },
-    { label: "Progetto Tablet 118",         url: "https://drive.google.com/drive/folders/1AY0nKpE80wKFR9U8VHDagrNJxI5YsJwu" },
-    { label: "Telefonia 118",               url: "https://docs.google.com/document/d/1i_X0fzFMihqFPBHOGHHBeECpWqSZ3_iYJSUjR43YUzw/edit" },
+    { label: "WebReparti",                   url: "https://trasportiurgenti.uslcentro.toscana.it/WebReparti/" },
+    { label: "WebSer",                       url: "https://trasportiurgenti.uslcentro.toscana.it/WebSer/login.aspx" },
+    { label: "Stradario Firenze",            url: "https://opendata.comune.fi.it/?q=metarepo/datasetinfo&id=11430710-56eb-4444-bd6f-c5433155afc5" },
+    { label: "Calcolo Preventivo Trasporto", url: "https://docs.google.com/spreadsheets/d/1azZt3nlI9xe-CAygKVDIOY0RmcSSccRod72FGmw-e_Q/edit" },
+    { label: "Calendario Notti",             url: "https://drive.google.com/drive/folders/1xp-ToYXze8TUoqQqogHv7v8WChZNQPmn" },
+    { label: "Nottante",                     url: "https://webmail.aruba.it/" },
+    { label: "Dispatcher Tablet Prova",      url: "https://demo.medicalnote.it" },
+    { label: "Decodifica Codice Fiscale",    url: "https://sites.google.com/view/esculapio/link-rapidi/decodifica-codice-fiscale" },
+    { label: "Progetto Tablet 118",          url: "https://drive.google.com/drive/folders/1AY0nKpE80wKFR9U8VHDagrNJxI5YsJwu" },
+    { label: "Telefonia 118",                url: "https://docs.google.com/document/d/1i_X0fzFMihqFPBHOGHHBeECpWqSZ3_iYJSUjR43YUzw/edit" },
   ],
 };
 
-function renderLinks() {
-  const comuneEl = document.getElementById('links-comune');
-  SITE_DATA.comune.forEach(({ label, url, intranet }) => {
-    const a = document.createElement('a');
-    a.href = url;
-    a.className = 'pill';
-    a.textContent = label;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    if (intranet) {
-      const badge = document.createElement('span');
-      badge.className = 'badge-lan';
-      badge.textContent = 'LAN';
-      a.appendChild(badge);
-    }
-    comuneEl.appendChild(a);
-  });
-  renderList('links-urgenti',  SITE_DATA.urgenti);
-  renderList('links-emergenza',SITE_DATA.emergenza);
-  renderList('links-archivio', SITE_DATA.archivio);
+/* ---- helpers ---- */
+function hostLabel(u) {
+  try {
+    const h = new URL(u).hostname.replace(/^www\./, "");
+    if (u.includes("docs.google.com/spreadsheets"))  return "Foglio Google";
+    if (u.includes("docs.google.com/document"))      return "Doc Google";
+    if (u.includes("docs.google.com/presentation"))  return "Slide Google";
+    if (h === "drive.google.com")                    return "Google Drive";
+    if (u.includes("google.com/maps"))               return "Google Maps";
+    if (h === "outlook.office.com")                  return "Outlook";
+    if (h === "sites.google.com")                    return "Google Sites";
+    return h;
+  } catch(e) { return ""; }
 }
 
-function renderList(id, links) {
-  const ul = document.getElementById(id);
-  links.forEach(({ label, url, intranet }) => {
-    const li = document.createElement('li');
-    const a  = document.createElement('a');
-    a.href = url;
-    a.textContent = label;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    if (intranet) {
-      const badge = document.createElement('span');
-      badge.className = 'badge-lan';
-      badge.textContent = 'LAN';
-      a.appendChild(badge);
-    }
-    li.appendChild(a);
-    ul.appendChild(li);
-  });
+function glyph(n) {
+  const w = n.replace(/[^\wÀ-ÿ ]/g, " ").trim().split(/\s+/).filter(Boolean);
+  return ((w[0]?.[0] || "") + (w[1]?.[0] || "")).toUpperCase() || "•";
 }
 
-renderLinks();
+/* ---- render ---- */
+function makeCard({ label, url, intranet }) {
+  const a = document.createElement("a");
+  a.className = "link-card";
+  a.href = url;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.dataset.search = label.toLowerCase();
+  a.innerHTML =
+    `<div class="glyph" aria-hidden="true">${glyph(label)}</div>` +
+    `<div class="meta"><span class="name">${label}</span><span class="host">${hostLabel(url)}</span></div>` +
+    (intranet ? `<span class="badge-lan">intranet</span>` : "");
+  return a;
+}
 
-function filterLinks(q) {
-  const noResults = document.getElementById('no-results');
+function renderSection(id, links) {
+  const el = document.getElementById(id);
+  links.forEach(l => el.appendChild(makeCard(l)));
+}
 
-  if (!q) {
-    showAll();
-    document.getElementById('archivio').removeAttribute('open');
-    noResults.classList.add('hidden');
-    return;
-  }
+function setCount(id, n) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = n;
+}
 
-  let total = 0;
+renderSection("links-comune",    SITE_DATA.comune);
+renderSection("links-urgenti",   SITE_DATA.urgenti);
+renderSection("links-emergenza", SITE_DATA.emergenza);
+renderSection("links-archivio",  SITE_DATA.archivio);
 
-  // Comune: filtra le pills
-  const comuneSection = document.getElementById('section-comune');
+setCount("count-comune",    SITE_DATA.comune.length);
+setCount("count-urgenti",   SITE_DATA.urgenti.length);
+setCount("count-emergenza", SITE_DATA.emergenza.length);
+
+/* ---- search / filter ---- */
+function filterGrid(gridId, q) {
   let n = 0;
-  comuneSection.querySelectorAll('.pill').forEach(el => {
-    const show = el.textContent.toLowerCase().includes(q);
-    el.style.display = show ? '' : 'none';
-    if (show) n++;
-  });
-  comuneSection.style.display = n ? '' : 'none';
-  total += n;
-
-  // Urgenti e Emergenza
-  const urgenti  = filterList('links-urgenti', q);
-  const emergenza = filterList('links-emergenza', q);
-  document.getElementById('section-urgenti').style.display  = urgenti  ? '' : 'none';
-  document.getElementById('section-emergenza').style.display = emergenza ? '' : 'none';
-  document.getElementById('sections-grid').style.display = (urgenti || emergenza) ? '' : 'none';
-  total += urgenti + emergenza;
-
-  // Archivio: si apre automaticamente se ha risultati
-  const arch    = filterList('links-archivio', q);
-  const archivio = document.getElementById('archivio');
-  archivio.style.display = arch ? '' : 'none';
-  if (arch) { archivio.setAttribute('open', ''); total += arch; }
-
-  noResults.classList.toggle('hidden', total > 0);
-}
-
-function filterList(listId, q) {
-  let n = 0;
-  document.getElementById(listId).querySelectorAll('li').forEach(li => {
-    const show = li.querySelector('a').textContent.toLowerCase().includes(q);
-    li.style.display = show ? '' : 'none';
+  document.getElementById(gridId).querySelectorAll(".link-card").forEach(el => {
+    const show = el.dataset.search.includes(q);
+    el.style.display = show ? "" : "none";
     if (show) n++;
   });
   return n;
 }
 
 function showAll() {
-  ['section-comune','section-urgenti','section-emergenza','archivio','sections-grid'].forEach(id => {
-    document.getElementById(id).style.display = '';
+  ["section-comune","section-urgenti","section-emergenza","archivio","sections-grid"].forEach(id => {
+    document.getElementById(id).style.display = "";
   });
-  document.querySelectorAll('.pill, #links-urgenti li, #links-emergenza li, #links-archivio li').forEach(el => {
-    el.style.display = '';
-  });
+  document.querySelectorAll(".link-card").forEach(el => el.style.display = "");
 }
 
-document.getElementById('search').addEventListener('input', e => {
-  filterLinks(e.target.value.trim().toLowerCase());
+function filterLinks(q) {
+  const noResults = document.getElementById("no-results");
+  if (!q) {
+    showAll();
+    document.getElementById("archivio").removeAttribute("open");
+    noResults.classList.add("hidden");
+    return;
+  }
+  let total = 0;
+
+  const comune = filterGrid("links-comune", q);
+  document.getElementById("section-comune").style.display = comune ? "" : "none";
+  total += comune;
+
+  const urgenti  = filterGrid("links-urgenti", q);
+  const emergenza = filterGrid("links-emergenza", q);
+  document.getElementById("section-urgenti").style.display   = urgenti   ? "" : "none";
+  document.getElementById("section-emergenza").style.display = emergenza ? "" : "none";
+  document.getElementById("sections-grid").style.display = (urgenti || emergenza) ? "" : "none";
+  total += urgenti + emergenza;
+
+  const arch    = filterGrid("links-archivio", q);
+  const archivio = document.getElementById("archivio");
+  archivio.style.display = arch ? "" : "none";
+  if (arch) { archivio.setAttribute("open", ""); total += arch; }
+
+  noResults.classList.toggle("hidden", total > 0);
+}
+
+const searchEl = document.getElementById("search");
+searchEl.addEventListener("input", e => filterLinks(e.target.value.trim().toLowerCase()));
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== searchEl) {
+    e.preventDefault(); searchEl.focus();
+  } else if (e.key === "Escape" && document.activeElement === searchEl) {
+    searchEl.value = ""; filterLinks(""); searchEl.blur();
+  }
 });
+
+/* ---- theme ---- */
+const root = document.documentElement;
+try { const s = localStorage.getItem("esc-theme"); if (s) root.dataset.theme = s; } catch(e) {}
+document.getElementById("theme-btn").onclick = () => {
+  root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+  try { localStorage.setItem("esc-theme", root.dataset.theme); } catch(e) {}
+};
+
+/* ---- clock ---- */
+function tick() {
+  const d = new Date();
+  document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
+  document.getElementById("dat").textContent  = d.toLocaleDateString("it-IT", { weekday:"long", day:"numeric", month:"long" });
+}
+tick(); setInterval(tick, 1000);
 </script>
 </body>
 </html>
