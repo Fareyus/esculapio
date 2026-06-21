@@ -123,14 +123,13 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   background:var(--accent-soft);border:1px solid var(--border);color:var(--accent-strong);
 }
 [data-theme="light"] .glyph{color:var(--navy)}
-.meta{min-width:0}
-.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{min-width:0;display:flex;flex-direction:column;gap:3px}
+.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block}
 .badge-lan{
-  margin-left:auto;flex-shrink:0;font-size:.58rem;font-weight:700;
+  align-self:flex-start;font-size:.58rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.5px;padding:2px 5px;border-radius:5px;
   background:var(--amber-soft);color:var(--amber);
   border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);
-  align-self:flex-start;
 }
 
 /* ---- ETÀ PAZIENTE ---- */
@@ -385,8 +384,9 @@ function makeCard({ label, url, intranet }) {
   a.dataset.search = label.toLowerCase();
   a.innerHTML =
     `<div class="glyph" aria-hidden="true">${glyph(label)}</div>` +
-    `<div class="meta"><span class="name">${label}</span></div>` +
-    (intranet ? `<span class="badge-lan">intranet</span>` : "");
+    `<div class="meta"><span class="name">${label}</span>` +
+    (intranet ? `<span class="badge-lan">intranet</span>` : "") +
+    `</div>`;
   return a;
 }
 
