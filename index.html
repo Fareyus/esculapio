@@ -43,18 +43,8 @@ header.top{
   border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;
 }
 .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
-.mark{
-  width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;
-  background:var(--navy);border:1px solid rgba(255,255,255,.12);
-}
-.mark span{
-  font-weight:800;font-size:1.1rem;letter-spacing:-1px;
-  background:var(--grad-mark);-webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.brand-text h1{font-size:1.2rem;margin:0;letter-spacing:.2px;font-weight:700}
-.brand-text h1 .eo{color:var(--wordmark)}
-.brand-text h1 b{font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.brand-text p{margin:2px 0 0;font-size:.73rem;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.brand-logo{height:52px;width:auto;border-radius:8px;background:#fff;padding:3px}
+.brand-sub{margin:0;font-size:.73rem;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
 .clock{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;line-height:1.1}
 .clock .t{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
 .clock .d{font-size:.72rem;color:var(--muted);text-transform:capitalize}
@@ -131,10 +121,11 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   overflow:hidden;text-overflow:ellipsis;display:block;margin-top:2px;
 }
 .badge-lan{
-  position:absolute;top:7px;right:7px;font-size:.58rem;font-weight:700;
+  margin-left:auto;flex-shrink:0;font-size:.58rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.5px;padding:2px 5px;border-radius:5px;
   background:var(--amber-soft);color:var(--amber);
   border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);
+  align-self:flex-start;
 }
 
 /* ---- ARCHIVIO ---- */
@@ -170,11 +161,8 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
 
 <header class="top">
   <div class="brand">
-    <div class="mark" aria-hidden="true"><span>eN</span></div>
-    <div class="brand-text">
-      <h1><span class="eo">esculapio</span><b>NET</b></h1>
-      <p>Link rapidi · Centrale 118 Firenze-Prato</p>
-    </div>
+    <img src="./logo.png" class="brand-logo" alt="EsculapioNET">
+    <p class="brand-sub">Link rapidi · Centrale 118 Firenze-Prato</p>
   </div>
   <div class="clock" aria-live="off">
     <div class="t" id="clk">--:--:--</div>
