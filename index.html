@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EsculapioNET · Link rapidi</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="google-extended" content="noindex">
+<meta name="gptbot" content="noindex">
+<meta name="anthropic-ai" content="noindex">
+<meta name="claudebot" content="noindex">
+<meta name="cohere-ai" content="noindex">
+<meta name="perplexitybot" content="noindex">
+<meta name="ccbot" content="noindex">
 <style>
 /* ---- DESIGN TOKENS ---- */
 :root {
@@ -190,10 +199,13 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
   <button class="iconbtn" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
 </header>
 
-<div class="search-wrap">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-  <input id="search" type="search" placeholder="Cerca un link…  (premi \)" autocomplete="off" aria-label="Cerca tra i link">
-  <kbd>\</kbd>
+<div class="ticker-wrap" id="ticker-wrap">
+  <div class="ticker-label">🗞 Toscana</div>
+  <div class="ticker-viewport">
+    <div class="ticker-inner" id="ticker-inner">
+      <span class="ticker-item" style="color:var(--muted)">Caricamento notizie…</span>
+    </div>
+  </div>
 </div>
 
 <p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
@@ -230,13 +242,10 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
   <div class="card-grid" id="links-archivio"></div>
 </details>
 
-<div class="ticker-wrap" id="ticker-wrap">
-  <div class="ticker-label">🗞 Toscana</div>
-  <div class="ticker-viewport">
-    <div class="ticker-inner" id="ticker-inner">
-      <span class="ticker-item" style="color:var(--muted)">Caricamento notizie…</span>
-    </div>
-  </div>
+<div class="search-wrap">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+  <input id="search" type="search" placeholder="Cerca un link…  (premi \)" autocomplete="off" aria-label="Cerca tra i link">
+  <kbd>\</kbd>
 </div>
 
 <footer>
