@@ -124,7 +124,7 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 }
 [data-theme="light"] .glyph{color:var(--navy)}
 .meta{min-width:0}
-.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block}
+.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .badge-lan{
   margin-left:auto;flex-shrink:0;font-size:.58rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.5px;padding:2px 5px;border-radius:5px;
@@ -162,6 +162,13 @@ a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .age-btn:hover{opacity:.8}
 .age-result{font-size:.88rem;font-weight:600;color:var(--accent-strong);flex:1;min-width:120px}
 .age-result.err{color:var(--amber)}
+
+/* ---- SHIFT TIMERS ---- */
+.shift-timers{display:flex;gap:18px;flex-shrink:0}
+.shift-timer{display:flex;flex-direction:column;align-items:center;gap:2px}
+.shift-lbl{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.shift-cd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-strong)}
+.age-vdiv{width:1px;height:34px;background:var(--border);flex-shrink:0;align-self:center}
 
 /* ---- ARCHIVIO ---- */
 #archivio{
@@ -268,6 +275,17 @@ footer code{font-family:ui-monospace,monospace;color:var(--text)}
 
 <!-- ETÀ PAZIENTE -->
 <div class="age-bar">
+  <div class="shift-timers">
+    <div class="shift-timer">
+      <span class="shift-lbl">ORD</span>
+      <span class="shift-cd" id="cd-ord">--:--:--</span>
+    </div>
+    <div class="shift-timer">
+      <span class="shift-lbl">EME</span>
+      <span class="shift-cd" id="cd-eme">--:--:--</span>
+    </div>
+  </div>
+  <div class="age-vdiv"></div>
   <span class="age-bar-label">🩺 Età paziente</span>
   <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
   <button class="age-btn" id="age-calc-btn">Calcola</button>
@@ -485,11 +503,36 @@ document.getElementById("theme-btn").onclick = () => {
   try { localStorage.setItem("esc-theme", root.dataset.theme); } catch(e) {}
 };
 
+/* ---- shift countdown ---- */
+function secsToHMS(s) {
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sc = s % 60;
+  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sc).padStart(2,"0")}`;
+}
+function shiftRemOrd(d) {
+  // Mattina 06:50-14:00 · Pomeriggio 14:00-20:00 · Notte 20:00-07:00
+  // 06:50-07:00 overlap → Notte ha priorità (turno precedente)
+  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
+  if (t < 7*3600)  return 7*3600 - t;          // Notte in corso → 07:00
+  if (t < 14*3600) return 14*3600 - t;         // Mattina → 14:00
+  if (t < 20*3600) return 20*3600 - t;         // Pomeriggio → 20:00
+  return (24+7)*3600 - t;                       // Notte → 07:00 domani
+}
+function shiftRemEme(d) {
+  // Mattina 07:00-13:00 · Pomeriggio 13:00-20:00 · Notte 20:00-07:00
+  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
+  if (t < 7*3600)  return 7*3600 - t;          // Notte in corso → 07:00
+  if (t < 13*3600) return 13*3600 - t;         // Mattina → 13:00
+  if (t < 20*3600) return 20*3600 - t;         // Pomeriggio → 20:00
+  return (24+7)*3600 - t;                       // Notte → 07:00 domani
+}
+
 /* ---- clock ---- */
 function tick() {
   const d = new Date();
   document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
   document.getElementById("dat").textContent  = d.toLocaleDateString("it-IT", { weekday:"long", day:"numeric", month:"long" });
+  document.getElementById("cd-ord").textContent = secsToHMS(shiftRemOrd(d));
+  document.getElementById("cd-eme").textContent = secsToHMS(shiftRemEme(d));
 }
 tick(); setInterval(tick, 1000);
 
