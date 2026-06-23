@@ -471,22 +471,48 @@ document.addEventListener("keydown", e => {
   const input  = document.getElementById("birthYear");
   const result = document.getElementById("age-result");
 
-  function calcola() {
-    const anno = parseInt(input.value, 10);
-    const oggi = new Date().getFullYear();
-    result.className = "age-result";
-    if (!input.value.trim()) {
-      result.textContent = "Inserisci un anno.";
-      result.classList.add("err");
-    } else if (isNaN(anno) || anno > oggi) {
+  function mostraEta(anno, oggi) {
+    if (anno > oggi) {
       result.textContent = "Non lo so Rick...";
       result.classList.add("err");
     } else if (anno < 1900) {
       result.textContent = "… è morto.";
       result.classList.add("err");
     } else {
-      result.textContent = "Ha " + (oggi - anno) + " anni (o li compirà quest'anno).";
+      result.textContent = `Ha ${oggi - anno} anni (o li compirà quest'anno).`;
     }
+  }
+
+  function calcola() {
+    const raw  = input.value.trim();
+    const oggi = new Date().getFullYear();
+    result.className = "age-result";
+
+    if (!raw) {
+      result.textContent = "Inserisci un anno.";
+      result.classList.add("err");
+      return;
+    }
+
+    const num = parseInt(raw, 10);
+    if (isNaN(num) || num < 0) {
+      result.textContent = "Non lo so Rick...";
+      result.classList.add("err");
+      return;
+    }
+
+    if (/^\d{1,2}$/.test(raw)) {
+      const y1 = 1900 + num;
+      const y2 = 2000 + num;
+      if (y2 > oggi) {
+        mostraEta(y1, oggi);
+      } else {
+        result.textContent = `Ha ${oggi - y1} anni (n. ${y1}) o ${oggi - y2} anni (n. ${y2}).`;
+      }
+      return;
+    }
+
+    mostraEta(num, oggi);
   }
 
   document.getElementById("age-calc-btn").addEventListener("click", calcola);
