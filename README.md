@@ -1,6 +1,6 @@
 # EsculapioNET — Portale link rapidi
 
-Portale di link operativi per gli operatori della Centrale 118 Firenze-Prato (USL Toscana Centro).
+Portale di link operativi per gli operatori della Centrale 118.
 Disponibile su **[fareyus.github.io/esculapio](https://fareyus.github.io/esculapio)**.
 
 ## Funzionalità
