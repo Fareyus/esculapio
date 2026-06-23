@@ -533,7 +533,7 @@ function tick() {
   const remEme = shiftRemEme(d);
   const merged = remOrd === remEme;
   document.getElementById("cd-eme").closest(".shift-timer").style.display = merged ? "none" : "";
-  document.getElementById("cd-ord").previousElementSibling.textContent    = merged ? "Ord + Eme" : "Ordinari";
+  document.getElementById("cd-ord").previousElementSibling.textContent    = merged ? "Ordinari/Emergenza" : "Ordinari";
   document.getElementById("cd-ord").textContent = secsToHMS(remOrd);
   document.getElementById("cd-eme").textContent = secsToHMS(remEme);
 }
