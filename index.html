@@ -529,8 +529,13 @@ function tick() {
   const d = new Date();
   document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
   document.getElementById("dat").textContent  = d.toLocaleDateString("it-IT", { weekday:"long", day:"numeric", month:"long" });
-  document.getElementById("cd-ord").textContent = secsToHMS(shiftRemOrd(d));
-  document.getElementById("cd-eme").textContent = secsToHMS(shiftRemEme(d));
+  const remOrd = shiftRemOrd(d);
+  const remEme = shiftRemEme(d);
+  const merged = remOrd === remEme;
+  document.getElementById("cd-eme").closest(".shift-timer").style.display = merged ? "none" : "";
+  document.getElementById("cd-ord").previousElementSibling.textContent    = merged ? "Ord + Eme" : "Ordinari";
+  document.getElementById("cd-ord").textContent = secsToHMS(remOrd);
+  document.getElementById("cd-eme").textContent = secsToHMS(remEme);
 }
 tick(); setInterval(tick, 1000);
 
@@ -634,6 +639,7 @@ async function loadTicker() {
   wrap.style.setProperty("--ticker-dur", dur + "s");
 }
 loadTicker();
+setInterval(loadTicker, 15 * 60 * 1000);
 </script>
 </body>
 </html>
