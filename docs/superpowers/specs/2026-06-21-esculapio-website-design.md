@@ -103,7 +103,7 @@ Mail USL Centro · Mail EsculapioNET · Rubrica Referenti · Mail Associazioni �
 ### 🚐 Trasporti Urgenti (11)
 NRE - Controllo Certificati · Lista Trasporti Entro-RT · Lista Trasporti EXTRA-RT · Rubrica Trasporti Salma · Programmazione 1° Servizio · Turnazione PRATO · Mappa Funebre · Tango · Mezzi 118 `intranet` · Protocolli CO Firenze · Regolamento Trasporti NRE
 
-### 🚑 Emergenza Sanitaria (13)
+### 🚑 Emergenza Sanitaria (12)
 Homepage 118 `intranet` · Medical Note Explorer · LifeDesk · DUMP - Guasti `intranet` · Gestione Guasti `intranet` · S.A.R.A. · Dati Post Chiusura Associazioni · Codifica Regionale Targhe · Guida Inserimento Targhe · Tablet Rotti · TuConTi · Cambio Password Dominio
 
 ### ▾ Archivio link (collassato)
