@@ -8,9 +8,10 @@ Disponibile su **[fareyus.github.io/esculapio](https://fareyus.github.io/esculap
 - **Link rapidi** suddivisi in sezioni: Comune, Trasporti Urgenti, Emergenza Sanitaria, Archivio
 - **Ricerca in tempo reale** (scorciatoia `\`) — filtra tutti i link istantaneamente
 - **Ticker notizie** La Nazione Firenze/Prato — aggiornato automaticamente ogni 15 minuti
+- **Orologio e data** in tempo reale nell'header
 - **Countdown fine turno** per Ordinari ed Emergenza, unificato quando coincidono
-- **Calcolatore età paziente** — inserisci l'anno di nascita e premi Invio
-- **Tema chiaro/scuro** con memoria locale
+- **Calcolatore età paziente** — inserisci l'anno di nascita e premi Invio (gestisce anche gli anni a 2 cifre)
+- **Tema chiaro/scuro** con memoria locale (scuro di default)
 - **Badge intranet** sui link raggiungibili solo dalla rete interna 118
 
 ## Come aggiungere o modificare un link
@@ -46,12 +47,16 @@ GitHub Pages si aggiorna in circa 30 secondi.
 ```
 index.html   # unico file del sito — HTML, CSS e JS incorporati, zero dipendenze
 logo.png     # logo EsculapioNET usato nell'header
+favicon.png  # icona della scheda browser
 robots.txt   # noindex — pagina a uso interno
+LICENSE      # CC BY-NC-ND 4.0
+docs/        # spec di design e piano di implementazione (storico)
 ```
 
 ## Note tecniche
 
 - **Ticker notizie:** usa tre proxy in cascata (rss2json → allorigins → corsproxy.io) per aggirare le restrizioni CORS sui feed RSS de La Nazione.
 - **Link intranet:** raggiungibili solo dalla rete interna 118 (`intranet.118.asf.locale`, `172.19.19.x`, `192.168.x.x`).
+- **Privacy:** pagina a uso interno — `robots.txt` con `noindex` più meta tag che escludono i crawler AI (GPTBot, ClaudeBot, Google-Extended, CCBot, ecc.).
 - **Turni Ordinari:** Mattina 06:50–14:00 · Pomeriggio 14:00–20:00 · Notte 20:00–07:00
 - **Turni Emergenza:** Mattina 07:00–13:00 · Pomeriggio 13:00–20:00 · Notte 20:00–07:00
