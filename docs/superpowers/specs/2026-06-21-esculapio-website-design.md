@@ -89,7 +89,7 @@ Quando i due countdown coincidono (di notte, entrambi verso le 07:00) vengono un
 Input anno di nascita + bottone "Calcola" (o Invio). Restituisce l'età (`anno corrente − nascita`). Gestisce anni a 2 cifre (disambigua 1900+ / 2000+) e casi limite con messaggi ironici ("Non lo so Rick...", "… è morto.").
 
 ### Tema chiaro/scuro
-Toggle `◐` nell'header. Scuro di default (`data-theme="dark"`), preferenza salvata in `localStorage` (`esc-theme`).
+Toggle `◐` nell'header. Chiaro di default (`data-theme="light"`), preferenza salvata in `localStorage` (`esc-theme`).
 
 ---
 
@@ -124,16 +124,16 @@ Rubrica Generale 118 · WebReparti · WebSer · Stradario Firenze · Calcolo Pre
 
 ## Visual Design
 
-**Palette (dark-first, con override light via `[data-theme="light"]`):**
+**Palette (chiaro di default, con tema scuro completo via `:root` / override light via `[data-theme="light"]`):**
 
-| Token | Scuro (default) | Chiaro |
-|-------|-----------------|--------|
-| `--bg` | `#090a1e` | `#eceef4` |
-| `--panel` | `#11132e` | `#ffffff` |
-| `--text` | `#e9ebf7` | `#0a0c2a` |
+| Token | Chiaro (default) | Scuro |
+|-------|------------------|-------|
+| `--bg` | `#eceef4` | `#090a1e` |
+| `--panel` | `#ffffff` | `#11132e` |
+| `--text` | `#0a0c2a` | `#e9ebf7` |
 | `--navy` | `#000066` | `#000066` |
-| `--amber` (badge intranet) | `#e0a93b` | `#9a6a06` |
-| `--c-urgenti` / `--c-emergenza` | `#7b9ce8` / `#4ab5c8` | `#1a3a8a` / `#1a5f7a` |
+| `--amber` (badge intranet) | `#9a6a06` | `#e0a93b` |
+| `--c-urgenti` / `--c-emergenza` | `#1a3a8a` / `#1a5f7a` | `#7b9ce8` / `#4ab5c8` |
 
 **Typography:** stack di sistema (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, …`), font monospace di sistema per orologio/countdown/contatori — nessuna font esterna, caricamento istantaneo.
 

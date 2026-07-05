@@ -11,7 +11,7 @@ Disponibile su **[fareyus.github.io/esculapio](https://fareyus.github.io/esculap
 - **Orologio e data** in tempo reale nell'header
 - **Countdown fine turno** per Ordinari ed Emergenza, unificato quando coincidono
 - **Calcolatore età paziente** — inserisci l'anno di nascita e premi Invio (gestisce anche gli anni a 2 cifre)
-- **Tema chiaro/scuro** con memoria locale (scuro di default)
+- **Tema chiaro/scuro** con memoria locale (chiaro di default)
 - **Badge intranet** sui link raggiungibili solo dalla rete interna 118
 
 ## Come aggiungere o modificare un link
