@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EsculapioNET · Link rapidi</title>
-<link rel="icon" type="image/png" href="favicon.png">  
+<title>EsculapioNET · Console link</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="google-extended" content="noindex">
@@ -15,304 +15,341 @@
 <meta name="perplexitybot" content="noindex">
 <meta name="ccbot" content="noindex">
 <style>
-/* ---- DESIGN TOKENS ---- */
-:root {
-  --bg:#090a1e; --panel:#11132e; --panel-2:#181b3c; --border:#262a55;
-  --text:#e9ebf7; --muted:#9298c0; --wordmark:#eef0fb;
-  --navy:#000066; --accent:#aab2c6; --accent-strong:#c7ccda; --accent-soft:#1a1d44;
-  --grad:linear-gradient(135deg,#3b3f88 0%,#aab2c6 100%);
-  --grad-mark:linear-gradient(135deg,#ffffff 0%,#9aa2b4 100%);
-  --amber:#e0a93b; --amber-soft:#312607;
-  --shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px rgba(0,0,0,.4);
+/* ============ TOKENS ============ */
+:root{
+  --bg:#e8ecf6; --surface:#ffffff; --surface-2:#f2f5fc;
+  --ink:#0b1330; --muted:#5b6483; --line:#dce1ef;
+  --brand:#0e1a7a; --brand-tint:#2b3bb0; --cyan:#0a97a8;
+  --amber:#a9700a; --amber-soft:#fbeecb; --danger:#c62435; --ok:#1fae5a;
+  --console-bg:#eef1fb; --console-panel:#ffffff; --console-text:#0b1330;
+  --console-muted:#5b6483; --console-line:#dce1ef; --ecg:#0e1a7a;
   --radius:14px;
-  --c-urgenti:#7b9ce8; --c-emergenza:#4ab5c8;
+  --shadow:0 1px 2px rgba(11,19,48,.05),0 10px 30px rgba(11,19,48,.10);
+  --c-urg:#1a3a8a; --c-eme:#0a7f8f;
 }
-[data-theme="light"] {
-  --bg:#eceef4; --panel:#ffffff; --panel-2:#f5f6fb; --border:#dcdfeb;
-  --text:#0a0c2a; --muted:#5d6379; --wordmark:#000066;
-  --navy:#000066; --accent:#000066; --accent-strong:#1b1b7a; --accent-soft:#e3e4f2;
-  --grad:linear-gradient(135deg,#000066 0%,#9aa2b4 100%);
-  --grad-mark:linear-gradient(135deg,#000066 0%,#4a5a9a 100%);
-  --amber:#9a6a06; --amber-soft:#fbeecb;
-  --shadow:0 1px 2px rgba(16,24,40,.06),0 6px 20px rgba(16,24,40,.09);
-  --c-urgenti:#1a3a8a; --c-emergenza:#1a5f7a;
+[data-theme="dark"]{
+  --bg:#060a1a; --surface:#0d1330; --surface-2:#131a3c;
+  --ink:#e9edfb; --muted:#8a93bd; --line:#222a54;
+  --brand:#7d92f5; --brand-tint:#9aabff; --cyan:#2ec7d6;
+  --amber:#f2b446; --amber-soft:#2c220a; --danger:#f2646f; --ok:#33d17a;
+  --console-bg:#04081a; --console-panel:#0b1234; --console-text:#eef1ff;
+  --console-muted:#8790bd; --console-line:#1c2450; --ecg:#2ec7d6;
+  --shadow:0 1px 0 rgba(255,255,255,.02),0 14px 34px rgba(0,0,0,.5);
+  --c-urg:#7b9ce8; --c-eme:#2bc7d6;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
-  background:var(--bg);color:var(--text);
+  background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;line-height:1.45;
-  padding:18px clamp(12px,3vw,28px) 48px;
 }
-.wrap{max-width:1180px;margin:0 auto}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(14px,3vw,30px)}
 
-/* ---- HEADER ---- */
-header.top{
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:14px 18px;background:var(--panel);border:1px solid var(--border);
-  border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;
+/* ============ CONSOLE HEADER (fascia blu) ============ */
+.console{background:var(--console-bg);color:var(--console-text)}
+.console-in{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:10px clamp(14px,3vw,30px) 10px;
 }
 .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
-.brand-logo{height:52px;width:auto;border-radius:8px;background:#fff;padding:3px}
-.brand-sub{margin:0;font-size:.73rem;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
-.clock{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;line-height:1.1}
-.clock .t{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
-.clock .d{font-size:.72rem;color:var(--muted);text-transform:capitalize}
-.iconbtn{
-  width:40px;height:40px;border-radius:10px;border:1px solid var(--border);
-  background:var(--panel-2);color:var(--text);cursor:pointer;font-size:1.1rem;
+.brand-logo{height:40px;width:auto;flex:none;border-radius:9px;background:#fff;padding:4px;border:1px solid var(--console-line)}
+.wordmark{font-size:1.24rem;font-weight:800;letter-spacing:.2px;line-height:1;display:flex;align-items:center}
+.wordmark .mk{color:var(--brand);font-size:1.28rem;margin-right:7px;line-height:1}
+.wordmark span{color:var(--brand)}
+.tagline{
+  font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--console-muted);margin-top:6px;
+}
+.status{
+  display:flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--console-muted);
+  padding:7px 12px;border:1px solid var(--console-line);border-radius:999px;
+  background:rgba(255,255,255,.02);
+}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 70%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.clockbox{text-align:right;line-height:1}
+.clk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.45rem;font-weight:700;letter-spacing:.5px}
+.dat{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--console-muted);margin-top:6px}
+.theme{
+  width:42px;height:42px;flex:none;border-radius:12px;cursor:pointer;font-size:1.15rem;
+  color:var(--console-text);background:var(--console-panel);border:1px solid var(--console-line);
   display:grid;place-items:center;transition:transform .12s,border-color .12s;
 }
-.iconbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.theme:hover{border-color:var(--brand-tint);transform:translateY(-1px)}
+.theme:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 
-/* ---- SEARCH ---- */
-.search-wrap{position:relative;margin-bottom:20px}
-.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none}
-#search{
-  width:100%;padding:13px 44px 13px 42px;border-radius:12px;
-  background:var(--panel);border:1px solid var(--border);color:var(--text);
-  font-size:1rem;outline:none;transition:border-color .12s,box-shadow .12s;
+/* ---- news ticker (dentro la fascia blu) ---- */
+.ticker-wrap{display:flex;align-items:stretch;overflow:hidden;position:relative}
+.console .ticker-wrap{
+  margin:0 clamp(14px,3vw,30px) 10px;
+  background:var(--console-panel);border:1px solid var(--console-line);border-radius:12px;box-shadow:var(--shadow);
 }
-#search:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);
+.ticker-ecg{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.10;pointer-events:none}
+[data-theme="dark"] .ticker-ecg{opacity:.18}
+.ticker-ecg path{fill:none;stroke:var(--ecg);stroke-width:2}
+.ticker-label{
+  display:flex;align-items:center;gap:6px;padding:0 15px;flex-shrink:0;position:relative;z-index:1;
+  font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--cyan);border-right:1px solid var(--console-line);white-space:nowrap;
 }
-.search-wrap kbd{
-  position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
-  border:1px solid var(--border);border-radius:6px;padding:2px 7px;background:var(--panel-2);
+.ticker-viewport{overflow:hidden;flex:1;padding:8px 15px;position:relative;z-index:1}
+.ticker-inner{display:inline-block;white-space:nowrap;animation:ticker var(--ticker-dur,60s) linear infinite}
+.ticker-wrap:hover .ticker-inner{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:.84rem;padding-right:38px}
+.ticker-item a{color:var(--console-text);text-decoration:none}
+.ticker-item a:hover{color:var(--cyan);text-decoration:underline}
+.ticker-sep{color:var(--cyan);opacity:.5;padding-right:38px;font-size:.72rem}
+
+/* ============ MAIN ============ */
+main{padding:14px 0 30px}
+
+/* ---- section head ---- */
+.sec{margin-bottom:14px}
+.sec-head{display:flex;align-items:center;gap:12px;margin:0 2px 9px}
+.tag{
+  font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--brand);
+  padding:5px 11px;border-radius:6px;
+  background:color-mix(in srgb,var(--brand) 9%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--brand) 22%,var(--line));white-space:nowrap;
 }
+.tag.t-urg{color:var(--c-urg);background:color-mix(in srgb,var(--c-urg) 9%,var(--surface));border-color:color-mix(in srgb,var(--c-urg) 22%,var(--line))}
+.tag.t-eme{color:var(--c-eme);background:color-mix(in srgb,var(--c-eme) 9%,var(--surface));border-color:color-mix(in srgb,var(--c-eme) 22%,var(--line))}
+.cnt{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.74rem;color:var(--muted)}
+.rule{flex:1;height:1px;background:var(--line)}
 
-/* ---- SECTION HEADERS ---- */
-.group{margin-bottom:24px}
-.ghead{display:flex;align-items:baseline;gap:10px;margin:0 2px 12px}
-.ghead h2{font-size:.96rem;margin:0;letter-spacing:.3px}
-.ghead .cnt{font-size:.74rem;color:var(--muted);font-family:ui-monospace,monospace}
-.ghead .line{flex:1;height:1px;background:var(--border)}
-.urgenti-title{color:var(--c-urgenti)}
-.emergenza-title{color:var(--c-emergenza)}
+/* ---- two-col ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
 
-/* ---- TWO-COL LAYOUT ---- */
-.sections-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
-
-/* ---- CARD GRID ---- */
-.card-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
-.sections-grid .card-grid{grid-template-columns:repeat(auto-fill,minmax(175px,1fr))}
-
-/* ---- LINK CARDS ---- */
-a.link-card{
+/* ---- tiles ---- */
+.tiles{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
+.grid2 .tiles{grid-template-columns:repeat(auto-fill,minmax(172px,1fr))}
+a.tile{
   display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   padding:12px 13px;position:relative;overflow:hidden;
   transition:transform .12s,border-color .12s,box-shadow .12s;
 }
-a.link-card::before{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:transparent;opacity:0;transition:opacity .12s,background .12s;
+a.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;opacity:0;transition:opacity .12s}
+a.tile:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--cyan) 45%,var(--line));box-shadow:var(--shadow)}
+a.tile:hover::before{opacity:1;background:linear-gradient(var(--cyan),var(--brand))}
+a.tile:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.key{
+  width:38px;height:38px;flex:none;border-radius:9px;display:grid;place-items:center;
+  font-family:ui-monospace,monospace;font-weight:700;font-size:.82rem;letter-spacing:-.5px;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--brand);
 }
-a.link-card:hover{
-  transform:translateY(-2px);
-  border-color:color-mix(in srgb,var(--accent) 55%,var(--border));
+.meta{min-width:0;display:flex;flex-direction:column;gap:4px}
+.name{font-size:.88rem;font-weight:600;line-height:1.25}
+.lan{
+  align-self:flex-start;font-family:ui-monospace,monospace;font-size:.58rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:6px;
+  background:var(--amber-soft);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
+}
+
+/* ---- utility: età paziente ---- */
+.util{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;
+  padding:9px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   box-shadow:var(--shadow);
 }
-a.link-card:hover::before{background:var(--grad);opacity:1}
-a.link-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-.glyph{
-  width:38px;height:38px;border-radius:9px;flex:none;display:grid;place-items:center;
-  font-weight:800;font-size:.88rem;letter-spacing:-.5px;
-  background:var(--accent-soft);border:1px solid var(--border);color:var(--accent-strong);
-}
-[data-theme="light"] .glyph{color:var(--navy)}
-.meta{min-width:0;display:flex;flex-direction:column;gap:3px}
-.meta .name{font-size:.88rem;font-weight:600;line-height:1.25;display:block}
-.badge-lan{
-  align-self:flex-start;font-size:.58rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:.5px;padding:2px 5px;border-radius:5px;
-  background:var(--amber-soft);color:var(--amber);
-  border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);
-}
-
-/* ---- ETÀ PAZIENTE ---- */
-.age-bar{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  padding:10px 16px;margin-bottom:10px;
-}
-.age-bar-label{
-  font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-  color:var(--muted);white-space:nowrap;flex-shrink:0;
-}
+.u-lbl{font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);white-space:nowrap}
 .age-input{
-  width:130px;padding:5px 10px;border-radius:8px;
-  border:1px solid var(--border);background:var(--panel-2);
-  color:var(--text);font-size:.88rem;outline:none;
-  transition:border-color .12s;
-  /* rimuove le freccette spinner */
+  width:150px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--ink);font-size:.9rem;outline:none;transition:border-color .12s;
   -moz-appearance:textfield;
 }
-.age-input::-webkit-outer-spin-button,
-.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.age-input:focus{border-color:var(--accent)}
+.age-input::-webkit-outer-spin-button,.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.age-input:focus{border-color:var(--cyan)}
 .age-btn{
-  padding:5px 14px;border-radius:8px;border:1px solid var(--border);
-  background:var(--navy);color:#fff;font-size:.82rem;font-weight:700;
-  cursor:pointer;transition:opacity .12s;white-space:nowrap;flex-shrink:0;
+  padding:8px 16px;border-radius:9px;border:1px solid transparent;cursor:pointer;
+  background:var(--brand);color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.02em;
+  transition:opacity .12s,transform .12s;white-space:nowrap;
 }
-.age-btn:hover{opacity:.8}
-.age-result{font-size:.88rem;font-weight:600;color:var(--accent-strong);flex:1;min-width:120px}
+[data-theme="dark"] .age-btn{color:#08122e}
+.age-btn:hover{opacity:.88;transform:translateY(-1px)}
+.age-btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.age-result{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;min-width:140px}
 .age-result.err{color:var(--amber)}
 
-/* ---- SHIFT TIMERS ---- */
-.shift-timers{display:flex;gap:16px;flex-shrink:0;margin-left:auto}
-.shift-timer{display:flex;flex-direction:row;align-items:center;gap:7px}
-.shift-lbl{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.shift-cd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-strong)}
-
-/* ---- ARCHIVIO ---- */
-#archivio{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:var(--radius);overflow:hidden;margin-bottom:24px;
-}
+/* ---- archivio ---- */
+#archivio{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
 #archivio summary{
-  padding:13px 16px;font-size:.82rem;font-weight:700;letter-spacing:.04em;
-  color:var(--muted);cursor:pointer;user-select:none;list-style:none;text-transform:uppercase;
+  padding:11px 16px;font-family:ui-monospace,monospace;font-size:.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.13em;color:var(--muted);cursor:pointer;user-select:none;list-style:none;
 }
+#archivio summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
 #archivio summary::-webkit-details-marker{display:none}
-#archivio summary::before{content:"▾  "}
-#archivio[open] summary::before{content:"▴  "}
-#archivio .card-grid{padding:4px 14px 14px}
+#archivio summary::before{content:"▸  "}
+#archivio[open] summary::before{content:"▾  "}
+#archivio .tiles{padding:2px 14px 16px}
 
-/* ---- TICKER ---- */
-.ticker-wrap{
-  display:flex;align-items:center;gap:0;
-  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-  margin-bottom:16px;overflow:hidden;
-}
-.ticker-label{
-  padding:10px 14px;font-size:.68rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--muted);white-space:nowrap;flex-shrink:0;
-  border-right:1px solid var(--border);
-}
-.ticker-viewport{overflow:hidden;flex:1;padding:0 14px;cursor:default}
-.ticker-inner{
-  display:inline-block;white-space:nowrap;
-  animation:ticker-scroll var(--ticker-dur,60s) linear infinite;
-}
-.ticker-wrap:hover .ticker-inner{animation-play-state:paused}
-@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ticker-item{font-size:.82rem;padding-right:40px}
-.ticker-item a{color:var(--text);text-decoration:none}
-.ticker-item a:hover{color:var(--accent);text-decoration:underline}
-.ticker-sep{color:var(--muted);padding-right:40px;font-size:.75rem}
+/* ---- countdown turni (inline nella barra età) ---- */
+.shift-inline{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+.shift-b{display:flex;align-items:center;gap:8px}
+.s-dot{width:8px;height:8px;border-radius:50%;flex:none}
+#shift-ord .s-dot{background:var(--brand)}
+#shift-eme .s-dot{background:var(--cyan)}
+.s-lbl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap}
+.s-val{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.05rem;font-weight:700;color:var(--ink)}
 
-/* ---- EMPTY / FOOTER ---- */
-.empty{text-align:center;color:var(--muted);padding:50px 0;font-size:.95rem}
+/* ---- search (in fondo) ---- */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap>svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.5;pointer-events:none}
+#search{
+  width:100%;padding:14px 46px 14px 44px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  font-size:1rem;outline:none;box-shadow:var(--shadow);
+  transition:border-color .12s,box-shadow .12s;
+}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px color-mix(in srgb,var(--cyan) 22%,transparent)}
+.search-wrap kbd{
+  position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--surface-2);
+}
+
+/* ---- misc ---- */
+.empty{text-align:center;color:var(--muted);padding:48px 0;font-size:.95rem}
 .hidden{display:none!important}
-footer{margin-top:8px;text-align:center;color:var(--muted);font-size:.74rem}
-footer code{font-family:ui-monospace,monospace;color:var(--text)}
+footer{margin-top:6px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.7}
+footer code{font-family:ui-monospace,monospace;color:var(--ink)}
+.credit{opacity:.5}
 
-/* ---- MOBILE ---- */
-@media(max-width:600px){
-  .sections-grid{grid-template-columns:1fr}
-  .clock{display:none}
+/* ---- responsive ---- */
+@media(max-width:640px){
+  .grid2{grid-template-columns:1fr}
+  .clockbox{display:none}
+  .console-in{gap:12px}
+  .brand{margin-right:0}
 }
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header class="top">
-  <div class="brand">
-    <img src="./logo.png" class="brand-logo" alt="EsculapioNET">
-    <p class="brand-sub">Link rapidi · Centrale 118 Firenze-Prato</p>
+<!-- ===== CONSOLE HEADER (fascia blu) ===== -->
+<header class="console">
+  <div class="console-in">
+    <div class="brand">
+      <img class="brand-logo" src="logo.png" alt="EsculapioNET">
+      <div>
+        <div class="wordmark"><span class="mk" aria-hidden="true">⚕</span>Esculapio<span>NET</span></div>
+        <div class="tagline">Centrale 118 · Firenze–Prato</div>
+      </div>
+    </div>
+    <div class="status"><span class="dot"></span> Operativo</div>
+    <div class="clockbox" aria-live="off">
+      <div class="clk" id="clk">--:--:--</div>
+      <div class="dat" id="dat">—</div>
+    </div>
+    <button class="theme" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
   </div>
-  <div class="clock" aria-live="off">
-    <div class="t" id="clk">--:--:--</div>
-    <div class="d" id="dat">—</div>
+  <!-- News nella fascia blu, con elettrocardiogramma di sfondo -->
+  <div class="ticker-wrap" id="ticker-wrap">
+    <svg class="ticker-ecg" viewBox="0 0 1200 44" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <pattern id="hb" width="150" height="44" patternUnits="userSpaceOnUse">
+          <path d="M0 22 H52 L58 22 L63 22 L68 8 L74 36 L80 15 L85 22 L92 22 H150"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="44" fill="url(#hb)"/>
+    </svg>
+    <div class="ticker-label">🗞 FI · PO</div>
+    <div class="ticker-viewport">
+      <div class="ticker-inner" id="ticker-inner">
+        <span class="ticker-item" style="color:var(--console-muted)">Caricamento notizie…</span>
+      </div>
+    </div>
   </div>
-  <button class="iconbtn" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
 </header>
 
-<div class="ticker-wrap" id="ticker-wrap">
-  <div class="ticker-label">🗞 FI · PO</div>
-  <div class="ticker-viewport">
-    <div class="ticker-inner" id="ticker-inner">
-      <span class="ticker-item" style="color:var(--muted)">Caricamento notizie…</span>
+<!-- ===== MAIN ===== -->
+<main>
+  <div class="wrap">
+
+    <p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
+
+    <!-- COMUNE -->
+    <section class="sec" id="section-comune">
+      <div class="sec-head">
+        <span class="tag">Comune</span>
+        <span class="cnt" id="count-comune"></span>
+        <span class="rule"></span>
+      </div>
+      <div class="tiles" id="links-comune"></div>
+    </section>
+
+    <!-- URGENTI + EMERGENZA -->
+    <div class="grid2" id="sections-grid">
+      <section class="sec" id="section-urgenti">
+        <div class="sec-head">
+          <span class="tag t-urg">🚐 Trasporti Urgenti</span>
+          <span class="cnt" id="count-urgenti"></span>
+          <span class="rule"></span>
+        </div>
+        <div class="tiles" id="links-urgenti"></div>
+      </section>
+      <section class="sec" id="section-emergenza">
+        <div class="sec-head">
+          <span class="tag t-eme">🚑 Emergenza Sanitaria</span>
+          <span class="cnt" id="count-emergenza"></span>
+          <span class="rule"></span>
+        </div>
+        <div class="tiles" id="links-emergenza"></div>
+      </section>
     </div>
+
+    <!-- ETÀ PAZIENTE + COUNTDOWN TURNI (inline) -->
+    <div class="util">
+      <span class="u-lbl">🩺 Età paziente</span>
+      <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
+      <button class="age-btn" id="age-calc-btn">Calcola</button>
+      <span class="age-result" id="age-result"></span>
+      <div class="shift-inline">
+        <div class="shift-b" id="shift-ord">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span class="s-lbl" id="lbl-ord">Ordinari</span>
+          <span class="s-val mono" id="cd-ord">--:--:--</span>
+        </div>
+        <div class="shift-b" id="shift-eme">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span class="s-lbl">Emergenza</span>
+          <span class="s-val mono" id="cd-eme">--:--:--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHIVIO -->
+    <details id="archivio">
+      <summary>Archivio link (poco usati)</summary>
+      <div class="tiles" id="links-archivio"></div>
+    </details>
+
+    <!-- RICERCA (in fondo) -->
+    <div class="search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      <input id="search" type="search" placeholder="Cerca un link…  (premi \ )" autocomplete="off" aria-label="Cerca tra i link">
+      <kbd>\</kbd>
+    </div>
+
+    <footer>
+      I link <code>lan</code> funzionano solo dalla rete interna 118 ·
+      Per modificare i link, apri il file e cambia l'oggetto <code>SITE_DATA</code>.
+      <br><span class="credit">© 2026 Fareyus</span>
+    </footer>
+
   </div>
-</div>
+</main>
 
-<p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
-
-<!-- COMUNE -->
-<section class="group" id="section-comune">
-  <div class="ghead">
-    <h2>Comune</h2><span class="cnt" id="count-comune"></span><div class="line"></div>
-  </div>
-  <div class="card-grid" id="links-comune"></div>
-</section>
-
-<!-- URGENTI + EMERGENZA -->
-<div class="sections-grid" id="sections-grid">
-  <section class="group" id="section-urgenti">
-    <div class="ghead">
-      <h2 class="urgenti-title">🚐 Trasporti Urgenti</h2>
-      <span class="cnt" id="count-urgenti"></span><div class="line"></div>
-    </div>
-    <div class="card-grid" id="links-urgenti"></div>
-  </section>
-  <section class="group" id="section-emergenza">
-    <div class="ghead">
-      <h2 class="emergenza-title">🚑 Emergenza Sanitaria</h2>
-      <span class="cnt" id="count-emergenza"></span><div class="line"></div>
-    </div>
-    <div class="card-grid" id="links-emergenza"></div>
-  </section>
-</div>
-
-<!-- ETÀ PAZIENTE -->
-<div class="age-bar">
-  <span class="age-bar-label">🩺 Età paziente</span>
-  <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
-  <button class="age-btn" id="age-calc-btn">Calcola</button>
-  <span class="age-result" id="age-result"></span>
-  <div class="shift-timers">
-    <div class="shift-timer">
-      <span class="shift-lbl">Ordinari</span>
-      <span class="shift-cd" id="cd-ord">--:--:--</span>
-    </div>
-    <div class="shift-timer">
-      <span class="shift-lbl">Emergenza</span>
-      <span class="shift-cd" id="cd-eme">--:--:--</span>
-    </div>
-  </div>
-</div>
-
-<!-- ARCHIVIO -->
-<details id="archivio">
-  <summary>Archivio link (poco usati)</summary>
-  <div class="card-grid" id="links-archivio"></div>
-</details>
-
-<div class="search-wrap">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-  <input id="search" type="search" placeholder="Cerca un link…  (premi \)" autocomplete="off" aria-label="Cerca tra i link">
-  <kbd>\</kbd>
-</div>
-
-<footer>
-  I link <code>intranet</code> funzionano solo dalla rete interna 118 ·
-  Per modificare i link, apri il file e cambia l'oggetto <code>SITE_DATA</code>.
-  <br><span style="opacity:.45">© 2026 Fareyus</span>
-</footer>
-
-</div><!-- .wrap -->
 <script>
 /* =========================================================
    DATI — per aggiungere/modificare un link, cambia qui.
-   intranet: true  → mostra il badge "intranet" sulla card
+   intranet: true  → mostra il badge "lan" sulla tile
 ========================================================= */
 const SITE_DATA = {
   comune: [
@@ -370,303 +407,190 @@ const SITE_DATA = {
 };
 
 /* ---- helpers ---- */
-function glyph(n) {
-  const w = n.replace(/[^\wÀ-ÿ ]/g, " ").trim().split(/\s+/).filter(Boolean);
-  return ((w[0]?.[0] || "") + (w[1]?.[0] || "")).toUpperCase() || "•";
+function glyph(n){
+  const w = n.replace(/[^\wÀ-ÿ ]/g," ").trim().split(/\s+/).filter(Boolean);
+  return ((w[0]?.[0]||"")+(w[1]?.[0]||"")).toUpperCase() || "•";
 }
 
 /* ---- render ---- */
-function makeCard({ label, url, intranet }) {
+function makeTile({label,url,intranet}){
   const a = document.createElement("a");
-  a.className = "link-card";
-  a.href = url;
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
+  a.className = "tile";
+  a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
   a.dataset.search = label.toLowerCase();
   a.innerHTML =
-    `<div class="glyph" aria-hidden="true">${glyph(label)}</div>` +
-    `<div class="meta"><span class="name">${label}</span>` +
-    (intranet ? `<span class="badge-lan">intranet</span>` : "") +
+    `<div class="key" aria-hidden="true">${glyph(label)}</div>`+
+    `<div class="meta"><span class="name">${label}</span>`+
+    (intranet ? `<span class="lan">lan</span>` : "")+
     `</div>`;
   return a;
 }
-
-function renderSection(id, links) {
-  const el = document.getElementById(id);
-  links.forEach(l => el.appendChild(makeCard(l)));
-}
-
-function setCount(id, n) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = n;
-}
+function renderSection(id,links){ const el=document.getElementById(id); links.forEach(l=>el.appendChild(makeTile(l))); }
+function setCount(id,n){ const el=document.getElementById(id); if(el) el.textContent="·"+n; }
 
 renderSection("links-comune",    SITE_DATA.comune);
 renderSection("links-urgenti",   SITE_DATA.urgenti);
 renderSection("links-emergenza", SITE_DATA.emergenza);
 renderSection("links-archivio",  SITE_DATA.archivio);
-
 setCount("count-comune",    SITE_DATA.comune.length);
 setCount("count-urgenti",   SITE_DATA.urgenti.length);
 setCount("count-emergenza", SITE_DATA.emergenza.length);
 
 /* ---- search / filter ---- */
-function filterGrid(gridId, q) {
-  let n = 0;
-  document.getElementById(gridId).querySelectorAll(".link-card").forEach(el => {
+function filterGrid(gridId,q){
+  let n=0;
+  document.getElementById(gridId).querySelectorAll(".tile").forEach(el=>{
     const show = el.dataset.search.includes(q);
     el.style.display = show ? "" : "none";
-    if (show) n++;
+    if(show) n++;
   });
   return n;
 }
-
-function showAll() {
-  ["section-comune","section-urgenti","section-emergenza","archivio","sections-grid"].forEach(id => {
-    document.getElementById(id).style.display = "";
+function showAll(){
+  ["section-comune","section-urgenti","section-emergenza","archivio","sections-grid"].forEach(id=>{
+    document.getElementById(id).style.display="";
   });
-  document.querySelectorAll(".link-card").forEach(el => el.style.display = "");
+  document.querySelectorAll(".tile").forEach(el=>el.style.display="");
 }
-
-function filterLinks(q) {
+function filterLinks(q){
   const noResults = document.getElementById("no-results");
-  if (!q) {
-    showAll();
-    document.getElementById("archivio").removeAttribute("open");
-    noResults.classList.add("hidden");
-    return;
-  }
-  let total = 0;
-
-  const comune = filterGrid("links-comune", q);
-  document.getElementById("section-comune").style.display = comune ? "" : "none";
-  total += comune;
-
-  const urgenti  = filterGrid("links-urgenti", q);
-  const emergenza = filterGrid("links-emergenza", q);
-  document.getElementById("section-urgenti").style.display   = urgenti   ? "" : "none";
-  document.getElementById("section-emergenza").style.display = emergenza ? "" : "none";
-  document.getElementById("sections-grid").style.display = (urgenti || emergenza) ? "" : "none";
-  total += urgenti + emergenza;
-
-  const arch    = filterGrid("links-archivio", q);
-  const archivio = document.getElementById("archivio");
-  archivio.style.display = arch ? "" : "none";
-  if (arch) { archivio.setAttribute("open", ""); total += arch; }
-
-  noResults.classList.toggle("hidden", total > 0);
+  if(!q){ showAll(); document.getElementById("archivio").removeAttribute("open"); noResults.classList.add("hidden"); return; }
+  let total=0;
+  const comune=filterGrid("links-comune",q);
+  document.getElementById("section-comune").style.display = comune?"":"none";
+  total+=comune;
+  const urgenti=filterGrid("links-urgenti",q), emergenza=filterGrid("links-emergenza",q);
+  document.getElementById("section-urgenti").style.display   = urgenti  ?"":"none";
+  document.getElementById("section-emergenza").style.display = emergenza?"":"none";
+  document.getElementById("sections-grid").style.display = (urgenti||emergenza)?"":"none";
+  total+=urgenti+emergenza;
+  const arch=filterGrid("links-archivio",q), archivio=document.getElementById("archivio");
+  archivio.style.display = arch?"":"none";
+  if(arch){ archivio.setAttribute("open",""); total+=arch; }
+  noResults.classList.toggle("hidden", total>0);
 }
-
 const searchEl = document.getElementById("search");
-searchEl.addEventListener("input", e => filterLinks(e.target.value.trim().toLowerCase()));
-document.addEventListener("keydown", e => {
-  if (e.key === "\\" && document.activeElement !== searchEl) {
-    e.preventDefault(); searchEl.focus();
-  } else if (e.key === "Escape" && document.activeElement === searchEl) {
-    searchEl.value = ""; filterLinks(""); searchEl.blur();
-  }
+searchEl.addEventListener("input", e=>filterLinks(e.target.value.trim().toLowerCase()));
+document.addEventListener("keydown", e=>{
+  if(e.key==="\\" && document.activeElement!==searchEl){ e.preventDefault(); searchEl.focus(); searchEl.scrollIntoView({block:"center",behavior:"smooth"}); }
+  else if(e.key==="Escape" && document.activeElement===searchEl){ searchEl.value=""; filterLinks(""); searchEl.blur(); }
 });
 
 /* ---- età paziente ---- */
-(function() {
-  const input  = document.getElementById("birthYear");
-  const result = document.getElementById("age-result");
-
-  function mostraEta(anno, oggi) {
-    if (anno > oggi) {
-      result.textContent = "Non lo so Rick...";
-      result.classList.add("err");
-    } else if (anno < 1900) {
-      result.textContent = "… è morto.";
-      result.classList.add("err");
-    } else {
-      result.textContent = `Ha ${oggi - anno} anni (o li compirà quest'anno).`;
-    }
+(function(){
+  const input=document.getElementById("birthYear"), result=document.getElementById("age-result");
+  function mostraEta(anno,oggi){
+    if(anno>oggi){ result.textContent="Non lo so Rick..."; result.classList.add("err"); }
+    else if(anno<1900){ result.textContent="… è morto."; result.classList.add("err"); }
+    else result.textContent=`Ha ${oggi-anno} anni (o li compirà quest'anno).`;
   }
-
-  function calcola() {
-    const raw  = input.value.trim();
-    const oggi = new Date().getFullYear();
-    result.className = "age-result";
-
-    if (!raw) {
-      result.textContent = "Inserisci un anno.";
-      result.classList.add("err");
+  function calcola(){
+    const raw=input.value.trim(), oggi=new Date().getFullYear();
+    result.className="age-result";
+    if(!raw){ result.textContent="Inserisci un anno."; result.classList.add("err"); return; }
+    const num=parseInt(raw,10);
+    if(isNaN(num)||num<0){ result.textContent="Non lo so Rick..."; result.classList.add("err"); return; }
+    if(/^\d{1,2}$/.test(raw)){
+      const y1=1900+num, y2=2000+num;
+      if(y2>oggi) mostraEta(y1,oggi);
+      else result.textContent=`Ha ${oggi-y1} anni (n. ${y1}) o ${oggi-y2} anni (n. ${y2}).`;
       return;
     }
-
-    const num = parseInt(raw, 10);
-    if (isNaN(num) || num < 0) {
-      result.textContent = "Non lo so Rick...";
-      result.classList.add("err");
-      return;
-    }
-
-    if (/^\d{1,2}$/.test(raw)) {
-      const y1 = 1900 + num;
-      const y2 = 2000 + num;
-      if (y2 > oggi) {
-        mostraEta(y1, oggi);
-      } else {
-        result.textContent = `Ha ${oggi - y1} anni (n. ${y1}) o ${oggi - y2} anni (n. ${y2}).`;
-      }
-      return;
-    }
-
-    mostraEta(num, oggi);
+    mostraEta(num,oggi);
   }
-
-  document.getElementById("age-calc-btn").addEventListener("click", calcola);
-  input.addEventListener("keydown", e => { if (e.key === "Enter") calcola(); });
+  document.getElementById("age-calc-btn").addEventListener("click",calcola);
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") calcola(); });
 })();
 
 /* ---- theme ---- */
-const root = document.documentElement;
-try { const s = localStorage.getItem("esc-theme"); if (s) root.dataset.theme = s; } catch(e) {}
-document.getElementById("theme-btn").onclick = () => {
-  root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-  try { localStorage.setItem("esc-theme", root.dataset.theme); } catch(e) {}
+const root=document.documentElement;
+try{ const s=localStorage.getItem("esc-theme"); if(s) root.dataset.theme=s; }catch(e){}
+document.getElementById("theme-btn").onclick=()=>{
+  root.dataset.theme = root.dataset.theme==="dark" ? "light" : "dark";
+  try{ localStorage.setItem("esc-theme", root.dataset.theme); }catch(e){}
 };
 
 /* ---- shift countdown ---- */
-function secsToHMS(s) {
-  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sc = s % 60;
+function secsToHMS(s){
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sc=s%60;
   return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sc).padStart(2,"0")}`;
 }
-function shiftRemOrd(d) {
-  // Mattina 06:50-14:00 · Pomeriggio 14:00-20:00 · Notte 20:00-07:00
-  // 06:50-07:00 overlap → Notte ha priorità (turno precedente)
-  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
-  if (t < 7*3600)  return 7*3600 - t;          // Notte in corso → 07:00
-  if (t < 14*3600) return 14*3600 - t;         // Mattina → 14:00
-  if (t < 20*3600) return 20*3600 - t;         // Pomeriggio → 20:00
-  return (24+7)*3600 - t;                       // Notte → 07:00 domani
+function shiftRemOrd(d){ // 06:50-14:00 · 14:00-20:00 · 20:00-07:00
+  const t=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();
+  if(t<7*3600)  return 7*3600-t;
+  if(t<14*3600) return 14*3600-t;
+  if(t<20*3600) return 20*3600-t;
+  return (24+7)*3600-t;
 }
-function shiftRemEme(d) {
-  // Mattina 07:00-13:00 · Pomeriggio 13:00-20:00 · Notte 20:00-07:00
-  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
-  if (t < 7*3600)  return 7*3600 - t;          // Notte in corso → 07:00
-  if (t < 13*3600) return 13*3600 - t;         // Mattina → 13:00
-  if (t < 20*3600) return 20*3600 - t;         // Pomeriggio → 20:00
-  return (24+7)*3600 - t;                       // Notte → 07:00 domani
+function shiftRemEme(d){ // 07:00-13:00 · 13:00-20:00 · 20:00-07:00
+  const t=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();
+  if(t<7*3600)  return 7*3600-t;
+  if(t<13*3600) return 13*3600-t;
+  if(t<20*3600) return 20*3600-t;
+  return (24+7)*3600-t;
 }
 
-/* ---- clock ---- */
-function tick() {
-  const d = new Date();
+/* ---- clock + shift ---- */
+function tick(){
+  const d=new Date();
   document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
-  document.getElementById("dat").textContent  = d.toLocaleDateString("it-IT", { weekday:"long", day:"numeric", month:"long" });
-  const remOrd = shiftRemOrd(d);
-  const remEme = shiftRemEme(d);
-  const merged = remOrd === remEme;
-  document.getElementById("cd-eme").closest(".shift-timer").style.display = merged ? "none" : "";
-  document.getElementById("cd-ord").previousElementSibling.textContent    = merged ? "Ordinari/Emergenza" : "Ordinari";
+  document.getElementById("dat").textContent = d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});
+  const remOrd=shiftRemOrd(d), remEme=shiftRemEme(d), merged=remOrd===remEme;
+  document.getElementById("shift-eme").style.display = merged ? "none" : "";
+  document.getElementById("lbl-ord").textContent = merged ? "Ord · Eme" : "Ordinari";
   document.getElementById("cd-ord").textContent = secsToHMS(remOrd);
   document.getElementById("cd-eme").textContent = secsToHMS(remEme);
 }
-tick(); setInterval(tick, 1000);
+tick(); setInterval(tick,1000);
 
 /* ---- news ticker ---- */
-async function loadTicker() {
-  const FEEDS = [
-    "https://www.lanazione.it/firenze/rss",
-    "https://www.lanazione.it/prato/rss",
-  ];
-  const inner = document.getElementById("ticker-inner");
-  const wrap  = document.getElementById("ticker-wrap");
-
-  function tFetch(url, ms) {
-    const ctrl = new AbortController();
-    const tid  = setTimeout(() => ctrl.abort(), ms);
-    return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
+async function loadTicker(){
+  const FEEDS=["https://www.lanazione.it/firenze/rss","https://www.lanazione.it/prato/rss"];
+  const inner=document.getElementById("ticker-inner"), wrap=document.getElementById("ticker-wrap");
+  function tFetch(url,ms){ const ctrl=new AbortController(); const tid=setTimeout(()=>ctrl.abort(),ms); return fetch(url,{signal:ctrl.signal}).finally(()=>clearTimeout(tid)); }
+  function parseXml(xml){
+    const doc=new DOMParser().parseFromString(xml,"text/xml");
+    if(doc.querySelector("parsererror")) throw new Error("xml");
+    const nodes=[...doc.querySelectorAll("item")].slice(0,8);
+    if(!nodes.length) throw new Error("empty");
+    return nodes.map(n=>({
+      title:(n.querySelector("title")?.textContent||"").trim(),
+      link:n.querySelector("link")?.nextSibling?.nodeValue?.trim()||n.querySelector("link")?.textContent?.trim()||n.querySelector("guid")?.textContent?.trim()||"#",
+      pubDate:new Date(n.querySelector("pubDate")?.textContent||0),
+    })).filter(i=>i.title);
   }
-
-  function parseXml(xml) {
-    const doc   = new DOMParser().parseFromString(xml, "text/xml");
-    if (doc.querySelector("parsererror")) throw new Error("xml");
-    const nodes = [...doc.querySelectorAll("item")].slice(0, 8);
-    if (!nodes.length) throw new Error("empty");
-    return nodes.map(n => ({
-      title:   (n.querySelector("title")?.textContent || "").trim(),
-      link:    n.querySelector("link")?.nextSibling?.nodeValue?.trim()
-            || n.querySelector("link")?.textContent?.trim()
-            || n.querySelector("guid")?.textContent?.trim()
-            || "#",
-      pubDate: new Date(n.querySelector("pubDate")?.textContent || 0),
-    })).filter(i => i.title);
-  }
-
-  async function fetchFeed(feedUrl) {
-    const enc = encodeURIComponent(feedUrl);
-
-    // 1) rss2json — restituisce JSON strutturato, nessun parse XML
-    try {
-      const res  = await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=8`, 7000);
-      const data = await res.json();
-      if (data.status === "ok" && data.items?.length) {
-        return data.items.map(i => ({
-          title:   (i.title || "").trim(),
-          link:    i.link || i.guid || "#",
-          pubDate: new Date(i.pubDate || 0),
-        })).filter(i => i.title);
-      }
-    } catch(e) {}
-
-    // 2) allorigins — restituisce {contents: rawXml o data:...;base64,...}
-    try {
-      const res  = await tFetch(`https://api.allorigins.win/get?url=${enc}`, 7000);
-      const data = await res.json();
-      if (data?.contents) {
-        let xml = data.contents;
-        if (xml.startsWith("data:") && xml.includes("base64,")) {
-          const b64   = xml.split("base64,")[1];
-          const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-          xml = new TextDecoder("utf-8").decode(bytes);
-        }
+  async function fetchFeed(feedUrl){
+    const enc=encodeURIComponent(feedUrl);
+    try{ const res=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=8`,7000); const data=await res.json();
+      if(data.status==="ok"&&data.items?.length) return data.items.map(i=>({title:(i.title||"").trim(),link:i.link||i.guid||"#",pubDate:new Date(i.pubDate||0)})).filter(i=>i.title);
+    }catch(e){}
+    try{ const res=await tFetch(`https://api.allorigins.win/get?url=${enc}`,7000); const data=await res.json();
+      if(data?.contents){ let xml=data.contents;
+        if(xml.startsWith("data:")&&xml.includes("base64,")){ const b64=xml.split("base64,")[1]; const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)); xml=new TextDecoder("utf-8").decode(bytes); }
         return parseXml(xml);
       }
-    } catch(e) {}
-
-    // 3) corsproxy — restituisce il testo grezzo
-    try {
-      const res = await tFetch(`https://corsproxy.io/?${enc}`, 7000);
-      return parseXml(await res.text());
-    } catch(e) {}
-
+    }catch(e){}
+    try{ const res=await tFetch(`https://corsproxy.io/?${enc}`,7000); return parseXml(await res.text()); }catch(e){}
     return [];
   }
-
-  const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
-  const items = results
-    .filter(r => r.status === "fulfilled" && r.value.length)
-    .flatMap(r => r.value)
-    .sort((a, b) => b.pubDate - a.pubDate)
-    .slice(0, 16);
-
-  if (!items.length) {
-    inner.innerHTML = `<span class="ticker-item" style="color:var(--muted)">Notizie Firenze/Prato non disponibili</span>`;
-    return;
-  }
-
-  const frag = document.createDocumentFragment();
-  for (let pass = 0; pass < 2; pass++) {
-    for (const { title, link } of items) {
-      const s = document.createElement("span"); s.className = "ticker-item";
-      const a = document.createElement("a");
-      a.href = link; a.target = "_blank"; a.rel = "noopener noreferrer";
-      a.textContent = title;
+  const results=await Promise.allSettled(FEEDS.map(f=>fetchFeed(f)));
+  const items=results.filter(r=>r.status==="fulfilled"&&r.value.length).flatMap(r=>r.value).sort((a,b)=>b.pubDate-a.pubDate).slice(0,16);
+  if(!items.length){ inner.innerHTML=`<span class="ticker-item" style="color:var(--console-muted)">Notizie Firenze/Prato non disponibili</span>`; return; }
+  const frag=document.createDocumentFragment();
+  for(let pass=0;pass<2;pass++){
+    for(const {title,link} of items){
+      const s=document.createElement("span"); s.className="ticker-item";
+      const a=document.createElement("a"); a.href=link; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=title;
       s.appendChild(a); frag.appendChild(s);
-      const sep = document.createElement("span"); sep.className = "ticker-sep";
-      sep.textContent = "◆"; frag.appendChild(sep);
+      const sep=document.createElement("span"); sep.className="ticker-sep"; sep.textContent="◆"; frag.appendChild(sep);
     }
   }
-  inner.textContent = "";
-  inner.appendChild(frag);
-  const dur = Math.max(40, items.reduce((s, i) => s + i.title.length, 0) * 0.18);
-  wrap.style.setProperty("--ticker-dur", dur + "s");
+  inner.textContent=""; inner.appendChild(frag);
+  const dur=Math.max(40, items.reduce((s,i)=>s+i.title.length,0)*0.18);
+  wrap.style.setProperty("--ticker-dur", dur+"s");
 }
 loadTicker();
-setInterval(loadTicker, 15 * 60 * 1000);
+setInterval(loadTicker, 15*60*1000);
 </script>
 </body>
 </html>
