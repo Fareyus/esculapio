@@ -149,6 +149,11 @@ a.tile:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
   text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:6px;
   background:var(--amber-soft);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
 }
+.dash{
+  align-self:flex-start;font-family:ui-monospace,monospace;font-size:.58rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:6px;
+  background:color-mix(in srgb,var(--ok) 15%,var(--surface));color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);
+}
 
 /* ---- utility: età paziente ---- */
 .util{
@@ -358,7 +363,7 @@ const SITE_DATA = {
     { label: "Rubrica Referenti",           url: "https://docs.google.com/spreadsheets/d/1H8Wfi8ccAZC7Pxi_HMVoefFpVOwKfx-bfPtoZnAVQ0Q/edit" },
     { label: "Mail Associazioni",           url: "https://docs.google.com/spreadsheets/d/1vvzBGbQW4WD_JToWUck5UkftfQABUR4donJxbMMWwFg/edit" },
     { label: "Turnazione Centrale 2026",    url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit?gid=770141305#gid=770141305" },
-    { label: "Timbrature",                  url: "https://zgcloud.zeitgroup.com/" },
+    { label: "Dashboard Segnalazioni",      url: "https://monitor118-tecnici.devicloud.me", dashboard: true },
     { label: "Mappa Sinottica EU FI-PO",    url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
     { label: "POT",                         url: "http://auth.sin.asf.it/login.php" },
     { label: "Cartellino",                  url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
@@ -403,6 +408,7 @@ const SITE_DATA = {
     { label: "Decodifica Codice Fiscale",    url: "https://sites.google.com/view/esculapio/link-rapidi/decodifica-codice-fiscale" },
     { label: "Progetto Tablet 118",          url: "https://drive.google.com/drive/folders/1AY0nKpE80wKFR9U8VHDagrNJxI5YsJwu" },
     { label: "Telefonia 118",                url: "https://docs.google.com/document/d/1i_X0fzFMihqFPBHOGHHBeECpWqSZ3_iYJSUjR43YUzw/edit" },
+    { label: "Timbrature",                   url: "https://zgcloud.zeitgroup.com/" },
   ],
 };
 
@@ -413,7 +419,7 @@ function glyph(n){
 }
 
 /* ---- render ---- */
-function makeTile({label,url,intranet}){
+function makeTile({label,url,intranet,dashboard}){
   const a = document.createElement("a");
   a.className = "tile";
   a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
@@ -422,6 +428,7 @@ function makeTile({label,url,intranet}){
     `<div class="key" aria-hidden="true">${glyph(label)}</div>`+
     `<div class="meta"><span class="name">${label}</span>`+
     (intranet ? `<span class="lan">lan</span>` : "")+
+    (dashboard ? `<span class="dash">dashboard</span>` : "")+
     `</div>`;
   return a;
 }
