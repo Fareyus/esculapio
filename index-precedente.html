@@ -18,27 +18,24 @@
 /* ============ TOKENS ============ */
 :root{
   --bg:#e8ecf6; --surface:#ffffff; --surface-2:#f2f5fc;
-  --ink:#0b1330; --muted:#4f5878; --line:#dce1ef;
+  --ink:#0b1330; --muted:#5b6483; --line:#dce1ef;
   --brand:#0e1a7a; --brand-tint:#2b3bb0; --cyan:#0a97a8;
-  --amber:#a9700a; --amber-ink:#7d5100; --amber-soft:#fbeecb;
-  --danger:#c62435; --ok:#1fae5a; --ok-ink:#0d6b39; --ok-soft:#e4f6ec;
+  --amber:#a9700a; --amber-soft:#fbeecb; --danger:#c62435; --ok:#1fae5a;
   --console-bg:#eef1fb; --console-panel:#ffffff; --console-text:#0b1330;
-  --console-muted:#4f5878; --console-line:#dce1ef; --ecg:#0e1a7a;
+  --console-muted:#5b6483; --console-line:#dce1ef; --ecg:#0e1a7a;
   --radius:14px;
   --shadow:0 1px 2px rgba(11,19,48,.05),0 10px 30px rgba(11,19,48,.10);
-  --c-urg:#1a3a8a; --c-eme:#08707e; --c-eme-cd:#c1121f;
-  --focus:var(--cyan);
+  --c-urg:#1a3a8a; --c-eme:#0a7f8f;
 }
 [data-theme="dark"]{
-  --bg:#151b31; --surface:#1e2542; --surface-2:#28304f;
-  --ink:#eef1fb; --muted:#a3abd0; --line:#333c62;
-  --brand:#93a6ff; --brand-tint:#aab8ff; --cyan:#3ad3e2;
-  --amber:#f5bf5c; --amber-ink:#f8cf7d; --amber-soft:#3b2f12;
-  --danger:#ff5a66; --ok:#3ddb85; --ok-ink:#5ee79b; --ok-soft:#14351f;
-  --console-bg:#1a2138; --console-panel:#232b49; --console-text:#f2f5ff;
-  --console-muted:#a3abd0; --console-line:#333c62; --ecg:#3ad3e2;
-  --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 28px rgba(0,0,0,.38);
-  --c-urg:#9db6f7; --c-eme:#3ad3e2; --c-eme-cd:#ff3d4a;
+  --bg:#060a1a; --surface:#0d1330; --surface-2:#131a3c;
+  --ink:#e9edfb; --muted:#8a93bd; --line:#222a54;
+  --brand:#7d92f5; --brand-tint:#9aabff; --cyan:#2ec7d6;
+  --amber:#f2b446; --amber-soft:#2c220a; --danger:#f2646f; --ok:#33d17a;
+  --console-bg:#04081a; --console-panel:#0b1234; --console-text:#eef1ff;
+  --console-muted:#8790bd; --console-line:#1c2450; --ecg:#2ec7d6;
+  --shadow:0 1px 0 rgba(255,255,255,.02),0 14px 34px rgba(0,0,0,.5);
+  --c-urg:#7b9ce8; --c-eme:#2bc7d6;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -48,14 +45,12 @@ body{
 }
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
 .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(14px,3vw,30px)}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 
-/* ============ CONSOLE HEADER ============ */
+/* ============ CONSOLE HEADER (fascia blu) ============ */
 .console{background:var(--console-bg);color:var(--console-text)}
 .console-in{
-  display:flex;align-items:center;gap:clamp(12px,2.2vw,24px);flex-wrap:wrap;
-  padding:10px clamp(14px,3vw,30px);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:10px clamp(14px,3vw,30px) 10px;
 }
 .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
 .brand-logo{height:40px;width:auto;flex:none;border-radius:9px;background:#fff;padding:4px;border:1px solid var(--console-line)}
@@ -66,27 +61,14 @@ body{
   font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;
   color:var(--console-muted);margin-top:6px;
 }
-
-/* ---- turni: il tempo è informazione di prima classe ---- */
-.shifts{display:flex;gap:18px;flex-wrap:wrap}
-.shift{min-width:118px}
-.s-top{display:flex;align-items:baseline;gap:7px}
-.s-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--console-muted);white-space:nowrap}
-.s-win{font-size:.6rem;font-weight:700;color:var(--console-muted);opacity:.8;white-space:nowrap}
-.s-val{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;
-  font-size:1.12rem;font-weight:700;line-height:1.15;display:block;margin-top:2px;
+.status{
+  display:flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--console-muted);
+  padding:7px 12px;border:1px solid var(--console-line);border-radius:999px;
+  background:rgba(255,255,255,.02);
 }
-#shift-urg .s-val{color:var(--c-urg)}
-#shift-eme .s-val{color:var(--c-eme-cd)}
-.s-bar{display:block;height:3px;border-radius:999px;background:var(--console-line);overflow:hidden;margin-top:5px}
-.s-fill{
-  display:block;height:100%;width:100%;border-radius:999px;
-  transform:scaleX(0);transform-origin:left center;transition:transform 1s linear;
-}
-#shift-urg .s-fill{background:var(--c-urg)}
-#shift-eme .s-fill{background:var(--c-eme-cd)}
-
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 70%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
 .clockbox{text-align:right;line-height:1}
 .clk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.45rem;font-weight:700;letter-spacing:.5px}
 .dat{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--console-muted);margin-top:6px}
@@ -96,8 +78,9 @@ body{
   display:grid;place-items:center;transition:transform .12s,border-color .12s;
 }
 .theme:hover{border-color:var(--brand-tint);transform:translateY(-1px)}
+.theme:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 
-/* ---- news ticker ---- */
+/* ---- news ticker (dentro la fascia blu) ---- */
 .ticker-wrap{display:flex;align-items:stretch;overflow:hidden;position:relative}
 .console .ticker-wrap{
   margin:0 clamp(14px,3vw,30px) 10px;
@@ -109,51 +92,26 @@ body{
 .ticker-label{
   display:flex;align-items:center;gap:6px;padding:0 15px;flex-shrink:0;position:relative;z-index:1;
   font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;
-  color:var(--c-eme);border-right:1px solid var(--console-line);white-space:nowrap;
+  color:var(--cyan);border-right:1px solid var(--console-line);white-space:nowrap;
 }
 .ticker-viewport{overflow:hidden;flex:1;padding:8px 15px;position:relative;z-index:1}
 .ticker-inner{display:inline-block;white-space:nowrap;animation:ticker var(--ticker-dur,60s) linear infinite}
-.ticker-wrap:hover .ticker-inner,.ticker-wrap:focus-within .ticker-inner{animation-play-state:paused}
+.ticker-wrap:hover .ticker-inner{animation-play-state:paused}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .ticker-item{font-size:.84rem;padding-right:38px}
 .ticker-item a{color:var(--console-text);text-decoration:none}
-.ticker-item a:hover{color:var(--c-eme);text-decoration:underline}
-.ticker-sep{color:var(--c-eme);opacity:.5;padding-right:38px;font-size:.72rem}
+.ticker-item a:hover{color:var(--cyan);text-decoration:underline}
+.ticker-sep{color:var(--cyan);opacity:.5;padding-right:38px;font-size:.72rem}
 
 /* ============ MAIN ============ */
 main{padding:14px 0 30px}
-
-/* ---- barra ricerca (in fondo) ---- */
-.toolbar{margin-bottom:14px}
-.search-wrap{position:relative}
-.search-wrap>svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none}
-#search{
-  width:100%;padding:13px 92px 13px 44px;border-radius:12px;
-  background:var(--surface);border:1px solid var(--line);color:var(--ink);
-  font-size:1rem;outline:none;box-shadow:var(--shadow);
-  transition:border-color .12s,box-shadow .12s;
-}
-#search::placeholder{color:var(--muted)}
-#search:focus{border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 22%,transparent)}
-.search-hint{
-  position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  display:flex;align-items:center;gap:8px;pointer-events:none;
-}
-.search-hint kbd{
-  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
-  border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--surface-2);
-}
-.search-count{
-  font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;
-  font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;
-}
 
 /* ---- section head ---- */
 .sec{margin-bottom:14px}
 .sec-head{display:flex;align-items:center;gap:12px;margin:0 2px 9px}
 .tag{
   font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.14em;color:var(--brand);margin:0;
+  letter-spacing:.14em;color:var(--brand);
   padding:5px 11px;border-radius:6px;
   background:color-mix(in srgb,var(--brand) 9%,var(--surface));
   border:1px solid color-mix(in srgb,var(--brand) 22%,var(--line));white-space:nowrap;
@@ -167,38 +125,35 @@ main{padding:14px 0 30px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
 
 /* ---- tiles ---- */
-.tiles{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
-.grid2 .tiles{grid-template-columns:repeat(auto-fill,minmax(196px,1fr))}
+.tiles{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
+.grid2 .tiles{grid-template-columns:repeat(auto-fill,minmax(172px,1fr))}
 a.tile{
-  display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;
+  display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:11px 13px;min-height:46px;
-  transition:transform .12s,border-color .12s,box-shadow .12s,background-color .12s;
+  padding:12px 13px;position:relative;overflow:hidden;
+  transition:transform .12s,border-color .12s,box-shadow .12s;
 }
-a.tile:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--focus) 45%,var(--line));box-shadow:var(--shadow)}
-a.tile.kbd-active{
-  border-color:var(--focus);background:color-mix(in srgb,var(--focus) 8%,var(--surface));
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 20%,transparent);
+a.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;opacity:0;transition:opacity .12s}
+a.tile:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--cyan) 45%,var(--line));box-shadow:var(--shadow)}
+a.tile:hover::before{opacity:1;background:linear-gradient(var(--cyan),var(--brand))}
+a.tile:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.key{
+  width:38px;height:38px;flex:none;border-radius:9px;display:grid;place-items:center;
+  font-family:ui-monospace,monospace;font-weight:700;font-size:.82rem;letter-spacing:-.5px;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--brand);
 }
-.name{font-size:.9rem;font-weight:600;line-height:1.25;flex:1;min-width:0}
-.badge{
-  flex:none;font-family:ui-monospace,monospace;font-size:.62rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:.06em;padding:3px 7px;border-radius:6px;
+.meta{min-width:0;display:flex;flex-direction:column;gap:4px}
+.name{font-size:.88rem;font-weight:600;line-height:1.25}
+.lan{
+  align-self:flex-start;font-family:ui-monospace,monospace;font-size:.58rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:6px;
+  background:var(--amber-soft);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
 }
-.badge.lan{background:var(--amber-soft);color:var(--amber-ink);border:1px solid color-mix(in srgb,var(--amber) 45%,transparent)}
-.badge.dash{background:var(--ok-soft);color:var(--ok-ink);border:1px solid color-mix(in srgb,var(--ok) 45%,transparent)}
-
-/* ---- archivio ---- */
-#archivio{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
-#archivio summary{
-  padding:11px 16px;font-family:ui-monospace,monospace;font-size:.68rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:.13em;color:var(--muted);cursor:pointer;user-select:none;list-style:none;
+.dash{
+  align-self:flex-start;font-family:ui-monospace,monospace;font-size:.58rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:6px;
+  background:color-mix(in srgb,var(--ok) 15%,var(--surface));color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);
 }
-#archivio summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
-#archivio summary::-webkit-details-marker{display:none}
-#archivio summary::before{content:"▸  "}
-#archivio[open] summary::before{content:"▾  "}
-#archivio .tiles{padding:2px 14px 16px}
 
 /* ---- utility: età paziente ---- */
 .util{
@@ -210,10 +165,10 @@ a.tile.kbd-active{
 .age-input{
   width:150px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
   background:var(--surface-2);color:var(--ink);font-size:.9rem;outline:none;transition:border-color .12s;
-  -moz-appearance:textfield;appearance:textfield;
+  -moz-appearance:textfield;
 }
 .age-input::-webkit-outer-spin-button,.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.age-input:focus{border-color:var(--focus)}
+.age-input:focus{border-color:var(--cyan)}
 .age-btn{
   padding:8px 16px;border-radius:9px;border:1px solid transparent;cursor:pointer;
   background:var(--brand);color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.02em;
@@ -221,67 +176,85 @@ a.tile.kbd-active{
 }
 [data-theme="dark"] .age-btn{color:#08122e}
 .age-btn:hover{opacity:.88;transform:translateY(-1px)}
+.age-btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .age-result{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;min-width:140px}
-.age-result.err{color:var(--danger)}
+.age-result.err{color:var(--amber)}
+
+/* ---- archivio ---- */
+#archivio{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+#archivio summary{
+  padding:11px 16px;font-family:ui-monospace,monospace;font-size:.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.13em;color:var(--muted);cursor:pointer;user-select:none;list-style:none;
+}
+#archivio summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
+#archivio summary::-webkit-details-marker{display:none}
+#archivio summary::before{content:"▸  "}
+#archivio[open] summary::before{content:"▾  "}
+#archivio .tiles{padding:2px 14px 16px}
+
+/* ---- countdown turni (inline nella barra età) ---- */
+.shift-inline{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+.shift-b{display:flex;align-items:center;gap:8px}
+.s-dot{width:8px;height:8px;border-radius:50%;flex:none}
+#shift-ord .s-dot{background:var(--brand)}
+#shift-eme .s-dot{background:var(--cyan)}
+.s-lbl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);white-space:nowrap}
+.s-val{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.05rem;font-weight:700;color:var(--ink)}
+
+/* ---- search (in fondo) ---- */
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap>svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.5;pointer-events:none}
+#search{
+  width:100%;padding:14px 46px 14px 44px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  font-size:1rem;outline:none;box-shadow:var(--shadow);
+  transition:border-color .12s,box-shadow .12s;
+}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px color-mix(in srgb,var(--cyan) 22%,transparent)}
+.search-wrap kbd{
+  position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--surface-2);
+}
 
 /* ---- misc ---- */
 .empty{text-align:center;color:var(--muted);padding:48px 0;font-size:.95rem}
 .hidden{display:none!important}
 footer{margin-top:6px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.7}
 footer code{font-family:ui-monospace,monospace;color:var(--ink)}
-.credit{opacity:.6}
+.credit{opacity:.5}
 
 /* ---- responsive ---- */
-@media(max-width:860px){
-  .clockbox{display:none}
-}
 @media(max-width:640px){
   .grid2{grid-template-columns:1fr}
-  .console-in{gap:12px 10px}
-  .shifts{width:100%;order:2;gap:14px}
-  .shift{flex:1;min-width:0}
-  .search-hint kbd{display:none}
-  #search{padding-right:64px}
+  .clockbox{display:none}
+  .console-in{gap:12px}
+  .brand{margin-right:0}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
-<h1 class="sr-only">EsculapioNET · console link Centrale 118 Firenze–Prato</h1>
-
-<!-- ===== CONSOLE HEADER ===== -->
+<!-- ===== CONSOLE HEADER (fascia blu) ===== -->
 <header class="console">
   <div class="console-in">
     <div class="brand">
-      <img class="brand-logo" src="logo.png" alt="">
+      <img class="brand-logo" src="logo.png" alt="EsculapioNET">
       <div>
         <div class="wordmark"><span class="mk" aria-hidden="true">⚕</span>Esculapio<span>NET</span></div>
         <div class="tagline">Centrale 118 · Firenze–Prato</div>
       </div>
     </div>
-
-    <div class="shifts">
-      <div class="shift" id="shift-urg">
-        <div class="s-top"><span class="s-lbl">Urgenti</span><span class="s-win" id="win-urg">—</span></div>
-        <span class="s-val mono" id="cd-urg">--:--:--</span>
-        <span class="s-bar"><span class="s-fill" id="bar-urg"></span></span>
-      </div>
-      <div class="shift" id="shift-eme">
-        <div class="s-top"><span class="s-lbl">Emergenza</span><span class="s-win" id="win-eme">—</span></div>
-        <span class="s-val mono" id="cd-eme">--:--:--</span>
-        <span class="s-bar"><span class="s-fill" id="bar-eme"></span></span>
-      </div>
-    </div>
-
-    <div class="clockbox">
+    <div class="status"><span class="dot"></span> Operativo</div>
+    <div class="clockbox" aria-live="off">
       <div class="clk" id="clk">--:--:--</div>
       <div class="dat" id="dat">—</div>
     </div>
     <button class="theme" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
   </div>
-
-  <!-- News, con elettrocardiogramma di sfondo -->
+  <!-- News nella fascia blu, con elettrocardiogramma di sfondo -->
   <div class="ticker-wrap" id="ticker-wrap">
     <svg class="ticker-ecg" viewBox="0 0 1200 44" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
@@ -307,9 +280,9 @@ footer code{font-family:ui-monospace,monospace;color:var(--ink)}
     <p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
 
     <!-- COMUNE -->
-    <section class="sec" id="section-comune" aria-labelledby="h-comune">
+    <section class="sec" id="section-comune">
       <div class="sec-head">
-        <h2 class="tag" id="h-comune">Comune</h2>
+        <span class="tag">Comune</span>
         <span class="cnt" id="count-comune"></span>
         <span class="rule"></span>
       </div>
@@ -318,22 +291,42 @@ footer code{font-family:ui-monospace,monospace;color:var(--ink)}
 
     <!-- URGENTI + EMERGENZA -->
     <div class="grid2" id="sections-grid">
-      <section class="sec" id="section-urgenti" aria-labelledby="h-urgenti">
+      <section class="sec" id="section-urgenti">
         <div class="sec-head">
-          <h2 class="tag t-urg" id="h-urgenti">🚐 Trasporti Urgenti</h2>
+          <span class="tag t-urg">🚐 Trasporti Urgenti</span>
           <span class="cnt" id="count-urgenti"></span>
           <span class="rule"></span>
         </div>
         <div class="tiles" id="links-urgenti"></div>
       </section>
-      <section class="sec" id="section-emergenza" aria-labelledby="h-emergenza">
+      <section class="sec" id="section-emergenza">
         <div class="sec-head">
-          <h2 class="tag t-eme" id="h-emergenza">🚑 Emergenza Sanitaria</h2>
+          <span class="tag t-eme">🚑 Emergenza Sanitaria</span>
           <span class="cnt" id="count-emergenza"></span>
           <span class="rule"></span>
         </div>
         <div class="tiles" id="links-emergenza"></div>
       </section>
+    </div>
+
+    <!-- ETÀ PAZIENTE + COUNTDOWN TURNI (inline) -->
+    <div class="util">
+      <span class="u-lbl">🩺 Età paziente</span>
+      <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-label="Anno di nascita">
+      <button class="age-btn" id="age-calc-btn">Calcola</button>
+      <span class="age-result" id="age-result"></span>
+      <div class="shift-inline">
+        <div class="shift-b" id="shift-ord">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span class="s-lbl" id="lbl-ord">Ordinari</span>
+          <span class="s-val mono" id="cd-ord">--:--:--</span>
+        </div>
+        <div class="shift-b" id="shift-eme">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span class="s-lbl">Emergenza</span>
+          <span class="s-val mono" id="cd-eme">--:--:--</span>
+        </div>
+      </div>
     </div>
 
     <!-- ARCHIVIO -->
@@ -342,24 +335,11 @@ footer code{font-family:ui-monospace,monospace;color:var(--ink)}
       <div class="tiles" id="links-archivio"></div>
     </details>
 
-    <!-- ETÀ PAZIENTE -->
-    <div class="util">
-      <span class="u-lbl" id="age-lbl">🩺 Età paziente</span>
-      <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-labelledby="age-lbl">
-      <button class="age-btn" id="age-calc-btn">Calcola</button>
-      <span class="age-result" id="age-result" aria-live="polite"></span>
-    </div>
-
     <!-- RICERCA (in fondo) -->
-    <div class="toolbar" id="toolbar">
-      <div class="search-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-        <input id="search" type="search" placeholder="Cerca un link…  (premi \ )" autocomplete="off" aria-label="Cerca tra i link" aria-describedby="search-count">
-        <div class="search-hint">
-          <span class="search-count" id="search-count" aria-live="polite"></span>
-          <kbd>\</kbd>
-        </div>
-      </div>
+    <div class="search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      <input id="search" type="search" placeholder="Cerca un link…  (premi \ )" autocomplete="off" aria-label="Cerca tra i link">
+      <kbd>\</kbd>
     </div>
 
     <footer>
@@ -374,8 +354,7 @@ footer code{font-family:ui-monospace,monospace;color:var(--ink)}
 <script>
 /* =========================================================
    DATI — per aggiungere/modificare un link, cambia qui.
-   intranet: true   → badge "lan" (solo da rete interna)
-   dashboard: true  → badge "dashboard"
+   intranet: true  → mostra il badge "lan" sulla tile
 ========================================================= */
 const SITE_DATA = {
   comune: [
@@ -383,12 +362,12 @@ const SITE_DATA = {
     { label: "Mail EsculapioNET",           url: "https://outlook.office.com/mail/" },
     { label: "Rubrica Referenti",           url: "https://docs.google.com/spreadsheets/d/1H8Wfi8ccAZC7Pxi_HMVoefFpVOwKfx-bfPtoZnAVQ0Q/edit" },
     { label: "Mail Associazioni",           url: "https://docs.google.com/spreadsheets/d/1vvzBGbQW4WD_JToWUck5UkftfQABUR4donJxbMMWwFg/edit" },
+    { label: "Turnazione Centrale 2026",    url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit?gid=770141305#gid=770141305" },
     { label: "Dashboard Segnalazioni",      url: "https://monitor118-tecnici.devicloud.me", dashboard: true },
     { label: "Mappa Sinottica EU FI-PO",    url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
     { label: "POT",                         url: "http://auth.sin.asf.it/login.php" },
     { label: "Cartellino",                  url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
     { label: "Sigle e Turni Ambulanze 118", url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by", intranet: true },
-    { label: "Turnazione Centrale 2026",    url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit?gid=770141305#gid=770141305" },
   ],
   urgenti: [
     { label: "NRE - Controllo Certificati",    url: "https://ricettatrasporti.sanita.toscana.it/" },
@@ -433,29 +412,24 @@ const SITE_DATA = {
   ],
 };
 
+/* ---- helpers ---- */
+function glyph(n){
+  const w = n.replace(/[^\wÀ-ÿ ]/g," ").trim().split(/\s+/).filter(Boolean);
+  return ((w[0]?.[0]||"")+(w[1]?.[0]||"")).toUpperCase() || "•";
+}
+
 /* ---- render ---- */
 function makeTile({label,url,intranet,dashboard}){
   const a = document.createElement("a");
   a.className = "tile";
   a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
-  // ricerca anche sull'host: "google", "toscana", "drive" trovano il link giusto
-  let host = "";
-  try{ host = new URL(url, location.href).hostname.replace(/^www\./,""); }catch(e){}
-  a.dataset.search = (label + " " + host).toLowerCase();
-  const name = document.createElement("span");
-  name.className = "name"; name.textContent = label;
-  a.appendChild(name);
-  if(intranet){
-    const b = document.createElement("span");
-    b.className = "badge lan"; b.textContent = "lan";
-    b.title = "Raggiungibile solo dalla rete interna 118";
-    a.appendChild(b);
-  }
-  if(dashboard){
-    const b = document.createElement("span");
-    b.className = "badge dash"; b.textContent = "dashboard";
-    a.appendChild(b);
-  }
+  a.dataset.search = label.toLowerCase();
+  a.innerHTML =
+    `<div class="key" aria-hidden="true">${glyph(label)}</div>`+
+    `<div class="meta"><span class="name">${label}</span>`+
+    (intranet ? `<span class="lan">lan</span>` : "")+
+    (dashboard ? `<span class="dash">dashboard</span>` : "")+
+    `</div>`;
   return a;
 }
 function renderSection(id,links){ const el=document.getElementById(id); links.forEach(l=>el.appendChild(makeTile(l))); }
@@ -470,87 +444,43 @@ setCount("count-urgenti",   SITE_DATA.urgenti.length);
 setCount("count-emergenza", SITE_DATA.emergenza.length);
 
 /* ---- search / filter ---- */
-const searchEl  = document.getElementById("search");
-const countEl   = document.getElementById("search-count");
-const noResults = document.getElementById("no-results");
-let kbdIndex = -1;
-
 function filterGrid(gridId,q){
   let n=0;
   document.getElementById(gridId).querySelectorAll(".tile").forEach(el=>{
     const show = el.dataset.search.includes(q);
-    el.classList.toggle("hidden", !show);
+    el.style.display = show ? "" : "none";
     if(show) n++;
   });
   return n;
 }
 function showAll(){
   ["section-comune","section-urgenti","section-emergenza","archivio","sections-grid"].forEach(id=>{
-    document.getElementById(id).classList.remove("hidden");
+    document.getElementById(id).style.display="";
   });
-  document.querySelectorAll(".tile").forEach(el=>el.classList.remove("hidden"));
-}
-function visibleTiles(){
-  return [...document.querySelectorAll(".tile")].filter(el=>{
-    if(el.classList.contains("hidden")) return false;
-    const arch = el.closest("#archivio");
-    if(arch && !arch.open) return false;
-    return el.closest(".sec, #archivio") && !el.closest(".hidden");
-  });
-}
-function unmarkKbd(){
-  document.querySelectorAll(".tile.kbd-active").forEach(el=>el.classList.remove("kbd-active"));
-}
-function clearKbd(){ kbdIndex = -1; unmarkKbd(); }
-function moveKbd(delta){
-  const tiles = visibleTiles();
-  if(!tiles.length) return;
-  unmarkKbd();
-  kbdIndex = (kbdIndex + delta + tiles.length) % tiles.length;
-  const t = tiles[kbdIndex];
-  t.classList.add("kbd-active");
-  t.scrollIntoView({block:"nearest"});
+  document.querySelectorAll(".tile").forEach(el=>el.style.display="");
 }
 function filterLinks(q){
-  clearKbd();
-  if(!q){
-    showAll();
-    document.getElementById("archivio").removeAttribute("open");
-    noResults.classList.add("hidden");
-    countEl.textContent = "";
-    return;
-  }
+  const noResults = document.getElementById("no-results");
+  if(!q){ showAll(); document.getElementById("archivio").removeAttribute("open"); noResults.classList.add("hidden"); return; }
   let total=0;
   const comune=filterGrid("links-comune",q);
-  document.getElementById("section-comune").classList.toggle("hidden", !comune);
+  document.getElementById("section-comune").style.display = comune?"":"none";
   total+=comune;
   const urgenti=filterGrid("links-urgenti",q), emergenza=filterGrid("links-emergenza",q);
-  document.getElementById("section-urgenti").classList.toggle("hidden", !urgenti);
-  document.getElementById("section-emergenza").classList.toggle("hidden", !emergenza);
-  document.getElementById("sections-grid").classList.toggle("hidden", !(urgenti||emergenza));
+  document.getElementById("section-urgenti").style.display   = urgenti  ?"":"none";
+  document.getElementById("section-emergenza").style.display = emergenza?"":"none";
+  document.getElementById("sections-grid").style.display = (urgenti||emergenza)?"":"none";
   total+=urgenti+emergenza;
   const arch=filterGrid("links-archivio",q), archivio=document.getElementById("archivio");
-  archivio.classList.toggle("hidden", !arch);
+  archivio.style.display = arch?"":"none";
   if(arch){ archivio.setAttribute("open",""); total+=arch; }
   noResults.classList.toggle("hidden", total>0);
-  countEl.textContent = total ? total+(total===1?" risultato":" risultati") : "";
-  if(total) moveKbd(1); // il primo risultato è già pronto: Invio lo apre
 }
+const searchEl = document.getElementById("search");
 searchEl.addEventListener("input", e=>filterLinks(e.target.value.trim().toLowerCase()));
-searchEl.addEventListener("keydown", e=>{
-  if(e.key==="Enter"){
-    const t = document.querySelector(".tile.kbd-active") || visibleTiles()[0];
-    if(t){ e.preventDefault(); window.open(t.href,"_blank","noopener"); }
-  } else if(e.key==="ArrowDown"){ e.preventDefault(); moveKbd(1); }
-  else if(e.key==="ArrowUp"){ e.preventDefault(); moveKbd(-1); }
-});
 document.addEventListener("keydown", e=>{
-  if(e.key==="\\" && document.activeElement!==searchEl){
-    e.preventDefault(); searchEl.focus(); searchEl.select();
-    searchEl.scrollIntoView({block:"center",behavior:"smooth"});
-  } else if(e.key==="Escape" && document.activeElement===searchEl){
-    searchEl.value=""; filterLinks(""); searchEl.blur();
-  }
+  if(e.key==="\\" && document.activeElement!==searchEl){ e.preventDefault(); searchEl.focus(); searchEl.scrollIntoView({block:"center",behavior:"smooth"}); }
+  else if(e.key==="Escape" && document.activeElement===searchEl){ searchEl.value=""; filterLinks(""); searchEl.blur(); }
 });
 
 /* ---- età paziente ---- */
@@ -587,43 +517,36 @@ document.getElementById("theme-btn").onclick=()=>{
   try{ localStorage.setItem("esc-theme", root.dataset.theme); }catch(e){}
 };
 
-/* ---- turni ----
-   Cambi turno espressi in ore. Notte = ultimo cambio → primo del giorno dopo. */
-const SHIFT_URG = [7,14,20];   // Trasporti Urgenti
-const SHIFT_EME = [7,13,20];   // Emergenza Sanitaria
-
-function shiftInfo(d, bounds){
-  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
-  const b = bounds.map(h=>h*3600), DAY = 86400;
-  let start, end;
-  if(t < b[0]){ start = b[b.length-1] - DAY; end = b[0]; }
-  else{
-    let i = b.length - 1;
-    while(i > 0 && t < b[i]) i--;
-    start = b[i];
-    end   = (i === b.length-1) ? b[0] + DAY : b[i+1];
-  }
-  const hh = s => String(Math.floor(((s%DAY)+DAY)%DAY/3600)).padStart(2,"0");
-  return { rem:end-t, progress:(t-start)/(end-start), window:`${hh(start)}–${hh(end)}` };
-}
+/* ---- shift countdown ---- */
 function secsToHMS(s){
   const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sc=s%60;
   return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sc).padStart(2,"0")}`;
 }
+function shiftRemOrd(d){ // 06:50-14:00 · 14:00-20:00 · 20:00-07:00
+  const t=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();
+  if(t<7*3600)  return 7*3600-t;
+  if(t<14*3600) return 14*3600-t;
+  if(t<20*3600) return 20*3600-t;
+  return (24+7)*3600-t;
+}
+function shiftRemEme(d){ // 07:00-13:00 · 13:00-20:00 · 20:00-07:00
+  const t=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();
+  if(t<7*3600)  return 7*3600-t;
+  if(t<13*3600) return 13*3600-t;
+  if(t<20*3600) return 20*3600-t;
+  return (24+7)*3600-t;
+}
 
-/* ---- clock + turni ---- */
+/* ---- clock + shift ---- */
 function tick(){
   const d=new Date();
   document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
   document.getElementById("dat").textContent = d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});
-
-  const urg = shiftInfo(d, SHIFT_URG), eme = shiftInfo(d, SHIFT_EME);
-  document.getElementById("cd-urg").textContent = secsToHMS(urg.rem);
-  document.getElementById("cd-eme").textContent = secsToHMS(eme.rem);
-  document.getElementById("win-urg").textContent = urg.window;
-  document.getElementById("win-eme").textContent = eme.window;
-  document.getElementById("bar-urg").style.transform = `scaleX(${urg.progress.toFixed(4)})`;
-  document.getElementById("bar-eme").style.transform = `scaleX(${eme.progress.toFixed(4)})`;
+  const remOrd=shiftRemOrd(d), remEme=shiftRemEme(d), merged=remOrd===remEme;
+  document.getElementById("shift-eme").style.display = merged ? "none" : "";
+  document.getElementById("lbl-ord").textContent = merged ? "Ord · Eme" : "Ordinari";
+  document.getElementById("cd-ord").textContent = secsToHMS(remOrd);
+  document.getElementById("cd-eme").textContent = secsToHMS(remEme);
 }
 tick(); setInterval(tick,1000);
 
