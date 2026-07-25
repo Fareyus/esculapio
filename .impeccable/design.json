@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-06T00:00:00.000Z",
+  "title": "Design System: EsculapioNET",
+  "extensions": {
+    "colorMeta": {
+      "brand": {
+        "role": "primary",
+        "displayName": "Blu Esculapio",
+        "canonical": "#0e1a7a",
+        "darkValue": "#7d92f5",
+        "tonalRamp": ["#05082e", "#0a1150", "#0e1a7a", "#24309e", "#3f4dbd", "#6b78d6", "#9aa4e6", "#cdd3f5"]
+      },
+      "cyan": {
+        "role": "secondary",
+        "displayName": "Teal Clinico",
+        "canonical": "#0a97a8",
+        "darkValue": "#2ec7d6",
+        "tonalRamp": ["#03282d", "#064a53", "#0a7280", "#0a97a8", "#14b6c7", "#45cdda", "#86e0e9", "#c5f1f5"]
+      },
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Ambra di Rete",
+        "canonical": "#a9700a",
+        "darkValue": "#f2b446",
+        "tonalRamp": ["#2b1c03", "#4f3506", "#7a520a", "#a9700a", "#cf8f1e", "#e0a93b", "#eec98a", "#f8e6c2"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Inchiostro",
+        "canonical": "#0b1330",
+        "darkValue": "#e9edfb",
+        "tonalRamp": ["#0b1330", "#1c2650", "#2f3c6e", "#4a5789", "#6c78a4", "#939dc0", "#bcc3dc", "#e3e7f4"]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Fondo Freddo",
+        "canonical": "#e8ecf6",
+        "darkValue": "#060a1a",
+        "tonalRamp": ["#060a1a", "#0d1330", "#141b3c", "#26305f", "#5b6483", "#9099c0", "#c6cbe0", "#e8ecf6"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display / Orologio", "purpose": "L'orologio nell'header: la lettura più grande, monospace tabellare." },
+      "headline": { "displayName": "Wordmark", "purpose": "Solo il marchio EsculapioNET." },
+      "body": { "displayName": "Testo tile", "purpose": "Nomi dei link e testo generale." },
+      "label": { "displayName": "Micro-etichetta", "purpose": "Etichette maiuscole spaziate (stato, turni, tag)." },
+      "data": { "displayName": "Dato-strumento", "purpose": "Countdown, contatori, badge, età: monospace tabellare." }
+    },
+    "shadows": [
+      { "name": "ambient", "value": "0 1px 2px rgba(11,19,48,.05), 0 10px 30px rgba(11,19,48,.10)", "purpose": "Contenitori a riposo (barre, campi, timer, ticker, archivio)." },
+      { "name": "ambient-dark", "value": "0 1px 0 rgba(255,255,255,.02), 0 14px 34px rgba(0,0,0,.5)", "purpose": "Stessa ombra in tema scuro." }
+    ],
+    "motion": [
+      { "name": "ease-quick", "value": "0.12s ease", "purpose": "Transizioni di stato (hover, focus, bordo)." },
+      { "name": "pulse", "value": "2.2s ease-out infinite", "purpose": "Dot di stato 'Operativo'." },
+      { "name": "ticker", "value": "linear infinite", "purpose": "Scorrimento continuo del ticker notizie (in pausa all'hover)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "xs", "value": "600px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Tile-link",
+      "kind": "card",
+      "refersTo": "tile",
+      "description": "Il mattone del sistema: glyph monospace + nome + eventuale badge lan; piatta a riposo, si solleva all'hover con canale teal→brand.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><span class=\"ds-tile-key\">MU</span><span class=\"ds-tile-meta\"><span class=\"ds-tile-name\">Mail USL Centro</span></span></a>",
+      "css": ".ds-tile{display:flex;align-items:center;gap:11px;max-width:240px;text-decoration:none;color:#0b1330;background:#fff;border:1px solid #dce1ef;border-radius:14px;padding:12px 13px;position:relative;overflow:hidden;transition:transform .12s,border-color .12s,box-shadow .12s}.ds-tile::before{content:\"\";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;opacity:0;transition:opacity .12s}.ds-tile:hover{transform:translateY(-2px);border-color:#7fb2c0;box-shadow:0 1px 2px rgba(11,19,48,.05),0 10px 30px rgba(11,19,48,.10)}.ds-tile:hover::before{opacity:1;background:linear-gradient(#0a97a8,#0e1a7a)}.ds-tile:focus-visible{outline:2px solid #0a97a8;outline-offset:2px}.ds-tile-key{width:38px;height:38px;flex:none;border-radius:9px;display:grid;place-items:center;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;font-size:.82rem;letter-spacing:-.5px;background:#f2f5fc;border:1px solid #dce1ef;color:#0e1a7a}.ds-tile-name{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.88rem;font-weight:600;line-height:1.25}"
+    },
+    {
+      "name": "Badge LAN",
+      "kind": "chip",
+      "refersTo": "lan-badge",
+      "description": "Avviso 'solo rete interna 118'. Ambra su fondo tenue. Mai decorativo.",
+      "html": "<span class=\"ds-lan\">lan</span>",
+      "css": ".ds-lan{display:inline-block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 6px;border-radius:5px;background:#fbeecb;color:#a9700a;border:1px solid rgba(169,112,10,.4)}"
+    },
+    {
+      "name": "Campo di ricerca",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "Ricerca in fondo alla pagina, con icona lente e scorciatoia da tastiera; focus teal con alone.",
+      "html": "<div class=\"ds-search\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#5b6483\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.2-3.2\"/></svg><input class=\"ds-search-input\" placeholder=\"Cerca un link…\"><kbd class=\"ds-kbd\">\\</kbd></div>",
+      "css": ".ds-search{position:relative;max-width:440px}.ds-search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none}.ds-search-input{width:100%;padding:14px 46px 14px 44px;border-radius:12px;background:#fff;border:1px solid #dce1ef;color:#0b1330;font-size:1rem;outline:none;box-shadow:0 1px 2px rgba(11,19,48,.05),0 10px 30px rgba(11,19,48,.10);transition:border-color .12s,box-shadow .12s}.ds-search-input::placeholder{color:#5b6483}.ds-search-input:focus{border-color:#0a97a8;box-shadow:0 0 0 3px rgba(10,151,168,.22)}.ds-kbd{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-family:ui-monospace,monospace;font-size:.72rem;color:#5b6483;border:1px solid #dce1ef;border-radius:6px;padding:2px 8px;background:#f2f5fc}"
+    },
+    {
+      "name": "Bottone primario",
+      "kind": "button",
+      "refersTo": "age-button",
+      "description": "Azione primaria (es. Calcola). Fondo blu-brand, testo bianco.",
+      "html": "<button class=\"ds-btn\">Calcola</button>",
+      "css": ".ds-btn{padding:8px 16px;border-radius:9px;border:1px solid transparent;cursor:pointer;background:#0e1a7a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.02em;transition:opacity .12s,transform .12s}.ds-btn:hover{opacity:.88;transform:translateY(-1px)}.ds-btn:focus-visible{outline:2px solid #0a97a8;outline-offset:2px}"
+    },
+    {
+      "name": "Timer di turno",
+      "kind": "custom",
+      "refersTo": "shift-timer",
+      "description": "Countdown al cambio turno: etichetta muta + valore monospace tabellare + didascalia. Contenitore con ombra ambientale, senza bordo-stripe.",
+      "html": "<div class=\"ds-shift\"><span class=\"ds-shift-lbl\">Turno Ordinari</span><span class=\"ds-shift-val\">02:14:51</span><span class=\"ds-shift-cap\">al cambio</span></div>",
+      "css": ".ds-shift{display:flex;align-items:baseline;gap:12px;max-width:360px;padding:13px 16px;border-radius:14px;background:#fff;border:1px solid #dce1ef;box-shadow:0 1px 2px rgba(11,19,48,.05),0 10px 30px rgba(11,19,48,.10)}.ds-shift-lbl{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:#5b6483;white-space:nowrap}.ds-shift-val{font-family:ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.42rem;font-weight:700;color:#0b1330;margin-left:auto}.ds-shift-cap{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5b6483;white-space:nowrap}"
+    },
+    {
+      "name": "Stato operativo",
+      "kind": "custom",
+      "refersTo": "status",
+      "description": "Indicatore di stato nell'header con dot verde pulsante.",
+      "html": "<div class=\"ds-status\"><span class=\"ds-dot\"></span> Operativo</div>",
+      "css": ".ds-status{display:inline-flex;align-items:center;gap:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#5b6483;padding:7px 12px;border:1px solid #dce1ef;border-radius:999px;background:#fff}.ds-dot{width:9px;height:9px;border-radius:50%;background:#1fae5a;box-shadow:0 0 0 0 #1fae5a;animation:ds-pulse 2.2s ease-out infinite}@keyframes ds-pulse{0%{box-shadow:0 0 0 0 rgba(31,174,90,.5)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}@media (prefers-reduced-motion:reduce){.ds-dot{animation:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Il Cruscotto Essenziale",
+    "overview": "EsculapioNET è il quadro strumenti di una sala di Centrale 118, non un sito. Chi lo guarda è a metà turno e deve capire in un colpo d'occhio che ore sono, quanto manca al cambio e dove sta il link che serve adesso. Il sistema è ridotto all'essenziale e strumentale: superfici calme, dati trattati come letture di uno strumento (monospace tabellari), un solo elemento caratterizzante — il battito ECG dietro le notizie — e nient'altro che chieda attenzione. Rifiuta il portale PA vecchio stile e il template SaaS generico.",
+    "keyCharacteristics": [
+      "Dati come strumenti: orologio, countdown e contatori in monospace tabellare.",
+      "Un solo accento (teal clinico) sopra un blu-brand strutturale.",
+      "Chiaro e scuro paritari, per i turni notturni.",
+      "Una firma sola: la linea ECG dietro il ticker notizie.",
+      "Gerarchia per uso reale: Comune / Urgenti / Emergenza / Archivio."
+    ],
+    "rules": [
+      { "name": "La Regola dell'Unica Voce", "body": "Il teal clinico è l'unico accento: compare su focus, hover e firma ECG, mai come riempimento.", "section": "colors" },
+      { "name": "La Regola dell'Ambra Onesta", "body": "L'ambra significa solo 'link di sola rete interna 118'. Mai estetico.", "section": "colors" },
+      { "name": "La Regola del Numero-Strumento", "body": "Ogni valore che cambia o si conta è in monospace tabellare. I numeri non ballano.", "section": "typography" },
+      { "name": "La Regola del Contenitore vs. Azione", "body": "I contenitori hanno ombra a riposo per stratificare; le tile sono piatte finché non le tocchi.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do trattare ogni numero che conta in monospace tabellare.",
+      "Do tenere il teal clinico come unico accento (focus, hover, ECG).",
+      "Do usare l'ambra solo per il badge lan.",
+      "Do mantenere chiaro e scuro paritari, contrasto testo su livelli AA.",
+      "Do far sollevare le tile all'hover; contenitori con ombra ambientale a riposo.",
+      "Do rispettare prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't ricadere nel portale PA vecchio stile (tabelle grigie, liste dense).",
+      "Don't usare il template SaaS (hero-metric, griglie di card identiche).",
+      "Don't usare bordi-accento laterali >1px (side-stripe) su tile, callout o barre.",
+      "Don't introdurre font esterne: il caricamento istantaneo è un requisito.",
+      "Don't spargere il teal come riempimento.",
+      "Don't aggiungere gradient text o glassmorphism decorativi."
+    ]
+  }
+}

@@ -1,1 +1,6 @@
 .DS_Store
+
+# strumenti locali (skill installate, permessi, cache)
+.claude/skills/
+.claude/settings.local.json
+.impeccable/hook.cache.json
