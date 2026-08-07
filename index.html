@@ -116,7 +116,10 @@ body{
 }
 .ticker-viewport{overflow:hidden;flex:1;padding:8px 15px;position:relative;z-index:1}
 .ticker-inner{display:inline-block;white-space:nowrap;animation:ticker var(--ticker-dur,60s) linear infinite}
-.ticker-wrap:hover .ticker-inner,.ticker-wrap:focus-within .ticker-inner{animation-play-state:paused}
+/* Pausa solo sul titolo puntato o col focus da tastiera: se bastasse il
+   passaggio sul contenitore, un mouse fermo sulla fascia lo bloccherebbe
+   a tempo indeterminato (su touch il problema non si presenta). */
+.ticker-inner:has(a:hover),.ticker-wrap:focus-within .ticker-inner{animation-play-state:paused}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .ticker-item{font-size:.84rem;padding-right:38px}
 .ticker-item a{color:var(--console-text);text-decoration:none}
@@ -631,6 +634,7 @@ function tick(){
 tick(); setInterval(tick,1000);
 
 /* ---- news ticker ---- */
+let tickerRO=null;
 async function loadTicker(){
   const FEEDS=["https://www.lanazione.it/firenze/rss","https://www.lanazione.it/prato/rss"];
   const inner=document.getElementById("ticker-inner"), wrap=document.getElementById("ticker-wrap");
@@ -675,8 +679,22 @@ async function loadTicker(){
     }
   }
   inner.textContent=""; inner.appendChild(frag);
-  const dur=Math.max(40, items.reduce((s,i)=>s+i.title.length,0)*0.18);
-  wrap.style.setProperty("--ticker-dur", dur+"s");
+  /* Durata calcolata sulla larghezza reale: velocita' costante in px/s.
+     Basarla sul numero di caratteri rende lo scorrimento impercettibile
+     sui monitor larghi (stesso tempo, molta piu' distanza da coprire). */
+  const setDur=()=>{
+    const half=inner.scrollWidth/2;
+    if(!half) return;
+    const dur=Math.max(30, half/70);
+    wrap.style.setProperty("--ticker-dur", dur.toFixed(1)+"s");
+  };
+  setDur();
+  requestAnimationFrame(setDur);
+  if(window.ResizeObserver){
+    tickerRO?.disconnect();
+    tickerRO=new ResizeObserver(setDur);
+    tickerRO.observe(wrap);
+  }
 }
 loadTicker();
 setInterval(loadTicker, 15*60*1000);
