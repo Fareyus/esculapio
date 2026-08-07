@@ -648,16 +648,18 @@ async function loadTicker(){
   }
   async function fetchFeed(feedUrl){
     const enc=encodeURIComponent(feedUrl);
-    try{ const res=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=8`,7000); const data=await res.json();
-      if(data.status==="ok"&&data.items?.length) return data.items.map(i=>({title:(i.title||"").trim(),link:i.link||i.guid||"#",pubDate:new Date(i.pubDate||0)})).filter(i=>i.title);
+    /* NB: il parametro count di rss2json richiede una API key -> non usarlo */
+    try{ const res=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}`,8000); const data=await res.json();
+      if(data.status==="ok"&&data.items?.length) return data.items.slice(0,8).map(i=>({title:(i.title||"").trim(),link:i.link||i.guid||"#",pubDate:new Date(i.pubDate||0)})).filter(i=>i.title);
     }catch(e){}
-    try{ const res=await tFetch(`https://api.allorigins.win/get?url=${enc}`,7000); const data=await res.json();
+    try{ const res=await tFetch(`https://api.allorigins.win/raw?url=${enc}`,12000); return parseXml(await res.text()); }catch(e){}
+    try{ const res=await tFetch(`https://api.allorigins.win/get?url=${enc}`,12000); const data=await res.json();
       if(data?.contents){ let xml=data.contents;
         if(xml.startsWith("data:")&&xml.includes("base64,")){ const b64=xml.split("base64,")[1]; const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)); xml=new TextDecoder("utf-8").decode(bytes); }
         return parseXml(xml);
       }
     }catch(e){}
-    try{ const res=await tFetch(`https://corsproxy.io/?${enc}`,7000); return parseXml(await res.text()); }catch(e){}
+    try{ const res=await tFetch(`https://corsproxy.io/?url=${enc}`,8000); return parseXml(await res.text()); }catch(e){}
     return [];
   }
   const results=await Promise.allSettled(FEEDS.map(f=>fetchFeed(f)));
