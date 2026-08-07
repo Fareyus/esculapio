@@ -116,10 +116,10 @@ body{
 }
 .ticker-viewport{overflow:hidden;flex:1;padding:8px 15px;position:relative;z-index:1}
 .ticker-inner{display:inline-block;white-space:nowrap;animation:ticker var(--ticker-dur,60s) linear infinite}
-/* Pausa solo sul titolo puntato o col focus da tastiera: se bastasse il
-   passaggio sul contenitore, un mouse fermo sulla fascia lo bloccherebbe
-   a tempo indeterminato (su touch il problema non si presenta). */
-.ticker-inner:has(a:hover),.ticker-wrap:focus-within .ticker-inner{animation-play-state:paused}
+/* Con lo scorrimento pilotato da requestAnimationFrame l'animazione CSS va
+   spenta, altrimenti i due movimenti si sommano. Il keyframe resta come
+   fallback se il JS del ticker non parte. */
+.ticker-inner.js-scroll{animation:none;will-change:transform}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .ticker-item{font-size:.84rem;padding-right:38px}
 .ticker-item a{color:var(--console-text);text-decoration:none}
@@ -679,23 +679,57 @@ async function loadTicker(){
     }
   }
   inner.textContent=""; inner.appendChild(frag);
-  /* Durata calcolata sulla larghezza reale: velocita' costante in px/s.
-     Basarla sul numero di caratteri rende lo scorrimento impercettibile
-     sui monitor larghi (stesso tempo, molta piu' distanza da coprire). */
+  /* Durata di riserva per il keyframe CSS, usata solo se il JS non parte:
+     va calcolata sulla larghezza reale, non sul numero di caratteri, o su
+     monitor larghi lo scorrimento diventa impercettibile. */
   const setDur=()=>{
     const half=inner.scrollWidth/2;
-    if(!half) return;
-    const dur=Math.max(30, half/70);
-    wrap.style.setProperty("--ticker-dur", dur.toFixed(1)+"s");
+    if(half) wrap.style.setProperty("--ticker-dur", Math.max(30, half/TICKER_SPEED).toFixed(1)+"s");
   };
   setDur();
-  requestAnimationFrame(setDur);
   if(window.ResizeObserver){
     tickerRO?.disconnect();
     tickerRO=new ResizeObserver(setDur);
     tickerRO.observe(wrap);
   }
+  startTickerScroll(inner);
 }
+
+/* Scorrimento pilotato da requestAnimationFrame invece che dall'animazione
+   CSS: su alcune postazioni (policy Windows sulle animazioni, motori che
+   scartano regole con selettori non riconosciuti) il keyframe non partiva e
+   il banner restava immobile. Qui il movimento dipende solo dal timer dei
+   frame. Il keyframe CSS resta come fallback se questo blocco non gira. */
+const TICKER_SPEED=70; /* px/s */
+let tickerFrame=null, tickerPaused=false;
+function startTickerScroll(inner){
+  if(!("requestAnimationFrame" in window)) return;
+  cancelAnimationFrame(tickerFrame);
+  inner.classList.add("js-scroll");
+  inner.style.transform="translateX(0px)";
+  let x=0, last=null;
+  const step=now=>{
+    if(last===null) last=now;
+    const dt=Math.min((now-last)/1000, .25); /* scarta i salti da tab in background */
+    last=now;
+    const half=inner.scrollWidth/2;
+    if(half){
+      if(!tickerPaused) x-=TICKER_SPEED*dt;
+      if(x<=-half) x+=half;
+      inner.style.transform=`translateX(${x.toFixed(1)}px)`;
+    }
+    tickerFrame=requestAnimationFrame(step);
+  };
+  tickerFrame=requestAnimationFrame(step);
+}
+/* Pausa solo col puntatore sul titolo o col focus da tastiera: agganciarla
+   all'intera fascia significherebbe bloccare tutto con il mouse parcheggiato
+   li' sopra. */
+const tickerWrapEl=document.getElementById("ticker-wrap");
+tickerWrapEl.addEventListener("mouseover",e=>{ if(e.target.closest("a")) tickerPaused=true; });
+tickerWrapEl.addEventListener("mouseout", e=>{ if(e.target.closest("a")) tickerPaused=false; });
+tickerWrapEl.addEventListener("focusin", ()=>{ tickerPaused=true; });
+tickerWrapEl.addEventListener("focusout",()=>{ tickerPaused=false; });
 loadTicker();
 setInterval(loadTicker, 15*60*1000);
 </script>
