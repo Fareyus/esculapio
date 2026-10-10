@@ -1,0 +1,39 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="../favicon.png"><link rel="stylesheet" href="shared.css"><title>EsculapioNET · Test C</title>
+<style>
+body{display:flex;flex-direction:column}
+.hero{padding:18px 24px 0;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.hero .l{display:flex;gap:12px;align-items:center}.hero .logo{width:44px;height:44px}
+.hero h1{font-size:22px;font-weight:700;line-height:1.1}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:16px;padding:16px 24px 20px;flex:1;min-height:0}
+.rail{display:flex;flex-direction:column;gap:12px}
+.rail .clk{padding:14px}.rail .clk b{font-size:30px;display:block;line-height:1}
+.panel{padding:12px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px}
+.tabs button{border:0;background:none;font:inherit;font-weight:600;color:var(--muted-fg);padding:6px 12px;border-radius:6px;cursor:pointer}
+.tabs button:hover{background:var(--accent)}.tabs button.on{background:var(--primary);color:var(--primary-fg)}
+.tabs .sp{flex:1}.tabs .s{width:220px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.tiles .link{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;min-height:44px;background:var(--card);font-weight:600}
+.tiles .link:hover{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 6%,var(--card))}
+.group h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted-fg);margin:2px 0 6px}
+.group+.group{margin-top:8px}
+.hide{display:none!important}
+@media(max-width:860px){.layout{grid-template-columns:1fr;padding:12px}.hero{padding:12px}.tabs .s{width:100%}}
+</style></head><body>
+<div class="hero"><div class="l"><img class="logo" src="../logo.png" alt=""><div><h1>EsculapioNET</h1><div class="muted">Centrale 118 · Firenze–Prato</div></div></div>
+<div style="display:flex;gap:10px;align-items:center"><span class="badge dash">● Operativo</span><button class="btn" data-theme-btn title="Tema">◐</button></div></div>
+<div class="layout"><aside class="rail">
+<div class="card clk"><b class="mono" data-clock></b><span class="muted" style="text-transform:capitalize" data-date></span></div><div class="card shift" style="padding:12px 14px"><div class="lbl">Ordinari · <span data-win="urg"></span></div><div class="val mono" data-cd="urg">--:--:--</div><div class="bar"><i data-bar="urg"></i></div></div>
+<div class="card shift" style="padding:12px 14px"><div class="lbl">Emergenza · <span data-win="eme"></span></div><div class="val mono" data-cd="eme">--:--:--</div><div class="bar"><i data-bar="eme"></i></div></div>
+<div class="card" style="padding:12px 14px"><div class="tag" style="text-transform:uppercase;letter-spacing:.4px">Età paziente</div><div class="age" data-age style="margin-top:6px"><input inputmode="numeric" placeholder="Anno" aria-label="Anno di nascita"><button class="btn">Calcola</button></div><div class="res mono muted" style="font-size:12px;margin-top:5px;min-height:15px"></div></div></aside>
+<section class="card panel"><div class="tabs" id="tabs"><button class="on" data-f="all">Tutto</button><button data-f="comune">Comune</button><button data-f="urgenti">Trasporti Urgenti</button><button data-f="emergenza">Emergenza</button><button data-f="archivio">Archivio</button>
+<span class="sp"></span><input class="search s" data-search placeholder="Cerca…  (\)"></div>
+<div class="group" data-section="comune"><h3>Comune</h3><div class="tiles" data-links="comune"></div></div>
+<div class="group" data-section="urgenti"><h3>Trasporti Urgenti</h3><div class="tiles" data-links="urgenti"></div></div>
+<div class="group" data-section="emergenza"><h3>Emergenza Sanitaria</h3><div class="tiles" data-links="emergenza"></div></div>
+<div class="group" data-section="archivio"><h3>Archivio</h3><div class="tiles" data-links="archivio"></div></div>
+</section></div>
+<script src="data.js"></script><script src="shared.js"></script>
+<script>$$("#tabs button").forEach(b=>b.onclick=()=>{$$("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+$$("[data-section]").forEach(s=>s.classList.toggle("hide",b.dataset.f!=="all"&&s.dataset.section!==b.dataset.f))})</script>
+</body></html>

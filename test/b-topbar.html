@@ -1,0 +1,34 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="../favicon.png"><link rel="stylesheet" href="shared.css"><title>EsculapioNET · Test B</title>
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+header{background:var(--card);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;gap:14px;padding:0 20px}
+header .t{font-weight:700;line-height:1.1}header .t small{display:block;font-weight:500;font-size:11px;color:var(--muted-fg)}
+.ok{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success);font-weight:600}.ok:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--success)}
+header .sp{flex:1}header .s{width:260px}
+.clock{text-align:right;line-height:1.1}.clock b{font-size:16px}.clock small{display:block;font-size:11px;color:var(--muted-fg);text-transform:capitalize}
+main{padding:16px 20px;display:flex;flex-direction:column;gap:14px;max-width:1500px;width:100%;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sec{padding:10px 12px}
+.sec h2{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sec h2 span{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted-fg);background:var(--muted);border-radius:999px;padding:0 7px}
+.wide [data-links]{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));column-gap:6px}
+.cols [data-links]{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));column-gap:6px}
+details summary{cursor:pointer;list-style:none;font-weight:700;font-size:13px}details summary::-webkit-details-marker{display:none}
+details summary:before{content:"▸ ";color:var(--muted-fg)}details[open] summary:before{content:"▾ "}
+.hide{display:none!important}
+@media(max-width:900px){.stats,.cols{grid-template-columns:1fr}header .s{display:none}}
+</style></head><body>
+<header><img class="logo" src="../logo.png" alt=""><div class="t">EsculapioNET<small>Centrale 118 · Firenze–Prato</small></div><div class="ok">Operativo</div>
+<div class="sp"></div><div class="s"><input class="search" data-search placeholder="Cerca…  (\)"></div>
+<div class="clock"><b class="mono" data-clock></b><small data-date></small></div><button class="btn" data-theme-btn title="Tema">◐</button></header>
+<main><div class="stats"><div class="card shift" style="padding:12px 14px"><div class="lbl">Ordinari · <span data-win="urg"></span></div><div class="val mono" data-cd="urg">--:--:--</div><div class="bar"><i data-bar="urg"></i></div></div>
+<div class="card shift" style="padding:12px 14px"><div class="lbl">Emergenza · <span data-win="eme"></span></div><div class="val mono" data-cd="eme">--:--:--</div><div class="bar"><i data-bar="eme"></i></div></div>
+<div class="card" style="padding:12px 14px"><div class="tag" style="text-transform:uppercase;letter-spacing:.4px">Età paziente</div><div class="age" data-age style="margin-top:6px"><input inputmode="numeric" placeholder="Anno" aria-label="Anno di nascita"><button class="btn">Calcola</button></div><div class="res mono muted" style="font-size:12px;margin-top:5px;min-height:15px"></div></div></div>
+<section class="card sec wide" data-section="comune"><h2>Comune <span data-count="comune"></span></h2><div data-links="comune"></div></section>
+<div class="cols">
+<section class="card sec" data-section="urgenti"><h2>🚐 Trasporti Urgenti <span data-count="urgenti"></span></h2><div data-links="urgenti"></div></section>
+<section class="card sec" data-section="emergenza"><h2>🚑 Emergenza Sanitaria <span data-count="emergenza"></span></h2><div data-links="emergenza"></div></section></div>
+<section class="card sec wide" data-section="archivio"><details data-arch><summary>Archivio <span class="muted mono" style="font-weight:500" data-count="archivio"></span></summary><div data-links="archivio" style="margin-top:6px"></div></details></section>
+</main>
+<script src="data.js"></script><script src="shared.js"></script></body></html>
