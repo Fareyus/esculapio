@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[TEST stile] EsculapioNET · Console link</title>
+<link rel="icon" type="image/png" sizes="256x256" href="../favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#e8ecf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151b31" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="google-extended" content="noindex">
+<meta name="gptbot" content="noindex">
+<meta name="anthropic-ai" content="noindex">
+<meta name="claudebot" content="noindex">
+<meta name="cohere-ai" content="noindex">
+<meta name="perplexitybot" content="noindex">
+<meta name="ccbot" content="noindex">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#f5f7f9; --surface:#ffffff; --surface-2:#eef1f5;
+  --ink:#0f172a; --muted:#5a6a7e; --line:#dce1e8;
+  --brand:#113d73; --brand-tint:#1b5499; --cyan:#113d73;
+  --amber:#c6670f; --amber-ink:#a3540c; --amber-soft:#fcf1e4;
+  --danger:#be2828; --ok:#27865a; --ok-ink:#1d6944; --ok-soft:#e8f5ee;
+  --console-bg:#ffffff; --console-panel:#f5f7f9; --console-text:#0f172a;
+  --console-muted:#5a6a7e; --console-line:#dce1e8; --ecg:#113d73;
+  --radius:8px;
+  --shadow:none;
+  --c-urg:#113d73; --c-eme:#113d73; --c-eme-cd:#be2828;
+  --accent:#e6ecf2;
+  --focus:#113d73;
+}
+[data-theme="dark"]{
+  --bg:#0f131e; --surface:#181d2a; --surface-2:#1f2634;
+  --ink:#eef2f6; --muted:#9eaabb; --line:#28303e;
+  --brand:#509eec; --brand-tint:#7ab6f2; --cyan:#509eec;
+  --amber:#e8a53f; --amber-ink:#eebb6a; --amber-soft:#2e2411;
+  --danger:#e05a5a; --ok:#3fa874; --ok-ink:#5cc28e; --ok-soft:#12291f;
+  --console-bg:#181d2a; --console-panel:#0f131e; --console-text:#eef2f6;
+  --console-muted:#9eaabb; --console-line:#28303e; --ecg:#509eec;
+  --shadow:none;
+  --c-urg:#509eec; --c-eme:#509eec; --c-eme-cd:#e05a5a;
+  --accent:#2b3342;
+  --focus:#509eec;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.45;
+}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(14px,3vw,30px)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+/* ============ CONSOLE HEADER ============ */
+.console{background:var(--console-bg);color:var(--console-text)}
+.console-in{
+  display:flex;align-items:center;gap:clamp(12px,2.2vw,24px);flex-wrap:wrap;
+  padding:10px clamp(14px,3vw,30px);
+}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.brand-logo{height:40px;width:auto;flex:none;border-radius:9px;background:#fff;padding:4px;border:1px solid var(--console-line)}
+.wordmark{font-size:1.24rem;font-weight:800;letter-spacing:.2px;line-height:1;display:flex;align-items:center}
+.wordmark .mk{color:var(--brand);font-size:1.28rem;margin-right:7px;line-height:1}
+.wordmark span{color:var(--brand)}
+.tagline{
+  font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--console-muted);margin-top:6px;
+}
+
+/* ---- turni: il tempo è informazione di prima classe ---- */
+.shifts{display:flex;gap:18px;flex-wrap:wrap}
+.shift{min-width:118px}
+.s-top{display:flex;align-items:baseline;gap:7px}
+.s-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--console-muted);white-space:nowrap}
+.s-win{font-size:.6rem;font-weight:700;color:var(--console-muted);opacity:.8;white-space:nowrap}
+.s-val{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;
+  font-size:1.12rem;font-weight:700;line-height:1.15;display:block;margin-top:2px;
+}
+#shift-urg .s-val{color:var(--c-urg)}
+#shift-eme .s-val{color:var(--c-eme-cd)}
+.s-bar{display:block;height:3px;border-radius:999px;background:var(--console-line);overflow:hidden;margin-top:5px}
+.s-fill{
+  display:block;height:100%;width:100%;border-radius:999px;
+  transform:scaleX(0);transform-origin:left center;transition:transform 1s linear;
+}
+#shift-urg .s-fill{background:var(--c-urg)}
+#shift-eme .s-fill{background:var(--c-eme-cd)}
+
+.clockbox{text-align:right;line-height:1}
+.clk{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;font-size:1.45rem;font-weight:700;letter-spacing:.5px}
+.dat{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--console-muted);margin-top:6px}
+.theme{
+  width:42px;height:42px;flex:none;border-radius:12px;cursor:pointer;font-size:1.15rem;
+  color:var(--console-text);background:var(--console-panel);border:1px solid var(--console-line);
+  display:grid;place-items:center;transition:transform .12s,border-color .12s;
+}
+.theme:hover{border-color:var(--brand-tint);transform:translateY(-1px)}
+
+/* ---- news ticker ---- */
+.ticker-wrap{display:flex;align-items:stretch;overflow:hidden;position:relative}
+.console .ticker-wrap{
+  margin:0 clamp(14px,3vw,30px) 10px;
+  background:var(--console-panel);border:1px solid var(--console-line);border-radius:12px;box-shadow:var(--shadow);
+}
+.ticker-ecg{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.10;pointer-events:none}
+[data-theme="dark"] .ticker-ecg{opacity:.18}
+.ticker-ecg path{fill:none;stroke:var(--ecg);stroke-width:2}
+.ticker-label{
+  display:flex;align-items:center;gap:6px;padding:0 15px;flex-shrink:0;position:relative;z-index:1;
+  font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--c-eme);border-right:1px solid var(--console-line);white-space:nowrap;
+}
+.ticker-viewport{overflow:hidden;flex:1;padding:8px 15px;position:relative;z-index:1}
+.ticker-inner{display:inline-block;white-space:nowrap;animation:ticker var(--ticker-dur,60s) linear infinite}
+/* Con lo scorrimento pilotato da requestAnimationFrame l'animazione CSS va
+   spenta, altrimenti i due movimenti si sommano. Il keyframe resta come
+   fallback se il JS del ticker non parte. */
+.ticker-inner.js-scroll{animation:none;will-change:transform}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:.84rem;padding-right:38px}
+.ticker-item a{color:var(--console-text);text-decoration:none}
+.ticker-item a:hover{color:var(--c-eme);text-decoration:underline}
+.ticker-sep{color:var(--c-eme);opacity:.5;padding-right:38px;font-size:.72rem}
+
+/* ============ MAIN ============ */
+main{padding:14px 0 30px}
+
+/* ---- barra ricerca (in fondo) ---- */
+.toolbar{margin-bottom:14px}
+.search-wrap{position:relative}
+.search-wrap>svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55;pointer-events:none}
+#search{
+  width:100%;padding:13px 92px 13px 44px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  font-size:1rem;outline:none;box-shadow:var(--shadow);
+  transition:border-color .12s,box-shadow .12s;
+}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 22%,transparent)}
+.search-hint{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:8px;pointer-events:none;
+}
+.search-hint kbd{
+  font-family:ui-monospace,monospace;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:var(--surface-2);
+}
+.search-count{
+  font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;
+}
+
+/* ---- section head ---- */
+.sec{margin-bottom:14px}
+.sec-head{display:flex;align-items:center;gap:12px;margin:0 2px 9px}
+.tag{
+  font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--brand);margin:0;
+  padding:5px 11px;border-radius:6px;
+  background:color-mix(in srgb,var(--brand) 9%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--brand) 22%,var(--line));white-space:nowrap;
+}
+.tag.t-urg{color:var(--c-urg);background:color-mix(in srgb,var(--c-urg) 9%,var(--surface));border-color:color-mix(in srgb,var(--c-urg) 22%,var(--line))}
+.tag.t-eme{color:var(--c-eme);background:color-mix(in srgb,var(--c-eme) 9%,var(--surface));border-color:color-mix(in srgb,var(--c-eme) 22%,var(--line))}
+.cnt{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.74rem;color:var(--muted)}
+.rule{flex:1;height:1px;background:var(--line)}
+
+/* ---- two-col ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+
+/* ---- tiles ---- */
+.tiles{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
+.grid2 .tiles{grid-template-columns:repeat(auto-fill,minmax(196px,1fr))}
+a.tile{
+  display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:11px 13px;min-height:46px;
+  transition:transform .12s,border-color .12s,box-shadow .12s,background-color .12s;
+}
+a.tile:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--focus) 45%,var(--line));box-shadow:var(--shadow)}
+a.tile.kbd-active{
+  border-color:var(--focus);background:color-mix(in srgb,var(--focus) 8%,var(--surface));
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 20%,transparent);
+}
+.name{font-size:.9rem;font-weight:600;line-height:1.25;flex:1;min-width:0}
+.badge{
+  flex:none;font-family:ui-monospace,monospace;font-size:.62rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;padding:3px 7px;border-radius:6px;
+}
+.badge.lan{background:var(--amber-soft);color:var(--amber-ink);border:1px solid color-mix(in srgb,var(--amber) 45%,transparent)}
+.badge.dash{background:var(--ok-soft);color:var(--ok-ink);border:1px solid color-mix(in srgb,var(--ok) 45%,transparent)}
+
+/* ---- archivio ---- */
+#archivio{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow)}
+#archivio summary{
+  padding:11px 16px;font-family:ui-monospace,monospace;font-size:.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.13em;color:var(--muted);cursor:pointer;user-select:none;list-style:none;
+}
+#archivio summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+#archivio summary::-webkit-details-marker{display:none}
+#archivio summary::before{content:"▸  "}
+#archivio[open] summary::before{content:"▾  "}
+#archivio .tiles{padding:2px 14px 16px}
+
+/* ---- utility: età paziente ---- */
+.util{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;
+  padding:9px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.u-lbl{font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);white-space:nowrap}
+.age-input{
+  width:150px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--ink);font-size:.9rem;outline:none;transition:border-color .12s;
+  -moz-appearance:textfield;appearance:textfield;
+}
+.age-input::-webkit-outer-spin-button,.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.age-input:focus{border-color:var(--focus)}
+.age-btn{
+  padding:8px 16px;border-radius:9px;border:1px solid transparent;cursor:pointer;
+  background:var(--brand);color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.02em;
+  transition:opacity .12s,transform .12s;white-space:nowrap;
+}
+[data-theme="dark"] .age-btn{color:#08122e}
+.age-btn:hover{opacity:.88;transform:translateY(-1px)}
+.age-result{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;min-width:140px}
+.age-result.err{color:var(--danger)}
+
+/* ---- misc ---- */
+.empty{text-align:center;color:var(--muted);padding:48px 0;font-size:.95rem}
+.hidden{display:none!important}
+footer{margin-top:6px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.7}
+footer code{font-family:ui-monospace,monospace;color:var(--ink)}
+.credit{opacity:.6}
+
+/* ---- responsive ---- */
+@media(max-width:860px){
+  .clockbox{display:none}
+}
+@media(max-width:640px){
+  .grid2{grid-template-columns:1fr}
+  .console-in{gap:12px 10px}
+  .shifts{width:100%;order:2;gap:14px}
+  .shift{flex:1;min-width:0}
+  .search-hint kbd{display:none}
+  #search{padding-right:64px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ STILE DASHBOARD (override) ============
+   Elementi grafici e colori della Dashboard Segnalazioni (shadcn):
+   superfici piatte con bordo sottile, raggio 8px, nessuna ombra né sollevamento,
+   etichette di sezione sobrie, pulsante primario pieno, badge a pillola. */
+.console{border-bottom:1px solid var(--line)}
+.brand-logo{height:36px;border-radius:6px;padding:0;border:0;background:transparent}
+.wordmark{font-size:1.05rem;font-weight:600;letter-spacing:0}
+.wordmark .mk{font-size:1.05rem}
+.tagline{font-size:.68rem;font-weight:500;letter-spacing:.04em;text-transform:none;margin-top:3px}
+.s-lbl{font-weight:600;letter-spacing:.06em}
+.s-val{font-weight:600}
+.theme{border-radius:6px;width:36px;height:36px;background:var(--surface)}
+.theme:hover{background:var(--accent);border-color:var(--line);transform:none}
+.console .ticker-wrap{border-radius:var(--radius);box-shadow:none}
+.ticker-label{font-weight:600;color:var(--brand)}
+.ticker-sep,.ticker-item a:hover{color:var(--brand)}
+/* ricerca */
+#search{border-radius:6px;box-shadow:none;padding-top:10px;padding-bottom:10px}
+#search:focus{box-shadow:0 0 0 2px color-mix(in srgb,var(--focus) 25%,transparent)}
+.search-hint kbd{border-radius:4px}
+/* etichette sezione: testo muted maiuscolo, niente chip colorati */
+.tag,.tag.t-urg,.tag.t-eme{
+  color:var(--muted);background:transparent;border:0;padding:0;border-radius:0;
+  font-family:inherit;font-size:.72rem;font-weight:600;letter-spacing:.08em;
+}
+.cnt{font-size:.72rem}
+/* tile = riga/card della dashboard */
+a.tile{border-radius:var(--radius);box-shadow:none;padding:10px 12px;min-height:44px}
+a.tile:hover{transform:none;background:var(--accent);border-color:var(--line);box-shadow:none}
+a.tile:hover .name{color:var(--brand)}
+a.tile.kbd-active{background:color-mix(in srgb,var(--brand) 10%,var(--surface));border-color:var(--brand);box-shadow:none}
+.name{font-weight:500;font-size:.88rem}
+/* badge a pillola */
+.badge{font-family:inherit;border-radius:999px;padding:2px 8px;font-weight:600;letter-spacing:.04em}
+/* archivio e utilità */
+#archivio{box-shadow:none;border-radius:var(--radius)}
+#archivio summary{font-family:inherit;font-weight:600;letter-spacing:.08em}
+.util{box-shadow:none;border-radius:var(--radius)}
+.u-lbl{font-family:inherit;font-weight:600;letter-spacing:.08em}
+.age-input{border-radius:6px;background:var(--surface)}
+.age-btn{border-radius:6px;font-weight:600}
+.age-btn:hover{opacity:.9;transform:none}
+</style>
+</head>
+<body>
+
+<h1 class="sr-only">EsculapioNET · console link Centrale 118 Firenze–Prato</h1>
+
+<!-- ===== CONSOLE HEADER ===== -->
+<header class="console">
+  <div class="console-in">
+    <div class="brand">
+      <img class="brand-logo" src="../logo.png" alt="">
+      <div>
+        <div class="wordmark"><span class="mk" aria-hidden="true">⚕</span>Esculapio<span>NET</span></div>
+        <div class="tagline">Centrale 118 · Firenze–Prato</div>
+      </div>
+    </div>
+
+    <div class="shifts">
+      <div class="shift" id="shift-urg">
+        <div class="s-top"><span class="s-lbl">Urgenti</span><span class="s-win" id="win-urg">—</span></div>
+        <span class="s-val mono" id="cd-urg">--:--:--</span>
+        <span class="s-bar"><span class="s-fill" id="bar-urg"></span></span>
+      </div>
+      <div class="shift" id="shift-eme">
+        <div class="s-top"><span class="s-lbl">Emergenza</span><span class="s-win" id="win-eme">—</span></div>
+        <span class="s-val mono" id="cd-eme">--:--:--</span>
+        <span class="s-bar"><span class="s-fill" id="bar-eme"></span></span>
+      </div>
+    </div>
+
+    <div class="clockbox">
+      <div class="clk" id="clk">--:--:--</div>
+      <div class="dat" id="dat">—</div>
+    </div>
+    <button class="theme" id="theme-btn" title="Tema chiaro/scuro" aria-label="Cambia tema">◐</button>
+  </div>
+
+  <!-- News, con elettrocardiogramma di sfondo -->
+  <div class="ticker-wrap" id="ticker-wrap">
+    <svg class="ticker-ecg" viewBox="0 0 1200 44" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <pattern id="hb" width="150" height="44" patternUnits="userSpaceOnUse">
+          <path d="M0 22 H52 L58 22 L63 22 L68 8 L74 36 L80 15 L85 22 L92 22 H150"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="44" fill="url(#hb)"/>
+    </svg>
+    <div class="ticker-label">🗞 FI · PO</div>
+    <div class="ticker-viewport">
+      <div class="ticker-inner" id="ticker-inner">
+        <span class="ticker-item" style="color:var(--console-muted)">Caricamento notizie…</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main>
+  <div class="wrap">
+
+    <p class="empty hidden" id="no-results">Nessun link trovato. Prova un altro termine.</p>
+
+    <!-- COMUNE -->
+    <section class="sec" id="section-comune" aria-labelledby="h-comune">
+      <div class="sec-head">
+        <h2 class="tag" id="h-comune">Comune</h2>
+        <span class="cnt" id="count-comune"></span>
+        <span class="rule"></span>
+      </div>
+      <div class="tiles" id="links-comune"></div>
+    </section>
+
+    <!-- URGENTI + EMERGENZA -->
+    <div class="grid2" id="sections-grid">
+      <section class="sec" id="section-urgenti" aria-labelledby="h-urgenti">
+        <div class="sec-head">
+          <h2 class="tag t-urg" id="h-urgenti">🚐 Trasporti Urgenti</h2>
+          <span class="cnt" id="count-urgenti"></span>
+          <span class="rule"></span>
+        </div>
+        <div class="tiles" id="links-urgenti"></div>
+      </section>
+      <section class="sec" id="section-emergenza" aria-labelledby="h-emergenza">
+        <div class="sec-head">
+          <h2 class="tag t-eme" id="h-emergenza">🚑 Emergenza Sanitaria</h2>
+          <span class="cnt" id="count-emergenza"></span>
+          <span class="rule"></span>
+        </div>
+        <div class="tiles" id="links-emergenza"></div>
+      </section>
+    </div>
+
+    <!-- ARCHIVIO -->
+    <details id="archivio">
+      <summary>Archivio link (poco usati)</summary>
+      <div class="tiles" id="links-archivio"></div>
+    </details>
+
+    <!-- ETÀ PAZIENTE -->
+    <div class="util">
+      <span class="u-lbl" id="age-lbl">🩺 Età paziente</span>
+      <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-labelledby="age-lbl">
+      <button class="age-btn" id="age-calc-btn">Calcola</button>
+      <span class="age-result" id="age-result" aria-live="polite"></span>
+    </div>
+
+    <!-- RICERCA (in fondo) -->
+    <div class="toolbar" id="toolbar">
+      <div class="search-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+        <input id="search" type="search" placeholder="Cerca un link…  (premi \ )" autocomplete="off" aria-label="Cerca tra i link" aria-describedby="search-count">
+        <div class="search-hint">
+          <span class="search-count" id="search-count" aria-live="polite"></span>
+          <kbd>\</kbd>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      I link <code>lan</code> funzionano solo dalla rete interna 118 ·
+      Per modificare i link, apri il file e cambia l'oggetto <code>SITE_DATA</code>.
+      <br><span class="credit">© 2026 Fareyus</span>
+    </footer>
+
+  </div>
+</main>
+
+<script>
+/* =========================================================
+   DATI — per aggiungere/modificare un link, cambia qui.
+   intranet: true   → badge "lan" (solo da rete interna)
+   dashboard: true  → badge "dashboard"
+========================================================= */
+const SITE_DATA = {
+  comune: [
+    { label: "Mail USL Centro",             url: "https://webmail.sanita.toscana.it/" },
+    { label: "Mail EsculapioNET",           url: "https://outlook.office.com/mail/" },
+    { label: "Rubrica Referenti",           url: "https://docs.google.com/spreadsheets/d/1H8Wfi8ccAZC7Pxi_HMVoefFpVOwKfx-bfPtoZnAVQ0Q/edit" },
+    { label: "Mail Associazioni",           url: "https://docs.google.com/spreadsheets/d/1vvzBGbQW4WD_JToWUck5UkftfQABUR4donJxbMMWwFg/edit" },
+    { label: "Dashboard Segnalazioni",      url: "https://monitor118-tecnici.devicloud.me", dashboard: true },
+    { label: "Mappa Sinottica EU FI-PO",    url: "https://www.google.com/maps/d/u/0/viewer?hl=it&ll=43.749161033153946%2C11.223471242045049&z=11&mid=1sL_UeJEQEL1CO2WbPerkVYeALvjpGHY" },
+    { label: "POT",                         url: "http://auth.sin.asf.it/login.php" },
+    { label: "Cartellino",                  url: "https://zeitgroup2.oltremare.net/oltremare_php/mainnew_2.php?Id=99&prg=aruba" },
+    { label: "Sigle e Turni Ambulanze 118", url: "http://intranet.118.asf.locale/index.php/acc-rapido/riga-1/turni-ambulanze-in-stand-by", intranet: true },
+    { label: "Turnazione Centrale 2026",    url: "https://docs.google.com/spreadsheets/d/16Zr8K8RBmMwz36aadtCGwlgUs5nl3WJuriIuNXd1oGY/edit?gid=1324590940#gid=1324590940" },
+  ],
+  urgenti: [
+    { label: "NRE - Controllo Certificati",    url: "https://ricettatrasporti.sanita.toscana.it/" },
+    { label: "Lista Trasporti Entro-RT",       url: "https://docs.google.com/spreadsheets/d/127_ym_5atztWavdqCmabw4qVHaYdo2mbbFNKNcvWoqI/edit" },
+    { label: "Lista Trasporti EXTRA-RT",       url: "https://docs.google.com/spreadsheets/d/1JOjGTEOhtfBt7vlznT-giyOKSul2Fo2LSOVdDgfK4Sg/edit" },
+    { label: "Rubrica Trasporti Salma",        url: "https://docs.google.com/spreadsheets/d/1mMYw8xa1EZ15YK4cwn6Gw5hADZJ26Xvg3KHUKHpMdyo/edit" },
+    { label: "Programmazione 1° Servizio",     url: "https://drive.google.com/drive/u/0/folders/11RbVBLZv6SRwvim9nR2FJZ0ZLYdsBnJ6" },
+    { label: "Turnazione PRATO",               url: "https://drive.google.com/file/d/12gCfvRuQjvZ8JhAe3iktxNednAUaXaJP/view" },
+    { label: "Mappa Funebre",                  url: "https://www.google.com/maps/d/u/0/viewer?mid=1gxSBjjf9NSwnSZP6SIP4UVVA5cv1m2lY&ll=43.8157963799819%2C11.372541918299275&z=10" },
+    { label: "Tango",                          url: "https://drive.google.com/drive/folders/1wT5EIO0WB1u5y_Mlb3jAACSW_7yZPZcN" },
+    { label: "Mezzi 118",                      url: "http://192.168.2.123:8080/dump118/", intranet: true },
+    { label: "Protocolli CO Firenze",          url: "https://drive.google.com/drive/u/0/folders/1A0L7jA6QkxEHzLL-hyQD50qI-2mwyIq0" },
+    { label: "Regolamento Trasporti NRE",      url: "https://drive.google.com/drive/folders/1va72AvaAiL5XAIIMbeYGk5C1e2Su6hQw" },
+  ],
+  emergenza: [
+    { label: "Homepage 118",                    url: "http://intranet.118.asf.locale/", intranet: true },
+    { label: "Medical Note Explorer",           url: "https://app118-firenze.uslcentro.toscana.it" },
+    { label: "LifeDesk",                        url: "https://checklist118.uslcentro.toscana.it/Consegne.aspx" },
+    { label: "DUMP - Guasti",                   url: "http://172.19.19.239/118/guasti.php", intranet: true },
+    { label: "Gestione Guasti",                 url: "http://intranet.118.asf.locale/index.php/acc-rapido/3-riga/gestione-guasti-e-richieste-di-assistenza-tecnica", intranet: true },
+    { label: "S.A.R.A.",                        url: "https://sara.gruppo-informatico.com/Login.aspx" },
+    { label: "Check List Mezzi",                url: "https://docs.google.com/spreadsheets/d/1M39UlgZYN-LDx6kuh547hATbSgf4kVj5vpn7rNbguvM/edit?usp=sharing" },
+    { label: "Codifica Regionale Targhe",       url: "https://docs.google.com/spreadsheets/d/1xYhNJWXpJO4gr1n8AutHg8GxYrp-lQhiw0b0Crm_xz4/edit" },
+    { label: "Guida Inserimento Targhe",        url: "https://docs.google.com/presentation/d/1pWAmGdhAOI3tjbaHD-kUvryNpeF4iYnyekaWO2TkfkA/edit" },
+    { label: "Tablet Rotti",                    url: "https://docs.google.com/spreadsheets/d/18GeLANtC43_U58puU05W99x3e3Rb6os3jeT6PrBjK7Q/edit" },
+    { label: "TuConTi",                         url: "https://tuconti20.amm.telecomitalia.it/" },
+    { label: "Cambio Password Dominio",         url: "https://cambiopassword118.uslcentro.toscana.it/" },
+  ],
+  archivio: [
+    { label: "Rubrica Generale 118",         url: "https://docs.google.com/spreadsheets/d/1cDakO5InL3gx95SdUShPwQzJb4EJ5_yH/edit" },
+    { label: "WebReparti",                   url: "https://trasportiurgenti.uslcentro.toscana.it/WebReparti/" },
+    { label: "WebSer",                       url: "https://trasportiurgenti.uslcentro.toscana.it/WebSer/login.aspx" },
+    { label: "Stradario Firenze",            url: "https://opendata.comune.fi.it/?q=metarepo/datasetinfo&id=11430710-56eb-4444-bd6f-c5433155afc5" },
+    { label: "Calcolo Preventivo Trasporto", url: "https://docs.google.com/spreadsheets/d/1azZt3nlI9xe-CAygKVDIOY0RmcSSccRod72FGmw-e_Q/edit" },
+    { label: "Calendario Notti",             url: "https://drive.google.com/drive/folders/1xp-ToYXze8TUoqQqogHv7v8WChZNQPmn" },
+    { label: "Nottante",                     url: "https://webmail.aruba.it/" },
+    { label: "Dispatcher Tablet Prova",      url: "https://demo.medicalnote.it" },
+    { label: "Decodifica Codice Fiscale",    url: "https://sites.google.com/view/esculapio/link-rapidi/decodifica-codice-fiscale" },
+    { label: "Progetto Tablet 118",          url: "https://drive.google.com/drive/folders/1AY0nKpE80wKFR9U8VHDagrNJxI5YsJwu" },
+    { label: "Telefonia 118",                url: "https://docs.google.com/document/d/1i_X0fzFMihqFPBHOGHHBeECpWqSZ3_iYJSUjR43YUzw/edit" },
+    { label: "Timbrature",                   url: "https://zgcloud.zeitgroup.com/" },
+  ],
+};
+
+/* ---- render ---- */
+function makeTile({label,url,intranet,dashboard}){
+  const a = document.createElement("a");
+  a.className = "tile";
+  a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
+  // ricerca anche sull'host: "google", "toscana", "drive" trovano il link giusto
+  let host = "";
+  try{ host = new URL(url, location.href).hostname.replace(/^www\./,""); }catch(e){}
+  a.dataset.search = (label + " " + host).toLowerCase();
+  const name = document.createElement("span");
+  name.className = "name"; name.textContent = label;
+  a.appendChild(name);
+  if(intranet){
+    const b = document.createElement("span");
+    b.className = "badge lan"; b.textContent = "lan";
+    b.title = "Raggiungibile solo dalla rete interna 118";
+    a.appendChild(b);
+  }
+  if(dashboard){
+    const b = document.createElement("span");
+    b.className = "badge dash"; b.textContent = "dashboard";
+    a.appendChild(b);
+  }
+  return a;
+}
+function renderSection(id,links){ const el=document.getElementById(id); links.forEach(l=>el.appendChild(makeTile(l))); }
+function setCount(id,n){ const el=document.getElementById(id); if(el) el.textContent="·"+n; }
+
+renderSection("links-comune",    SITE_DATA.comune);
+renderSection("links-urgenti",   SITE_DATA.urgenti);
+renderSection("links-emergenza", SITE_DATA.emergenza);
+renderSection("links-archivio",  SITE_DATA.archivio);
+setCount("count-comune",    SITE_DATA.comune.length);
+setCount("count-urgenti",   SITE_DATA.urgenti.length);
+setCount("count-emergenza", SITE_DATA.emergenza.length);
+
+/* ---- search / filter ---- */
+const searchEl  = document.getElementById("search");
+const countEl   = document.getElementById("search-count");
+const noResults = document.getElementById("no-results");
+let kbdIndex = -1;
+
+function filterGrid(gridId,q){
+  let n=0;
+  document.getElementById(gridId).querySelectorAll(".tile").forEach(el=>{
+    const show = el.dataset.search.includes(q);
+    el.classList.toggle("hidden", !show);
+    if(show) n++;
+  });
+  return n;
+}
+function showAll(){
+  ["section-comune","section-urgenti","section-emergenza","archivio","sections-grid"].forEach(id=>{
+    document.getElementById(id).classList.remove("hidden");
+  });
+  document.querySelectorAll(".tile").forEach(el=>el.classList.remove("hidden"));
+}
+function visibleTiles(){
+  return [...document.querySelectorAll(".tile")].filter(el=>{
+    if(el.classList.contains("hidden")) return false;
+    const arch = el.closest("#archivio");
+    if(arch && !arch.open) return false;
+    return el.closest(".sec, #archivio") && !el.closest(".hidden");
+  });
+}
+function unmarkKbd(){
+  document.querySelectorAll(".tile.kbd-active").forEach(el=>el.classList.remove("kbd-active"));
+}
+function clearKbd(){ kbdIndex = -1; unmarkKbd(); }
+function moveKbd(delta){
+  const tiles = visibleTiles();
+  if(!tiles.length) return;
+  unmarkKbd();
+  kbdIndex = (kbdIndex + delta + tiles.length) % tiles.length;
+  const t = tiles[kbdIndex];
+  t.classList.add("kbd-active");
+  t.scrollIntoView({block:"nearest"});
+}
+function filterLinks(q){
+  clearKbd();
+  if(!q){
+    showAll();
+    document.getElementById("archivio").removeAttribute("open");
+    noResults.classList.add("hidden");
+    countEl.textContent = "";
+    return;
+  }
+  let total=0;
+  const comune=filterGrid("links-comune",q);
+  document.getElementById("section-comune").classList.toggle("hidden", !comune);
+  total+=comune;
+  const urgenti=filterGrid("links-urgenti",q), emergenza=filterGrid("links-emergenza",q);
+  document.getElementById("section-urgenti").classList.toggle("hidden", !urgenti);
+  document.getElementById("section-emergenza").classList.toggle("hidden", !emergenza);
+  document.getElementById("sections-grid").classList.toggle("hidden", !(urgenti||emergenza));
+  total+=urgenti+emergenza;
+  const arch=filterGrid("links-archivio",q), archivio=document.getElementById("archivio");
+  archivio.classList.toggle("hidden", !arch);
+  if(arch){ archivio.setAttribute("open",""); total+=arch; }
+  noResults.classList.toggle("hidden", total>0);
+  countEl.textContent = total ? total+(total===1?" risultato":" risultati") : "";
+  if(total) moveKbd(1); // il primo risultato è già pronto: Invio lo apre
+}
+searchEl.addEventListener("input", e=>filterLinks(e.target.value.trim().toLowerCase()));
+searchEl.addEventListener("keydown", e=>{
+  if(e.key==="Enter"){
+    const t = document.querySelector(".tile.kbd-active") || visibleTiles()[0];
+    if(t){ e.preventDefault(); window.open(t.href,"_blank","noopener"); }
+  } else if(e.key==="ArrowDown"){ e.preventDefault(); moveKbd(1); }
+  else if(e.key==="ArrowUp"){ e.preventDefault(); moveKbd(-1); }
+});
+document.addEventListener("keydown", e=>{
+  if(e.key==="\\" && document.activeElement!==searchEl){
+    e.preventDefault(); searchEl.focus(); searchEl.select();
+    searchEl.scrollIntoView({block:"center",behavior:"smooth"});
+  } else if(e.key==="Escape" && document.activeElement===searchEl){
+    searchEl.value=""; filterLinks(""); searchEl.blur();
+  }
+});
+
+/* ---- età paziente ---- */
+(function(){
+  const input=document.getElementById("birthYear"), result=document.getElementById("age-result");
+  function mostraEta(anno,oggi){
+    if(anno>oggi){ result.textContent="Non lo so Rick..."; result.classList.add("err"); }
+    else if(anno<1900){ result.textContent="… è morto."; result.classList.add("err"); }
+    else result.textContent=`Ha ${oggi-anno} anni (o li compirà quest'anno).`;
+  }
+  function calcola(){
+    const raw=input.value.trim(), oggi=new Date().getFullYear();
+    result.className="age-result";
+    if(!raw){ result.textContent="Inserisci un anno."; result.classList.add("err"); return; }
+    const num=parseInt(raw,10);
+    if(isNaN(num)||num<0){ result.textContent="Non lo so Rick..."; result.classList.add("err"); return; }
+    if(/^\d{1,2}$/.test(raw)){
+      const y1=1900+num, y2=2000+num;
+      if(y2>oggi) mostraEta(y1,oggi);
+      else result.textContent=`Ha ${oggi-y1} anni (n. ${y1}) o ${oggi-y2} anni (n. ${y2}).`;
+      return;
+    }
+    mostraEta(num,oggi);
+  }
+  document.getElementById("age-calc-btn").addEventListener("click",calcola);
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") calcola(); });
+})();
+
+/* ---- theme ---- */
+const root=document.documentElement;
+try{ const s=localStorage.getItem("esc-theme"); if(s) root.dataset.theme=s; }catch(e){}
+document.getElementById("theme-btn").onclick=()=>{
+  root.dataset.theme = root.dataset.theme==="dark" ? "light" : "dark";
+  try{ localStorage.setItem("esc-theme", root.dataset.theme); }catch(e){}
+};
+
+/* ---- turni ----
+   Cambi turno espressi in ore. Notte = ultimo cambio → primo del giorno dopo. */
+const SHIFT_URG = [7,14,20];   // Trasporti Urgenti
+const SHIFT_EME = [7,13,20];   // Emergenza Sanitaria
+
+function shiftInfo(d, bounds){
+  const t = d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds();
+  const b = bounds.map(h=>h*3600), DAY = 86400;
+  let start, end;
+  if(t < b[0]){ start = b[b.length-1] - DAY; end = b[0]; }
+  else{
+    let i = b.length - 1;
+    while(i > 0 && t < b[i]) i--;
+    start = b[i];
+    end   = (i === b.length-1) ? b[0] + DAY : b[i+1];
+  }
+  const hh = s => String(Math.floor(((s%DAY)+DAY)%DAY/3600)).padStart(2,"0");
+  return { rem:end-t, progress:(t-start)/(end-start), window:`${hh(start)}–${hh(end)}` };
+}
+function secsToHMS(s){
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sc=s%60;
+  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sc).padStart(2,"0")}`;
+}
+
+/* ---- clock + turni ---- */
+function tick(){
+  const d=new Date();
+  document.getElementById("clk").textContent = d.toLocaleTimeString("it-IT");
+  document.getElementById("dat").textContent = d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});
+
+  const urg = shiftInfo(d, SHIFT_URG), eme = shiftInfo(d, SHIFT_EME);
+  document.getElementById("cd-urg").textContent = secsToHMS(urg.rem);
+  document.getElementById("cd-eme").textContent = secsToHMS(eme.rem);
+  document.getElementById("win-urg").textContent = urg.window;
+  document.getElementById("win-eme").textContent = eme.window;
+  document.getElementById("bar-urg").style.transform = `scaleX(${urg.progress.toFixed(4)})`;
+  document.getElementById("bar-eme").style.transform = `scaleX(${eme.progress.toFixed(4)})`;
+}
+tick(); setInterval(tick,1000);
+
+/* ---- news ticker ---- */
+let tickerRO=null;
+async function loadTicker(){
+  const FEEDS=["https://www.lanazione.it/firenze/rss","https://www.lanazione.it/prato/rss"];
+  const inner=document.getElementById("ticker-inner"), wrap=document.getElementById("ticker-wrap");
+  function tFetch(url,ms){ const ctrl=new AbortController(); const tid=setTimeout(()=>ctrl.abort(),ms); return fetch(url,{signal:ctrl.signal}).finally(()=>clearTimeout(tid)); }
+  function parseXml(xml){
+    const doc=new DOMParser().parseFromString(xml,"text/xml");
+    if(doc.querySelector("parsererror")) throw new Error("xml");
+    const nodes=[...doc.querySelectorAll("item")].slice(0,8);
+    if(!nodes.length) throw new Error("empty");
+    return nodes.map(n=>({
+      title:(n.querySelector("title")?.textContent||"").trim(),
+      link:n.querySelector("link")?.nextSibling?.nodeValue?.trim()||n.querySelector("link")?.textContent?.trim()||n.querySelector("guid")?.textContent?.trim()||"#",
+      pubDate:new Date(n.querySelector("pubDate")?.textContent||0),
+    })).filter(i=>i.title);
+  }
+  async function fetchFeed(feedUrl){
+    const enc=encodeURIComponent(feedUrl);
+    /* NB: il parametro count di rss2json richiede una API key -> non usarlo */
+    try{ const res=await tFetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}`,8000); const data=await res.json();
+      if(data.status==="ok"&&data.items?.length) return data.items.slice(0,8).map(i=>({title:(i.title||"").trim(),link:i.link||i.guid||"#",pubDate:new Date(i.pubDate||0)})).filter(i=>i.title);
+    }catch(e){}
+    try{ const res=await tFetch(`https://api.allorigins.win/raw?url=${enc}`,12000); return parseXml(await res.text()); }catch(e){}
+    try{ const res=await tFetch(`https://api.allorigins.win/get?url=${enc}`,12000); const data=await res.json();
+      if(data?.contents){ let xml=data.contents;
+        if(xml.startsWith("data:")&&xml.includes("base64,")){ const b64=xml.split("base64,")[1]; const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0)); xml=new TextDecoder("utf-8").decode(bytes); }
+        return parseXml(xml);
+      }
+    }catch(e){}
+    try{ const res=await tFetch(`https://corsproxy.io/?url=${enc}`,8000); return parseXml(await res.text()); }catch(e){}
+    return [];
+  }
+  const results=await Promise.allSettled(FEEDS.map(f=>fetchFeed(f)));
+  const items=results.filter(r=>r.status==="fulfilled"&&r.value.length).flatMap(r=>r.value).sort((a,b)=>b.pubDate-a.pubDate).slice(0,16);
+  if(!items.length){ inner.innerHTML=`<span class="ticker-item" style="color:var(--console-muted)">Notizie Firenze/Prato non disponibili</span>`; return; }
+  const frag=document.createDocumentFragment();
+  for(let pass=0;pass<2;pass++){
+    for(const {title,link} of items){
+      const s=document.createElement("span"); s.className="ticker-item";
+      const a=document.createElement("a"); a.href=link; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=title;
+      s.appendChild(a); frag.appendChild(s);
+      const sep=document.createElement("span"); sep.className="ticker-sep"; sep.textContent="◆"; frag.appendChild(sep);
+    }
+  }
+  inner.textContent=""; inner.appendChild(frag);
+  /* Durata di riserva per il keyframe CSS, usata solo se il JS non parte:
+     va calcolata sulla larghezza reale, non sul numero di caratteri, o su
+     monitor larghi lo scorrimento diventa impercettibile. */
+  const setDur=()=>{
+    const half=inner.scrollWidth/2;
+    if(half) wrap.style.setProperty("--ticker-dur", Math.max(30, half/TICKER_SPEED).toFixed(1)+"s");
+  };
+  setDur();
+  if(window.ResizeObserver){
+    tickerRO?.disconnect();
+    tickerRO=new ResizeObserver(setDur);
+    tickerRO.observe(wrap);
+  }
+  startTickerScroll(inner);
+}
+
+/* Scorrimento pilotato da requestAnimationFrame invece che dall'animazione
+   CSS: su alcune postazioni (policy Windows sulle animazioni, motori che
+   scartano regole con selettori non riconosciuti) il keyframe non partiva e
+   il banner restava immobile. Qui il movimento dipende solo dal timer dei
+   frame. Il keyframe CSS resta come fallback se questo blocco non gira. */
+const TICKER_SPEED=70; /* px/s */
+let tickerFrame=null, tickerPaused=false;
+function startTickerScroll(inner){
+  if(!("requestAnimationFrame" in window)) return;
+  cancelAnimationFrame(tickerFrame);
+  inner.classList.add("js-scroll");
+  inner.style.transform="translateX(0px)";
+  let x=0, last=null;
+  const step=now=>{
+    if(last===null) last=now;
+    const dt=Math.min((now-last)/1000, .25); /* scarta i salti da tab in background */
+    last=now;
+    const half=inner.scrollWidth/2;
+    if(half){
+      if(!tickerPaused) x-=TICKER_SPEED*dt;
+      if(x<=-half) x+=half;
+      inner.style.transform=`translateX(${x.toFixed(1)}px)`;
+    }
+    tickerFrame=requestAnimationFrame(step);
+  };
+  tickerFrame=requestAnimationFrame(step);
+}
+/* Pausa solo col puntatore sul titolo o col focus da tastiera: agganciarla
+   all'intera fascia significherebbe bloccare tutto con il mouse parcheggiato
+   li' sopra. */
+const tickerWrapEl=document.getElementById("ticker-wrap");
+tickerWrapEl.addEventListener("mouseover",e=>{ if(e.target.closest("a")) tickerPaused=true; });
+tickerWrapEl.addEventListener("mouseout", e=>{ if(e.target.closest("a")) tickerPaused=false; });
+tickerWrapEl.addEventListener("focusin", ()=>{ tickerPaused=true; });
+tickerWrapEl.addEventListener("focusout",()=>{ tickerPaused=false; });
+loadTicker();
+setInterval(loadTicker, 15*60*1000);
+</script>
+</body>
+</html>
