@@ -2,7 +2,8 @@
 // simula il backend Apps Script usando la stessa applyOp (stato in memoria).
 //   node test/fleet-stub.js        → http://localhost:8099
 //   /api         GET/POST come lo script Google
-//   /api?fail=1  risponde HTML (simula pagina di login / errore)
+//   /api?fail=1  risponde HTML (simula pagina di login / errore); /__fail?on=1 lo fa per tutte le chiamate
+//   /__reset     ripristina i due mezzi iniziali
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -10,10 +11,12 @@ const { applyOp } = require("../apps-script/Code.gs");
 
 const PORT = process.env.PORT || 8099;
 const ROOT = path.join(__dirname, "..");
-let stato = [
+const iniziale = () => [
   { id: "a", nome: "Croce A", n: 12, reset: "2026-11-03T13:20:00.000Z" },
   { id: "b", nome: "Misericordia", n: 9, reset: null },
 ];
+let stato = iniziale();
+let fail = false; // /__fail?on=1 simula Google non raggiungibile; /__reset ripristina lo stato
 
 function pagina() {
   return fs
@@ -25,8 +28,10 @@ http
   .createServer((req, res) => {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" };
+    if (url.pathname === "/__reset") { stato = iniziale(); fail = false; res.writeHead(200); return res.end("ok"); }
+    if (url.pathname === "/__fail") { fail = url.searchParams.get("on") === "1"; res.writeHead(200); return res.end("ok"); }
     if (url.pathname === "/api") {
-      if (url.searchParams.get("fail")) {
+      if (fail || url.searchParams.get("fail")) {
         res.writeHead(200, { ...cors, "Content-Type": "text/html" });
         return res.end("<html>Accedi a Google</html>");
       }

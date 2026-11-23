@@ -214,7 +214,7 @@ a.tile.kbd-active{
 }
 .u-lbl{font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);white-space:nowrap}
 /* ---- servizi mezzi ---- */
-.fleet{align-items:flex-start}
+.fleet{align-items:flex-start;padding-top:7px;padding-bottom:7px}
 .f-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
 .f-add{
   padding:5px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);
@@ -225,26 +225,37 @@ a.tile.kbd-active{
 .f-status.err{color:var(--danger)}
 .f-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px;width:100%}
 .f-item{
-  display:flex;align-items:center;gap:10px;padding:6px 10px;
+  display:flex;align-items:center;gap:8px;padding:3px 8px;
   background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
 }
 .f-id{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .f-name{font-size:.88rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text}
 .f-reset{font-size:.66rem;color:var(--muted);white-space:nowrap}
 .f-ctl{display:flex;align-items:center;gap:6px}
-.f-n{min-width:2.2ch;text-align:center;font-size:1.35rem;font-weight:700;color:var(--ink)}
+.f-n{min-width:2.2ch;text-align:center;font-size:1.3rem;font-weight:700;color:var(--ink)}
 .f-btn{
-  width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--surface);
+  width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--surface);
   color:var(--brand);font-size:1.1rem;font-weight:700;line-height:1;cursor:pointer;transition:border-color .12s,transform .12s;
 }
 .f-btn:hover:not(:disabled){border-color:var(--brand-tint);transform:translateY(-1px)}
 .f-btn:disabled{opacity:.5;cursor:default}
 .f-ico{
-  min-width:32px;height:32px;padding:0 6px;border-radius:9px;border:1px solid transparent;background:transparent;
+  min-width:30px;height:30px;padding:0 5px;border-radius:9px;border:1px solid transparent;background:transparent;
   color:var(--muted);font-size:.9rem;cursor:pointer;white-space:nowrap;
 }
 .f-ico:hover{color:var(--ink);border-color:var(--line)}
 .f-ico.armed{color:var(--danger);border-color:var(--danger);font-size:.72rem;font-weight:700}
+.f-edit{
+  width:100%;min-width:0;padding:5px 8px;border-radius:8px;border:1px solid var(--focus);
+  background:var(--surface);color:var(--ink);font:inherit;font-size:.86rem;font-weight:700;outline:none;
+}
+.f-head{position:relative}
+.f-pop{
+  position:absolute;top:calc(100% + 6px);left:0;z-index:5;display:flex;gap:8px;align-items:center;
+  padding:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+}
+.f-pop .f-edit{width:200px;font-weight:600}
+.f-add:disabled{opacity:.5;cursor:default}
 .f-empty{font-size:.82rem;color:var(--muted)}
 
 /* ---- misc ---- */
@@ -570,7 +581,7 @@ searchEl.addEventListener("keydown", e=>{
   else if(e.key==="ArrowUp"){ e.preventDefault(); moveKbd(-1); }
 });
 document.addEventListener("keydown", e=>{
-  if(e.key==="\\" && document.activeElement!==searchEl){
+  if(e.key==="\\" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){
     e.preventDefault(); searchEl.focus(); searchEl.select();
     searchEl.scrollIntoView({block:"center",behavior:"smooth"});
   } else if(e.key==="Escape" && document.activeElement===searchEl){
@@ -599,13 +610,19 @@ function el(tag,cls,text){
   return e;
 }
 
+const FLEET_POLL_MS=12000, FLEET_TIMEOUT_MS=8000, FLEET_CONFIRM_MS=4000;
+let fleetState=[];          // ultimo stato noto
+let fleetEditing=null;      // id del mezzo con il nome in modifica
+let fleetInflight=0;        // richieste di scrittura in corso
+const fleetArmed=new Map(); // "id|azione" -> timeout della conferma
+
 function renderFleet(mezzi){
   fleetListEl.replaceChildren();
   if(!mezzi.length){ fleetListEl.appendChild(el("span","f-empty","Nessun mezzo: aggiungine uno con “+ mezzo”.")); return; }
   mezzi.forEach(m=>{
     const item=el("div","f-item"); item.dataset.id=m.id;
     const id=el("div","f-id");
-    const name=el("span","f-name",m.nome); name.title="Rinomina";
+    const name=el("span","f-name",m.nome); name.title="Rinomina"; name.tabIndex=0; name.setAttribute("role","button");
     id.append(name, el("span","f-reset mono","reset "+formatReset(m.reset)));
     const ctl=el("div","f-ctl");
     const dec=el("button","f-btn f-dec","−"); dec.type="button"; dec.setAttribute("aria-label","Meno un servizio: "+m.nome);
@@ -613,18 +630,112 @@ function renderFleet(mezzi){
     ctl.append(dec, el("span","f-n mono",String(m.n)), inc);
     const rst=el("button","f-ico f-rst","↺"); rst.type="button"; rst.title="Azzera"; rst.setAttribute("aria-label","Azzera: "+m.nome);
     const del=el("button","f-ico f-del","✕"); del.type="button"; del.title="Rimuovi mezzo"; del.setAttribute("aria-label","Rimuovi: "+m.nome);
+    [[rst,"f-rst","↺"],[del,"f-del","✕"]].forEach(([b,c])=>{ if(fleetArmed.has(m.id+"|"+c)){ b.classList.add("armed"); b.textContent="Sicuro?"; } });
     item.append(id, ctl, rst, del);
     fleetListEl.appendChild(item);
   });
 }
+function fleetRender(){ if(!fleetEditing) renderFleet(fleetState); }
+function fleetApply(mezzi){ fleetState=mezzi; fleetRender(); }
+
+function fleetOk(){ fleetStatusEl.textContent=""; fleetStatusEl.classList.remove("err"); }
+function fleetFail(msg){ fleetStatusEl.textContent=msg; fleetStatusEl.classList.add("err"); }
+const FLEET_OFFLINE="Contatore non raggiungibile — numeri non aggiornati";
+
+async function fleetCall(init){
+  const ctrl=new AbortController(), tid=setTimeout(()=>ctrl.abort(),FLEET_TIMEOUT_MS);
+  try{
+    const r=await fetch(FLEET_API,{...init,signal:ctrl.signal});
+    const j=await r.json();
+    if(!j||!j.ok||!Array.isArray(j.mezzi)) throw new Error("risposta non valida");
+    return j.mezzi;
+  } finally { clearTimeout(tid); }
+}
 
 async function fleetRefresh(){
   if(!FLEET_API){ fleetStatusEl.textContent="Contatore non configurato"; return; }
-  const r=await fetch(FLEET_API);
-  const j=await r.json();
-  if(j.ok) renderFleet(j.mezzi);
+  if(fleetInflight>0) return;
+  try{ const m=await fleetCall({}); if(fleetInflight===0){ fleetApply(m); fleetOk(); } }
+  catch(e){ fleetFail(FLEET_OFFLINE); }
 }
-fleetRefresh().catch(()=>{});
+
+async function fleetSend(op){
+  if(!FLEET_API) return;
+  fleetInflight++;
+  try{
+    const m=await fleetCall({method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(op)});
+    // con altre scritture in corso, l'ultima porterà lo stato finale: niente ritorni indietro
+    if(fleetInflight===1){ fleetApply(m); } fleetOk();
+  }catch(e){ fleetFail(FLEET_OFFLINE); }
+  finally{ fleetInflight--; }
+}
+
+function fleetConfirm(btn, azione){
+  const key=btn.closest(".f-item").dataset.id+"|"+btn.classList[1];
+  if(fleetArmed.has(key)){ clearTimeout(fleetArmed.get(key)); fleetArmed.delete(key); fleetRender(); azione(); return; }
+  fleetArmed.set(key,setTimeout(()=>{ fleetArmed.delete(key); fleetRender(); },FLEET_CONFIRM_MS));
+  fleetRender();
+}
+
+function fleetEditName(item){
+  const id=item.dataset.id, m=fleetState.find(x=>x.id===id); if(!m||fleetEditing) return;
+  fleetEditing=id;
+  const span=item.querySelector(".f-name");
+  const inp=el("input","f-edit"); inp.maxLength=30; inp.value=m.nome; inp.setAttribute("aria-label","Nome del mezzo");
+  span.replaceWith(inp); inp.focus(); inp.select();
+  let done=false;
+  const end=(salva)=>{
+    if(done) return; done=true; fleetEditing=null;
+    const nome=inp.value.trim();
+    if(salva && nome && nome!==m.nome){
+      fleetState=fleetState.map(x=>x.id===id?{...x,nome}:x);
+      fleetSend({op:"rename",id,nome});
+    }
+    fleetRender();
+  };
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") end(true); else if(e.key==="Escape") end(false); });
+  inp.addEventListener("blur",()=>end(true));
+}
+
+fleetListEl.addEventListener("click",e=>{
+  const b=e.target.closest("button"), item=e.target.closest(".f-item");
+  if(!item) return;
+  const id=item.dataset.id;
+  if(e.target.closest(".f-name")){ fleetEditName(item); return; }
+  if(!b) return;
+  if(b.classList.contains("f-inc")||b.classList.contains("f-dec")){
+    const d=b.classList.contains("f-inc")?1:-1;
+    fleetState=fleetState.map(x=>x.id===id?{...x,n:Math.max(0,x.n+d)}:x); // subito, poi conferma il server
+    fleetRender();
+    fleetSend({op:d>0?"inc":"dec",id});
+  }
+  else if(b.classList.contains("f-rst")) fleetConfirm(b,()=>fleetSend({op:"reset",id}));
+  else if(b.classList.contains("f-del")) fleetConfirm(b,()=>fleetSend({op:"remove",id}));
+});
+fleetListEl.addEventListener("keydown",e=>{
+  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("f-name")){ e.preventDefault(); fleetEditName(e.target.closest(".f-item")); }
+});
+
+/* menu a comparsa "+ mezzo" */
+(function(){
+  const head=document.querySelector(".f-head"), addBtn=document.getElementById("fleet-add");
+  const pop=el("div","f-pop hidden");
+  const inp=el("input","f-edit"); inp.maxLength=30; inp.placeholder="Nome del mezzo"; inp.setAttribute("aria-label","Nome del nuovo mezzo");
+  const ok=el("button","f-add","Aggiungi"); ok.type="button"; ok.disabled=true;
+  pop.append(inp,ok); head.appendChild(pop);
+  const close=()=>{ pop.classList.add("hidden"); inp.value=""; ok.disabled=true; };
+  const open=()=>{ pop.classList.remove("hidden"); inp.focus(); };
+  const conferma=()=>{ const nome=inp.value.trim(); if(!nome) return; close(); fleetSend({op:"add",nome}); };
+  addBtn.addEventListener("click",()=>pop.classList.contains("hidden")?open():close());
+  inp.addEventListener("input",()=>{ ok.disabled=!inp.value.trim(); });
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") conferma(); else if(e.key==="Escape"){ close(); addBtn.focus(); } });
+  ok.addEventListener("click",conferma);
+  document.addEventListener("click",e=>{ if(!pop.classList.contains("hidden") && !pop.contains(e.target) && e.target!==addBtn) close(); });
+})();
+
+fleetRefresh();
+setInterval(()=>{ if(!document.hidden) fleetRefresh(); },FLEET_POLL_MS);
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) fleetRefresh(); });
 
 /* ---- theme ---- */
 const root=document.documentElement;
