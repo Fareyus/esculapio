@@ -115,6 +115,14 @@ const names = (p) => p.eval(`[...document.querySelectorAll('.f-name')].map(e=>e.
   check("k: dopo il primo click su ↺ il focus è ancora su ↺ ('Sicuro?')", /^a\|f-ico f-rst armed\|Sicuro\?/.test(await attivo()), await attivo());
   await p.click(".f-item .f-rst"); await p.wait(700);
 
+  // (l) la ✕ di rimozione è piccola, nell'angolo, e armata resta dentro la card
+  const g = await p.eval(`(()=>{const d=document.querySelector('.f-item .f-del').getBoundingClientRect(),c=document.querySelector('.f-item').getBoundingClientRect();return {w:d.width,h:d.height,top:d.top-c.top,right:c.right-d.right}})()`);
+  check("l: ✕ piccola (≤ 20 px) nell'angolo in alto a destra", g.w <= 20 && g.h <= 20 && g.top <= 8 && g.right <= 8, JSON.stringify(g));
+  await p.eval(`document.querySelector('.f-item .f-del').click()`);
+  const g2 = await p.eval(`(()=>{const d=document.querySelector('.f-item .f-del').getBoundingClientRect(),c=document.querySelector('.f-item').getBoundingClientRect();return {armed:document.querySelector('.f-item .f-del').classList.contains('armed'),dentro:d.right<=c.right&&d.left>=c.left&&d.top>=c.top}})()`);
+  check("l: armata ('Sicuro?') resta dentro la card", g2.armed && g2.dentro, JSON.stringify(g2));
+  await p.wait(4500);
+
   check("console senza errori", p.logs.length === 0, p.logs.join(" | "));
   await p.close(); await p2.close();
   console.log(fails ? `\n${fails} controlli falliti` : "\nTutti i controlli superati");

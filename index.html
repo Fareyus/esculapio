@@ -256,6 +256,15 @@ a.tile.kbd-active{
 }
 .f-pop .f-edit{width:200px;font-weight:600}
 .f-add:disabled{opacity:.5;cursor:default}
+/* ✕ rimuovi: minuscola nell'angolo, area di click allargata, piena solo su hover/focus */
+.f-item{position:relative;padding-right:22px}
+.f-del{
+  position:absolute;top:2px;right:3px;min-width:0;width:16px;height:16px;padding:0;
+  font-size:.62rem;line-height:1;opacity:.6;border-color:transparent;
+}
+.f-del::after{content:"";position:absolute;inset:-4px}
+.f-item:hover .f-del,.f-del:focus-visible{opacity:1}
+.f-del.armed{width:auto;height:18px;padding:0 6px;opacity:1;z-index:1;background:var(--surface);white-space:nowrap}
 .f-empty{font-size:.82rem;color:var(--muted)}
 
 /* ---- misc ---- */
