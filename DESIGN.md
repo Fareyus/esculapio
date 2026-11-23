@@ -151,17 +151,17 @@ Palette fredda e istituzionale: un blu-brand profondo che struttura, un teal cli
 - **Title** (mono, 700, ~0.64rem, uppercase, tracking 0.14em): i tag di sezione (COMUNE, TRASPORTI URGENTI…) e le etichette del cruscotto.
 - **Body** (sans, 600, 0.88rem, lh 1.25): nomi dei link nelle tile e testo generale.
 - **Label** (sans, 800, 0.64rem, uppercase, tracking 0.14em): micro-etichette (stato, didascalie turno).
-- **Data** (mono, 700, tabular-nums): countdown, contatori `·N`, badge `lan`, risultato età.
+- **Data** (mono, 700, tabular-nums): countdown, contatori `·N`, badge `lan`, numeri del contatore mezzi.
 
 ### Named Rules
-**La Regola del Numero-Strumento.** Ogni valore numerico che cambia nel tempo o che si conta — orari, countdown, contatori, età — è in monospace tabellare (`font-variant-numeric: tabular-nums`). I numeri non ballano.
+**La Regola del Numero-Strumento.** Ogni valore numerico che cambia nel tempo o che si conta — orari, countdown, contatori, servizi per mezzo — è in monospace tabellare (`font-variant-numeric: tabular-nums`). I numeri non ballano.
 
 ## 4. Elevation
 
 Sistema **stratificato con ombra morbida**: le superfici-contenitore (barre, campi, timer, archivio, ticker) portano un'ombra ambientale tenue che le stacca dal fondo, così l'occhio legge subito i livelli. Le tile-link, invece, sono piatte a riposo e si sollevano solo all'interazione: l'ombra diventa lì un feedback, non una decorazione permanente.
 
 ### Shadow Vocabulary
-- **Ombra Ambientale** (`box-shadow: 0 1px 2px rgba(11,19,48,.05), 0 10px 30px rgba(11,19,48,.10)`): contenitori a riposo (search, ticker, timer, archivio, barra età). In scuro: `0 1px 0 rgba(255,255,255,.02), 0 14px 34px rgba(0,0,0,.5)`.
+- **Ombra Ambientale** (`box-shadow: 0 1px 2px rgba(11,19,48,.05), 0 10px 30px rgba(11,19,48,.10)`): contenitori a riposo (search, ticker, timer, archivio, riquadro mezzi). In scuro: `0 1px 0 rgba(255,255,255,.02), 0 14px 34px rgba(0,0,0,.5)`.
 - **Sollevamento all'hover** (stessa ombra + `translateY(-2px)`): solo sulle tile-link, come risposta al puntatore.
 
 ### Named Rules
@@ -205,7 +205,7 @@ Fascia superiore con logo, wordmark `⚕ EsculapioNET`, stato `● Operativo` (d
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** trattare ogni numero che conta (orari, countdown, contatori, età) in **monospace tabellare**.
+- **Do** trattare ogni numero che conta (orari, countdown, contatori, servizi per mezzo) in **monospace tabellare**.
 - **Do** tenere il **teal clinico come unico accento**, riservato a focus, hover ed ECG.
 - **Do** usare l'**ambra solo** per il badge `lan` (link di sola rete interna): è un avviso, non un colore.
 - **Do** mantenere **chiaro e scuro paritari**, con contrasto del testo su livelli AA (turni notturni, monitor eterogenei).

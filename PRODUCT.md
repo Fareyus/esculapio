@@ -16,7 +16,7 @@ Vincolo architetturale portante: **singolo file `index.html`** autocontenuto (HT
 
 ## Brand Personality
 
-Console di centrale operativa: **preciso, affidabile, calmo sotto pressione**. Autorevole ma non freddo. I dati (orari, countdown, contatori, codici) hanno un trattamento da quadro strumenti; il tono testuale è essenziale e diretto, con qualche tocco umano dove non compromette la serietà (es. i messaggi del calcolatore età). Deve dare la sensazione di uno strumento vivo e sotto controllo, non di una pagina statica.
+Console di centrale operativa: **preciso, affidabile, calmo sotto pressione**. Autorevole ma non freddo. I dati (orari, countdown, contatori, codici) hanno un trattamento da quadro strumenti; il tono testuale è essenziale e diretto, con qualche tocco umano dove non compromette la serietà. Deve dare la sensazione di uno strumento vivo e sotto controllo, non di una pagina statica.
 
 ## Anti-references
 
