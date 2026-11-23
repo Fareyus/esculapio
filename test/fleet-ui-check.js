@@ -97,6 +97,24 @@ const names = (p) => p.eval(`[...document.querySelectorAll('.f-name')].map(e=>e.
   await p.eval(`document.querySelectorAll('.f-item')[2].querySelector('.f-del').click()`); await p.wait(700);
   check("i: secondo click rimuove", (await names(p)).length === prima2 - 1);
 
+  // (j) una lettura lenta partita prima del click non deve annullare il click
+  const n0 = await n(p, 0);
+  await fetch(URL_ + "/__delay?ms=1500");
+  await p.eval(`(fleetRefresh(),0)`); await p.wait(200);
+  await p.click(".f-item .f-inc"); await p.wait(2500);
+  await fetch(URL_ + "/__delay?ms=0");
+  check("j: la lettura lenta non riporta indietro il numero", (await n(p, 0)) === n0 + 1, `${await n(p, 0)} invece di ${n0 + 1}`);
+
+  // (k) il focus da tastiera sopravvive ai ridisegni
+  const attivo = () => p.eval(`(()=>{const a=document.activeElement;const it=a&&a.closest&&a.closest('.f-item');return it?it.dataset.id+'|'+a.className+'|'+a.textContent:''})()`);
+  await p.eval(`document.querySelector('.f-item .f-inc').focus()`);
+  await p.click(".f-item .f-inc"); await p.wait(700);
+  check("k: dopo + il focus resta sul pulsante +", /^a\|f-btn f-inc\|/.test(await attivo()), await attivo());
+  await p.eval(`document.querySelector('.f-item .f-rst').focus()`);
+  await p.click(".f-item .f-rst"); await p.wait(200);
+  check("k: dopo il primo click su ↺ il focus è ancora su ↺ ('Sicuro?')", /^a\|f-ico f-rst armed\|Sicuro\?/.test(await attivo()), await attivo());
+  await p.click(".f-item .f-rst"); await p.wait(700);
+
   check("console senza errori", p.logs.length === 0, p.logs.join(" | "));
   await p.close(); await p2.close();
   console.log(fails ? `\n${fails} controlli falliti` : "\nTutti i controlli superati");

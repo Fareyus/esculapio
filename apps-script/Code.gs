@@ -82,6 +82,8 @@ function scriviStato(stato) {
   var righe = sh.getLastRow() - 1;
   if (righe > 0) sh.getRange(2, 1, righe, 4).clearContent();
   if (stato.length) {
+    // id, nome e reset restano testo: niente formule ("=1+1"), date automatiche ("1/12") o zeri persi ("007")
+    [1, 2, 4].forEach(function (col) { sh.getRange(2, col, stato.length, 1).setNumberFormat("@"); });
     sh.getRange(2, 1, stato.length, 4).setValues(
       stato.map(function (m) { return [m.id, m.nome, m.n, m.reset || ""]; })
     );
@@ -105,6 +107,7 @@ function doPost(e) {
     var op = JSON.parse(e.postData.contents);
     var nuovo = applyOp(leggiStato(), op, new Date());
     scriviStato(nuovo);
+    SpreadsheetApp.flush(); // la scrittura deve essere completa prima che un'altra richiesta prenda il lock
     return json_({ ok: true, mezzi: nuovo });
   } catch (err) {
     return json_({ ok: false, errore: String(err) });
@@ -123,4 +126,4 @@ function inizializza() {
   }
 }
 
-if (typeof module !== "undefined") module.exports = { applyOp: applyOp, NOME_MAX: NOME_MAX };
+if (typeof module !== "undefined") module.exports = { applyOp: applyOp, doPost: doPost, NOME_MAX: NOME_MAX };

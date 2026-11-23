@@ -614,9 +614,12 @@ const FLEET_POLL_MS=12000, FLEET_TIMEOUT_MS=8000, FLEET_CONFIRM_MS=4000;
 let fleetState=[];          // ultimo stato noto
 let fleetEditing=null;      // id del mezzo con il nome in modifica
 let fleetInflight=0;        // richieste di scrittura in corso
+let fleetWriteSeq=0;        // cresce a ogni scrittura: una lettura partita prima viene scartata
 const fleetArmed=new Map(); // "id|azione" -> timeout della conferma
 
 function renderFleet(mezzi){
+  const a=document.activeElement, it0=a&&fleetListEl.contains(a)?a.closest(".f-item"):null;
+  const keep=it0?{id:it0.dataset.id,cls:a.classList[1]||a.classList[0]}:null; // per rimettere il focus (tastiera)
   fleetListEl.replaceChildren();
   if(!mezzi.length){ fleetListEl.appendChild(el("span","f-empty","Nessun mezzo: aggiungine uno con “+ mezzo”.")); return; }
   mezzi.forEach(m=>{
@@ -634,6 +637,11 @@ function renderFleet(mezzi){
     item.append(id, ctl, rst, del);
     fleetListEl.appendChild(item);
   });
+  if(keep){
+    const it=[...fleetListEl.children].find(x=>x.dataset&&x.dataset.id===keep.id);
+    const t=it&&it.querySelector("."+keep.cls);
+    if(t) t.focus();
+  }
 }
 function fleetRender(){ if(!fleetEditing) renderFleet(fleetState); }
 function fleetApply(mezzi){ fleetState=mezzi; fleetRender(); }
@@ -655,13 +663,14 @@ async function fleetCall(init){
 async function fleetRefresh(){
   if(!FLEET_API){ fleetStatusEl.textContent="Contatore non configurato"; return; }
   if(fleetInflight>0) return;
-  try{ const m=await fleetCall({}); if(fleetInflight===0){ fleetApply(m); fleetOk(); } }
+  const seq=fleetWriteSeq;
+  try{ const m=await fleetCall({}); if(fleetInflight===0 && seq===fleetWriteSeq){ fleetApply(m); fleetOk(); } }
   catch(e){ fleetFail(FLEET_OFFLINE); }
 }
 
 async function fleetSend(op){
   if(!FLEET_API) return;
-  fleetInflight++;
+  fleetInflight++; fleetWriteSeq++;
   try{
     const m=await fleetCall({method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(op)});
     // con altre scritture in corso, l'ultima porterà lo stato finale: niente ritorni indietro

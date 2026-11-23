@@ -16,6 +16,7 @@ const iniziale = () => [
   { id: "b", nome: "Misericordia", n: 9, reset: null },
 ];
 let stato = iniziale();
+let getDelay = 0; // /__delay?ms=N ritarda solo le risposte GET (lo stato è letto subito, come una lettura lenta)
 let fail = false; // /__fail?on=1 simula Google non raggiungibile; /__reset ripristina lo stato
 
 function pagina() {
@@ -29,6 +30,7 @@ http
     const url = new URL(req.url, `http://localhost:${PORT}`);
     const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" };
     if (url.pathname === "/__reset") { stato = iniziale(); fail = false; res.writeHead(200); return res.end("ok"); }
+    if (url.pathname === "/__delay") { getDelay = +url.searchParams.get("ms") || 0; res.writeHead(200); return res.end("ok"); }
     if (url.pathname === "/__fail") { fail = url.searchParams.get("on") === "1"; res.writeHead(200); return res.end("ok"); }
     if (url.pathname === "/api") {
       if (fail || url.searchParams.get("fail")) {
@@ -36,9 +38,9 @@ http
         return res.end("<html>Accedi a Google</html>");
       }
       if (req.method === "OPTIONS") { res.writeHead(204, cors); return res.end(); }
-      const rispondi = () => {
-        res.writeHead(200, { ...cors, "Content-Type": "application/json" });
-        res.end(JSON.stringify({ ok: true, mezzi: stato }));
+      const rispondi = (ritardo = 0) => {
+        const corpo = JSON.stringify({ ok: true, mezzi: stato }); // snapshot al momento della lettura
+        setTimeout(() => { res.writeHead(200, { ...cors, "Content-Type": "application/json" }); res.end(corpo); }, ritardo);
       };
       if (req.method === "POST") {
         let body = "";
@@ -49,7 +51,7 @@ http
         });
         return;
       }
-      return rispondi();
+      return rispondi(getDelay);
     }
     if (url.pathname === "/" || url.pathname === "/index.html") {
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });

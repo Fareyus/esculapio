@@ -16,6 +16,14 @@ Si fa una volta sola. Non serve altro: niente server, niente database.
    - Chi ha accesso: **Chiunque**
 6. Copia l'URL che finisce con `/exec`.
 
+### Controllo dalla postazione (importante)
+
+Da **una postazione della centrale** apri nel browser l'URL `/exec` appena copiato. Deve mostrare un testo che inizia con
+`{"ok":true,"mezzi":[…` . Se si carica, il firewall lascia passare tutto il percorso: la richiesta passa da `script.google.com`
+e viene girata a `script.googleusercontent.com`, quindi **non basta** poter aprire `script.google.com`.
+Se la pagina non si apre o chiede di accedere a Google, il contatore resterà su "non raggiungibile": serve far
+sbloccare `*.googleusercontent.com` (o rivedere la distribuzione: "Chiunque", non "Chiunque con account Google").
+
 ## 2. Collegare la pagina
 
 In `index.html` cerca la riga `const FLEET_API = "";` e incolla l'URL tra le virgolette. Poi:
