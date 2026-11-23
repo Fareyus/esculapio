@@ -10,7 +10,7 @@ Disponibile su **[fareyus.github.io/esculapio](https://fareyus.github.io/esculap
 - **Ticker notizie** La Nazione Firenze/Prato — aggiornato automaticamente ogni 15 minuti
 - **Orologio e data** in tempo reale nell'header
 - **Countdown fine turno** per Ordinari ed Emergenza, unificato quando coincidono
-- **Calcolatore età paziente** — inserisci l'anno di nascita e premi Invio (gestisce anche gli anni a 2 cifre)
+- **Contatore servizi mezzi** — quanti servizi ha fatto ciascun mezzo, condiviso tra tutte le postazioni (foglio Google). Nome modificabile, − e +, reset con data/ora, aggiunta e rimozione mezzi. Setup: [docs/contatore-mezzi-setup.md](docs/contatore-mezzi-setup.md)
 - **Tema chiaro/scuro** con memoria locale (chiaro di default)
 - **Badge intranet** sui link raggiungibili solo dalla rete interna 118
 
@@ -50,7 +50,9 @@ logo.png     # logo EsculapioNET usato nell'header
 favicon.png  # icona della scheda browser
 robots.txt   # noindex — pagina a uso interno
 LICENSE      # CC BY-NC-ND 4.0
-docs/        # spec di design e piano di implementazione (storico)
+apps-script/ # backend del contatore mezzi (Google Apps Script) + test
+test/        # stub locale e controlli del riquadro mezzi, prototipi grafici
+docs/        # spec di design, piani e guida di installazione
 ```
 
 ## Note tecniche

@@ -10,7 +10,7 @@ Operatori della Centrale Operativa 118 USL Toscana Centro (area Firenze–Prato)
 
 ## Product Purpose
 
-Portale di accesso rapido ai link e agli strumenti operativi usati in centrale (mail, rubriche, gestionali arr/soccorso, mappe, turnazioni, ecc.), più poche utilità di supporto al turno: orologio, countdown fine turno, calcolatore età paziente, ticker notizie locali. Esiste per sostituire il vecchio sito Google Sites con qualcosa di più veloce, ordinato e curato. Successo = l'operatore trova e apre il link giusto in un colpo d'occhio, e ha sotto controllo tempo e stato del turno senza cercarli.
+Portale di accesso rapido ai link e agli strumenti operativi usati in centrale (mail, rubriche, gestionali arr/soccorso, mappe, turnazioni, ecc.), più poche utilità di supporto al turno: orologio, countdown fine turno, contatore dei servizi per mezzo (condiviso tra le postazioni, per distribuire le uscite tra le associazioni), ticker notizie locali. Esiste per sostituire il vecchio sito Google Sites con qualcosa di più veloce, ordinato e curato. Successo = l'operatore trova e apre il link giusto in un colpo d'occhio, e ha sotto controllo tempo e stato del turno senza cercarli.
 
 Vincolo architetturale portante: **singolo file `index.html`** autocontenuto (HTML+CSS+JS, zero dipendenze), editabile anche da chi non è sviluppatore (i link stanno nell'oggetto `SITE_DATA`), deployato su GitHub Pages.
 
