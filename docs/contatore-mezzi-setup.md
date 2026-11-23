@@ -1,5 +1,19 @@
 # Contatore servizi mezzi — installazione
 
+## Stato attuale
+
+In uso sulle postazioni dal **23/11/2026**.
+
+- **Foglio Google dei dati:** [Contatore mezzi](https://docs.google.com/spreadsheets/d/16t4INNe1ZIKcmWGA-6kTOHFMRtllsQHwkkXR1OIqRhQ/edit?usp=sharing) — scheda *Mezzi* (colonne `id`, `nome`, `n`, `reset`).
+- Lo script (Estensioni → Apps Script, dentro il foglio) è la copia di `apps-script/Code.gs` pubblicata come applicazione web.
+  L'URL `/exec` è nel codice di `index.html` (costante `FLEET_API`).
+- **Correggere un numero o un nome a mano:** apri il foglio e cambia `n` o `nome`; la pagina si aggiorna entro ~12 s. Non cambiare `id`.
+- **Rimettere a posto tutto:** cancellando le righe dalla 2 in giù e rieseguendo `inizializza` dall'editor dello script si ricreano "Mezzo 1" e "Mezzo 2".
+- Il link del foglio è pubblico nel repo per scelta: se qualcuno lo modifica per scherzo, si corregge dal foglio
+  (Cronologia delle versioni: File → Cronologia delle versioni) e non ci sono dati sensibili.
+
+---
+
 I numeri vivono in un foglio Google; uno script (Apps Script) fa da ponte tra il foglio e la pagina.
 Si fa una volta sola. Non serve altro: niente server, niente database.
 

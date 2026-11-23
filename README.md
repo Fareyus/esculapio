@@ -10,7 +10,7 @@ Disponibile su **[fareyus.github.io/esculapio](https://fareyus.github.io/esculap
 - **Ticker notizie** La Nazione Firenze/Prato — aggiornato automaticamente ogni 15 minuti
 - **Orologio e data** in tempo reale nell'header
 - **Countdown fine turno** per Ordinari ed Emergenza, unificato quando coincidono
-- **Contatore servizi mezzi** — quanti servizi ha fatto ciascun mezzo, condiviso tra tutte le postazioni (foglio Google). Nome modificabile, − e +, reset con data/ora, aggiunta e rimozione mezzi. Setup: [docs/contatore-mezzi-setup.md](docs/contatore-mezzi-setup.md)
+- **Contatore servizi mezzi** — quanti servizi ha fatto ciascun mezzo, condiviso tra tutte le postazioni (foglio Google). Nome modificabile, − e +, reset con data/ora, aggiunta e rimozione mezzi. Foglio dati: [Contatore mezzi](https://docs.google.com/spreadsheets/d/16t4INNe1ZIKcmWGA-6kTOHFMRtllsQHwkkXR1OIqRhQ/edit?usp=sharing) · setup e manutenzione: [docs/contatore-mezzi-setup.md](docs/contatore-mezzi-setup.md)
 - **Tema chiaro/scuro** con memoria locale (chiaro di default)
 - **Badge intranet** sui link raggiungibili solo dalla rete interna 118
 
