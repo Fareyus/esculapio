@@ -213,22 +213,39 @@ a.tile.kbd-active{
   box-shadow:var(--shadow);
 }
 .u-lbl{font-family:ui-monospace,monospace;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);white-space:nowrap}
-.age-input{
-  width:150px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);
-  background:var(--surface-2);color:var(--ink);font-size:.9rem;outline:none;transition:border-color .12s;
-  -moz-appearance:textfield;appearance:textfield;
+/* ---- servizi mezzi ---- */
+.fleet{align-items:flex-start}
+.f-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
+.f-add{
+  padding:5px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);
+  color:var(--brand);font-size:.78rem;font-weight:700;cursor:pointer;transition:border-color .12s;
 }
-.age-input::-webkit-outer-spin-button,.age-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.age-input:focus{border-color:var(--focus)}
-.age-btn{
-  padding:8px 16px;border-radius:9px;border:1px solid transparent;cursor:pointer;
-  background:var(--brand);color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.02em;
-  transition:opacity .12s,transform .12s;white-space:nowrap;
+.f-add:hover{border-color:var(--brand-tint)}
+.f-status{font-size:.74rem;font-weight:600;color:var(--muted)}
+.f-status.err{color:var(--danger)}
+.f-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px;width:100%}
+.f-item{
+  display:flex;align-items:center;gap:10px;padding:6px 10px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
 }
-[data-theme="dark"] .age-btn{color:#08122e}
-.age-btn:hover{opacity:.88;transform:translateY(-1px)}
-.age-result{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;min-width:140px}
-.age-result.err{color:var(--danger)}
+.f-id{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.f-name{font-size:.88rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text}
+.f-reset{font-size:.66rem;color:var(--muted);white-space:nowrap}
+.f-ctl{display:flex;align-items:center;gap:6px}
+.f-n{min-width:2.2ch;text-align:center;font-size:1.35rem;font-weight:700;color:var(--ink)}
+.f-btn{
+  width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--surface);
+  color:var(--brand);font-size:1.1rem;font-weight:700;line-height:1;cursor:pointer;transition:border-color .12s,transform .12s;
+}
+.f-btn:hover:not(:disabled){border-color:var(--brand-tint);transform:translateY(-1px)}
+.f-btn:disabled{opacity:.5;cursor:default}
+.f-ico{
+  min-width:32px;height:32px;padding:0 6px;border-radius:9px;border:1px solid transparent;background:transparent;
+  color:var(--muted);font-size:.9rem;cursor:pointer;white-space:nowrap;
+}
+.f-ico:hover{color:var(--ink);border-color:var(--line)}
+.f-ico.armed{color:var(--danger);border-color:var(--danger);font-size:.72rem;font-weight:700}
+.f-empty{font-size:.82rem;color:var(--muted)}
 
 /* ---- misc ---- */
 .empty{text-align:center;color:var(--muted);padding:48px 0;font-size:.95rem}
@@ -348,13 +365,15 @@ footer code{font-family:ui-monospace,monospace;color:var(--ink)}
       <div class="tiles" id="links-archivio"></div>
     </details>
 
-    <!-- ETÀ PAZIENTE -->
-    <div class="util">
-      <span class="u-lbl" id="age-lbl">🩺 Età paziente</span>
-      <input class="age-input" type="number" id="birthYear" placeholder="Anno di nascita" min="1900" max="2099" aria-labelledby="age-lbl">
-      <button class="age-btn" id="age-calc-btn">Calcola</button>
-      <span class="age-result" id="age-result" aria-live="polite"></span>
-    </div>
+    <!-- SERVIZI MEZZI -->
+    <section class="util fleet" aria-label="Servizi mezzi">
+      <div class="f-head">
+        <span class="u-lbl">🚑 Servizi mezzi</span>
+        <button class="f-add" id="fleet-add" type="button">+ mezzo</button>
+        <span class="f-status" id="fleet-status" aria-live="polite"></span>
+      </div>
+      <div class="f-list" id="fleet-list"></div>
+    </section>
 
     <!-- RICERCA (in fondo) -->
     <div class="toolbar" id="toolbar">
@@ -559,31 +578,53 @@ document.addEventListener("keydown", e=>{
   }
 });
 
-/* ---- età paziente ---- */
-(function(){
-  const input=document.getElementById("birthYear"), result=document.getElementById("age-result");
-  function mostraEta(anno,oggi){
-    if(anno>oggi){ result.textContent="Non lo so Rick..."; result.classList.add("err"); }
-    else if(anno<1900){ result.textContent="… è morto."; result.classList.add("err"); }
-    else result.textContent=`Ha ${oggi-anno} anni (o li compirà quest'anno).`;
-  }
-  function calcola(){
-    const raw=input.value.trim(), oggi=new Date().getFullYear();
-    result.className="age-result";
-    if(!raw){ result.textContent="Inserisci un anno."; result.classList.add("err"); return; }
-    const num=parseInt(raw,10);
-    if(isNaN(num)||num<0){ result.textContent="Non lo so Rick..."; result.classList.add("err"); return; }
-    if(/^\d{1,2}$/.test(raw)){
-      const y1=1900+num, y2=2000+num;
-      if(y2>oggi) mostraEta(y1,oggi);
-      else result.textContent=`Ha ${oggi-y1} anni (n. ${y1}) o ${oggi-y2} anni (n. ${y2}).`;
-      return;
-    }
-    mostraEta(num,oggi);
-  }
-  document.getElementById("age-calc-btn").addEventListener("click",calcola);
-  input.addEventListener("keydown",e=>{ if(e.key==="Enter") calcola(); });
-})();
+/* ---- servizi mezzi ----
+   Backend: Google Apps Script (apps-script/Code.gs). Setup: docs/contatore-mezzi-setup.md */
+const FLEET_API = "";
+const fleetListEl = document.getElementById("fleet-list");
+const fleetStatusEl = document.getElementById("fleet-status");
+
+function formatReset(iso){
+  if(!iso) return "mai";
+  const d=new Date(iso);
+  if(isNaN(d)) return "mai";
+  const p=n=>String(n).padStart(2,"0");
+  return `${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+function el(tag,cls,text){
+  const e=document.createElement(tag);
+  if(cls) e.className=cls;
+  if(text!=null) e.textContent=text;
+  return e;
+}
+
+function renderFleet(mezzi){
+  fleetListEl.replaceChildren();
+  if(!mezzi.length){ fleetListEl.appendChild(el("span","f-empty","Nessun mezzo: aggiungine uno con “+ mezzo”.")); return; }
+  mezzi.forEach(m=>{
+    const item=el("div","f-item"); item.dataset.id=m.id;
+    const id=el("div","f-id");
+    const name=el("span","f-name",m.nome); name.title="Rinomina";
+    id.append(name, el("span","f-reset mono","reset "+formatReset(m.reset)));
+    const ctl=el("div","f-ctl");
+    const dec=el("button","f-btn f-dec","−"); dec.type="button"; dec.setAttribute("aria-label","Meno un servizio: "+m.nome);
+    const inc=el("button","f-btn f-inc","+"); inc.type="button"; inc.setAttribute("aria-label","Più un servizio: "+m.nome);
+    ctl.append(dec, el("span","f-n mono",String(m.n)), inc);
+    const rst=el("button","f-ico f-rst","↺"); rst.type="button"; rst.title="Azzera"; rst.setAttribute("aria-label","Azzera: "+m.nome);
+    const del=el("button","f-ico f-del","✕"); del.type="button"; del.title="Rimuovi mezzo"; del.setAttribute("aria-label","Rimuovi: "+m.nome);
+    item.append(id, ctl, rst, del);
+    fleetListEl.appendChild(item);
+  });
+}
+
+async function fleetRefresh(){
+  if(!FLEET_API){ fleetStatusEl.textContent="Contatore non configurato"; return; }
+  const r=await fetch(FLEET_API);
+  const j=await r.json();
+  if(j.ok) renderFleet(j.mezzi);
+}
+fleetRefresh().catch(()=>{});
 
 /* ---- theme ---- */
 const root=document.documentElement;
